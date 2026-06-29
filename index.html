@@ -3,166 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InkaStudio - Corporate Governance</title>
+    <meta name="description" content="INKA STUDIOS - Crafting Immersive Worlds.">
+    <title>INKA STUDIOS</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        /* Import a clean, modern corporate font */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            background-color: #f9fafb; /* Very faint off-white background */
-            color: #111827; /* Near-black for softer reading */
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            padding: 40px 20px;
-        }
-
-        .document-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #ffffff; /* Pure white document */
-            padding: 60px 80px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Soft drop shadow */
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            text-align: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #111827;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 40px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 5px;
-        }
-
-        .meta-data {
-            font-size: 14px;
-            margin-bottom: 40px;
-            color: #4b5563;
-        }
-
-        .meta-data strong {
-            color: #111827;
-        }
-
-        p {
-            font-size: 15px;
-            margin-bottom: 20px;
-            text-align: justify;
-            color: #374151;
-        }
-
-        .sub-section {
-            margin-left: 20px;
-            font-size: 15px;
-            margin-bottom: 15px;
-            color: #374151;
-        }
-
-        .sub-point {
-            margin-left: 40px;
-            font-size: 14.5px;
-            margin-bottom: 10px;
-            color: #4b5563;
-            display: flex;
-        }
-
-        .sub-point strong {
-            margin-right: 10px;
-            color: #111827;
+            background-color: #050505; /* Deep premium black */
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         a {
-            color: #111827;
-            text-decoration: underline;
-            font-weight: 600;
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
         }
 
         a:hover {
-            color: #4b5563;
+            color: #d1d1d1;
         }
 
-        /* Mobile responsiveness */
-        @media (max-width: 600px) {
-            .document-container {
-                padding: 30px 20px;
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 70%);
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            border: 1px solid #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .btn:hover {
+            background: #ffffff;
+            color: #050505;
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1rem;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background-color: #111;
+            height: 400px;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+            border: 1px solid #222;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #555;
+        }
+
+        .game-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid #111;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            .sub-point {
-                margin-left: 20px;
-                flex-direction: column;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 2rem; flex-direction: column; gap: 1rem; }
+            .hero h1 { font-size: 3rem; }
+            section { padding: 4rem 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="document-container">
-        
-        <h1>INKA STUDIO<br>CORPORATE GOVERNANCE & RECRUITMENT POLICY</h1>
-        
-        <div class="meta-data">
-            <strong>Effective Date:</strong> June 2026<br>
-            <strong>Entity Status:</strong> Pre-Incorporation / Independent Studio<br>
-            <strong>Contact:</strong> <a href="mailto:support.inkastudio@gmail.com">support.inkastudio@gmail.com</a>
+    <nav>
+        <div class="logo">INKA STUDIOS</div>
+        <div class="nav-links">
+            <a href="#games">Games</a>
+            <a href="#about">Studio</a>
+            <a href="#careers">Careers</a>
         </div>
+    </nav>
 
-        <h2>1.0 OVERVIEW</h2>
-        <p>This document outlines the standard operating procedures regarding employment, compensation, and equity distribution for InkaStudio (hereafter referred to as "the Company"). By submitting an application or investment inquiry, the corresponding party acknowledges and accepts the terms outlined herein.</p>
+    <header class="hero">
+        <h1>Inka Studios</h1>
+        <p>Pushing the boundaries of interactive entertainment. We build worlds that leave a mark.</p>
+        <a href="#games" class="btn">Explore Our Titles</a>
+    </header>
 
-        <h2>2.0 RECRUITMENT & ENGAGEMENT POLICY</h2>
-        
-        <div class="sub-section"><strong>2.1 Open Applications</strong></div>
-        <p>The Company operates on a continuous, unsolicited application model. Individuals seeking engagement with the Company must submit a formal application, including a resume, portfolio, and explicit declaration of their domain specialty (e.g., Programming, 3D Modeling, Audio Engineering) to the official Company contact address.</p>
-        
-        <div class="sub-section"><strong>2.2 Deferred Compensation (Revenue Share)</strong></div>
-        <p>All current developmental and operational roles within the Company are structured as compensation-deferred agreements.</p>
-        
-        <div class="sub-point">
-            <strong>2.2.1</strong> 
-            <div>Remuneration for services rendered is contingent upon the successful commercial release and subsequent revenue generation of the Company's primary project.</div>
+    <section id="games">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-info">
+                    <h3>Project Alpha</h3>
+                    <p>In Development • Next-Gen Action RPG</p>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-info">
+                    <h3>Project Onyx</h3>
+                    <p>Pre-Production • Multiplayer Survival</p>
+                </div>
+            </div>
         </div>
-        <div class="sub-point">
-            <strong>2.2.2</strong> 
-            <div>Specific revenue-share percentages will be negotiated and formalized via a separate, binding legal agreement upon the applicant's acceptance into the Company.</div>
-        </div>
+    </section>
 
-        <h2>3.0 EQUITY & INVESTMENT POLICY</h2>
-        
-        <div class="sub-section"><strong>3.1 Shareholder Distribution</strong></div>
-        <p>The Founder retains a primary eighty percent (80%) equity stake in the Company. The remaining twenty percent (20%) is allocated to a reserved equity pool for early-stage capital investors and select core administrative partners.</p>
-        
-        <div class="sub-section"><strong>3.2 Restricted Access</strong></div>
-        <p>Core shareholder positions, administrative roles, and equity disbursements are strictly by invitation only, managed exclusively by the Founder. The Company does not publicly offer shares or equity positions to the general applicant pool.</p>
-        
-        <div class="sub-section"><strong>3.3 Formal Investment Inquiries</strong></div>
-        <p>Parties seeking to acquire equity outside of a formal invitation must submit a speculative investment proposal.</p>
-        
-        <div class="sub-point">
-            <strong>3.3.1</strong> 
-            <div>Inquiries must be directed to the official Company contact address with the strict subject line protocol: <em>Investment Inquiry - [Entity/Individual Name]</em>.</div>
-        </div>
-        <div class="sub-point">
-            <strong>3.3.2</strong> 
-            <div>The Company reserves the right to review, accept, or dismiss any speculative investment inquiries without obligation for further correspondence.</div>
-        </div>
+    <section id="about">
+        <h2 class="section-title">The Studio</h2>
+        <p style="max-width: 800px; color: #a0a0a0; font-size: 1.1rem;">
+            Founded by industry veterans, INKA STUDIOS is dedicated to creating unparalleled gaming experiences. We believe in high-fidelity graphics, gripping narratives, and flawless gameplay mechanics. Our mission is to set the new gold standard for interactive entertainment.
+        </p>
+    </section>
 
-        <h2>4.0 DISPUTE & APPEAL PROCESS</h2>
-        <p>The Company's decisions regarding recruitment, equity allocation, and project management are final. If an applicant or external party wishes to formally request a review of a declined application or investment proposal, a formalized request may be submitted to the Company contact address. Such requests will be reviewed at the sole discretion of the Founder and administrative staff.</p>
+    <section id="careers">
+        <h2 class="section-title">Join Us</h2>
+        <p style="max-width: 800px; color: #a0a0a0; font-size: 1.1rem; margin-bottom: 2rem;">
+            We are always looking for visionary artists, developers, and designers. If you are passionate about pushing the medium forward, we want to hear from you.
+        </p>
+        <a href="mailto:contact@inkastudios.com" class="btn">View Open Roles</a>
+    </section>
 
-    </div>
+    <footer>
+        <p>&copy; 2026 INKA STUDIOS. All Rights Reserved.</p>
+    </footer>
 
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
