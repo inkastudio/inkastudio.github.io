@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dead Ignition - Inka Studio</title>
     
-    <!-- Path goes up two levels to the main root for the favicon -->
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
     
@@ -93,10 +92,10 @@
 
         .parallax-layer {
             position: absolute;
-            top: -20%; /* Offset to allow movement */
+            top: -20%; 
             left: 0;
             width: 100%;
-            height: 140%; /* Taller than container for scrolling */
+            height: 140%; 
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -113,6 +112,15 @@
         
         .game-hero .parallax-layer {
             background-image: linear-gradient(rgba(5,5,7,0.4) 0%, var(--bg-pure) 100%), url('../gameback.jpg');
+        }
+        
+        /* FIX: Ensure content sits below the fixed navbar */
+        .hero-content {
+            z-index: 2;
+            margin-top: 90px; /* Accounts for the navbar height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .hero-icon {
@@ -146,7 +154,6 @@
         }
         
         .image-divider .parallax-layer {
-            /* We add a dark overlay to img1 and img2 so the red text pops out around it */
             box-shadow: inset 0 0 100px #000; 
         }
 
@@ -158,9 +165,7 @@
             text-align: center; position: relative; z-index: 10;
         }
         
-        .story-section h3 {
-            font-size: 2.2rem; color: var(--text-main); margin-bottom: 25px; font-style: italic;
-        }
+        .story-section h3 { font-size: 2.2rem; color: var(--text-main); margin-bottom: 25px; font-style: italic; }
         .story-section h3 span { color: var(--accent); }
 
         .story-section p {
@@ -178,19 +183,18 @@
             position: relative; z-index: 10; text-align: center;
         }
         
-        /* Mobile alignment fix applied here */
         .trailer-section .section-title { 
             font-size: 3rem; margin-bottom: 50px; 
             border-bottom: 4px solid var(--accent); 
             display: inline-block; padding-bottom: 5px; font-style: italic;
         }
 
+        /* FIX: Modern Aspect Ratio for perfect 16:9 on PC and Mobile */
         .video-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9; /* Perfect widescreen */
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
             background: #000;
             border: 2px solid rgba(255,42,42,0.3);
             box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(255,42,42,0.1);
@@ -231,10 +235,16 @@
             .dropdown-menu a { padding: 15px 0; font-size: 1rem !important; color: var(--accent) !important; }
             .nav-links a.support-btn { margin: 20px auto; width: 80%; background: transparent; border: 2px solid var(--accent); color: var(--accent); }
 
-            /* Fix Mobile Zoom for Parallax Images */
-            .game-hero { height: 80vh; min-height: 500px; }
-            .parallax-layer { height: 120%; top: -10%; } 
-            .image-divider { height: 250px; }
+            /* FIX: Mobile Image Display & Alignment */
+            .game-hero { height: auto; min-height: 80vh; padding: 100px 0 50px; }
+            .image-divider { height: 300px; }
+            
+            /* Disable JS parallax math on mobile for clean scrolling */
+            .parallax-layer { 
+                height: 100%; 
+                top: 0; 
+                transform: none !important; 
+            } 
 
             .glitch-title { font-size: 3.5rem; }
             .trailer-section .section-title { font-size: 2.2rem; }
@@ -278,7 +288,7 @@
     <!-- HERO SECTION (gameback.jpg) -->
     <header class="parallax-window game-hero">
         <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.3) 0%, var(--bg-pure) 100%), url('../gameback.jpg');" data-speed="0.4"></div>
-        <div style="z-index: 2;">
+        <div class="hero-content">
             <img src="/icon.png" alt="Dead Ignition Icon" class="hero-icon reveal">
             <h1 class="glitch-title reveal">DEAD IGNITION</h1>
             <p class="tagline reveal-delay">SURVIVE THE NIGHT. FIX THE RIDE.</p>
@@ -295,8 +305,7 @@
 
     <!-- PARALLAX IMAGE 1 (img1.jpeg) -->
     <div class="parallax-window image-divider reveal">
-        <!-- Slightly darkened gradient so it blends nicely -->
-        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.5), rgba(5,5,7,0.5)), url('img1.jpeg');" data-speed="0.25"></div>
+        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.4), rgba(5,5,7,0.4)), url('img1.jpeg');" data-speed="0.25"></div>
     </div>
 
     <!-- STORY PART 2 -->
@@ -308,7 +317,7 @@
 
     <!-- PARALLAX IMAGE 2 (img2.jpeg) -->
     <div class="parallax-window image-divider reveal">
-        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.5), rgba(5,5,7,0.5)), url('img2.jpeg');" data-speed="0.25"></div>
+        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.4), rgba(5,5,7,0.4)), url('img2.jpeg');" data-speed="0.25"></div>
     </div>
 
     <!-- TRAILER EMBED -->
@@ -386,19 +395,21 @@
                         }
                     }
                     
-                    // Parallax Scroll Math (Calculates position based on screen center)
-                    parallaxLayers.forEach(layer => {
-                        const speed = layer.getAttribute('data-speed') || 0.3;
-                        const parent = layer.parentElement;
-                        const rect = parent.getBoundingClientRect();
-                        
-                        // Only do the math if the image is actually visible on the screen
-                        if (rect.top < window.innerHeight && rect.bottom > 0) {
-                            const distanceToCenter = (window.innerHeight / 2) - (rect.top + rect.height / 2);
-                            const yPos = distanceToCenter * speed;
-                            layer.style.transform = `translateY(${yPos}px)`;
-                        }
-                    });
+                    // PC ONLY Parallax Scroll Math 
+                    if (window.innerWidth > 768) {
+                        parallaxLayers.forEach(layer => {
+                            const speed = layer.getAttribute('data-speed') || 0.3;
+                            const parent = layer.parentElement;
+                            const rect = parent.getBoundingClientRect();
+                            
+                            // Only calculate if visible on screen
+                            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                const distanceToCenter = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+                                const yPos = distanceToCenter * speed;
+                                layer.style.transform = `translateY(${yPos}px)`;
+                            }
+                        });
+                    }
 
                     lastScrollY = window.scrollY;
                     ticking = false;
