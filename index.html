@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Studio</title>
+    <title>Inka Studio | System Online</title>
     
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     
-    <!-- EXPERIMENTAL GAMER TYPOGRAPHY (Chakra Petch & Rajdhani) -->
+    <!-- AAA GAMER TYPOGRAPHY -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
         /* =========================================
-           EXPERIMENTAL THEME: "RED LINE" AAA GAMER
+           THEME: CORRUPTED RED HUD
            ========================================= */
         :root {
-            --bg-pure: #050507; /* Very dark tech-blue/black */
-            --bg-panel: #0d0d12;
-            --accent: #ff2a2a; /* Neon Crimson */
-            --accent-glow: rgba(255, 42, 42, 0.4);
+            --bg-pure: #030305;
+            --bg-panel: #0a0a0e;
+            --accent: #ff2a2a; 
+            --accent-glow: rgba(255, 42, 42, 0.5);
             --text-main: #f0f4f8;
             --text-grey: #8a93a2;
             --transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
 
         body {
@@ -39,217 +38,224 @@
             overflow-x: hidden;
         }
 
-        /* CINEMATIC SCANLINES OVERLAY */
-        body::after {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
-            pointer-events: none; z-index: 9999;
+        /* GRITTY NOISE OVERLAY */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
+            pointer-events: none; z-index: 9998;
         }
 
-        /* GAMER GRID BACKGROUND */
-        .bg-matrix {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: 
-                linear-gradient(rgba(255, 42, 42, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 42, 42, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: -2; pointer-events: none;
+        /* SCANLINES */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px);
+            pointer-events: none; z-index: 9999;
         }
 
         h1, h2, h3, .nav-links a, .btn {
             font-family: 'Chakra Petch', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            text-transform: uppercase; letter-spacing: 2px;
         }
-
         a { text-decoration: none; }
 
-        .vignette {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center, transparent 40%, rgba(5,5,7,0.95) 130%);
-            pointer-events: none; z-index: 50; 
-        }
-
         /* =========================================
-           ADVANCED SCROLL ANIMATIONS
+           ANIMATIONS & REVEALS
            ========================================= */
         .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-zoom { opacity: 0; transform: scale(0.9); transition: all 1s ease-out; }
-        .reveal-zoom.active { opacity: 1; transform: scale(1); }
-        .reveal-blur { opacity: 0; filter: blur(10px); transition: all 1s ease 0.2s; }
-        .reveal-blur.active { opacity: 1; filter: blur(0); }
         .reveal-delay { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out 0.4s; }
         .reveal-delay.active { opacity: 1; transform: translateY(0); }
 
+        /* TEXT GLITCH EFFECT */
+        .glitch { position: relative; display: inline-block; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent; opacity: 0.8;
+        }
+        .glitch::before { left: 2px; text-shadow: -2px 0 red; clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
+        .glitch::after { left: -2px; text-shadow: -2px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 44px, 0); }
+            20% { clip: rect(80px, 9999px, 12px, 0); }
+            40% { clip: rect(40px, 9999px, 90px, 0); }
+            60% { clip: rect(90px, 9999px, 20px, 0); }
+            80% { clip: rect(20px, 9999px, 80px, 0); }
+            100% { clip: rect(50px, 9999px, 30px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(20px, 9999px, 90px, 0); }
+            20% { clip: rect(50px, 9999px, 20px, 0); }
+            40% { clip: rect(10px, 9999px, 60px, 0); }
+            60% { clip: rect(70px, 9999px, 10px, 0); }
+            80% { clip: rect(80px, 9999px, 40px, 0); }
+            100% { clip: rect(30px, 9999px, 50px, 0); }
+        }
+
         /* =========================================
-           SMART HEADER (Tech UI Style)
+           SMART HEADER WITH HUD ELEMENTS
            ========================================= */
         nav {
             position: fixed; top: 0; width: 100%; height: 90px;
-            display: flex; align-items: center; padding: 0 5%;
-            background: rgba(5, 5, 7, 0.85);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 1000; border-bottom: 2px solid rgba(255, 42, 42, 0.2);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+            background: linear-gradient(to bottom, rgba(3,3,5,0.95), rgba(3,3,5,0.7));
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid rgba(255, 42, 42, 0.3);
             transition: transform 0.4s ease;
         }
-
         nav.nav-hidden { transform: translateY(-100%); }
 
-        .logo-container { flex: 1; display: flex; align-items: center; }
-        .logo-img { height: 70px; width: auto; object-fit: contain; position: relative; z-index: 1001; }
+        .logo-container { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 60px; width: auto; object-fit: contain; }
+        
+        .hud-status { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--accent); font-family: 'Chakra Petch', sans-serif; letter-spacing: 2px;}
+        .hud-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .nav-links { display: flex; gap: 40px; align-items: center; z-index: 1001; }
+        .nav-links { display: flex; gap: 35px; align-items: center; }
         .nav-links > li { list-style: none; position: relative; }
-
         .nav-links a { color: var(--text-main); font-size: 1.1rem; font-weight: 700; transition: var(--transition); display: block; padding: 10px 0; }
         .nav-links a:hover { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
-        /* Slanted HUD Support Button */
         .nav-links a.support-btn { 
-            background-color: var(--accent); color: var(--bg-pure); 
-            padding: 8px 30px; font-weight: 700; 
+            background: transparent; color: var(--accent); border: 1px solid var(--accent);
+            padding: 8px 25px; font-weight: 700; 
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
-        .nav-links a.support-btn:hover { background-color: var(--text-main); color: var(--bg-pure); text-shadow: none; box-shadow: 0 0 20px var(--accent-glow); }
-
-        .dropdown-menu {
-            position: absolute; top: 100%; left: 0; background: var(--bg-panel);
-            border: 1px solid var(--accent); border-top: 4px solid var(--accent); min-width: 200px;
-            opacity: 0; pointer-events: none; transform: translateY(15px); transition: var(--transition);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-        }
-        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .dropdown-menu a { padding: 15px 20px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-grey); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .dropdown-menu a:hover { background: rgba(255, 42, 42, 0.1); color: var(--accent); padding-left: 25px; }
+        .nav-links a.support-btn:hover { background-color: var(--accent); color: var(--bg-pure); box-shadow: 0 0 20px var(--accent-glow); }
 
         .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1100; }
         .hamburger div { width: 35px; height: 3px; background-color: var(--accent); }
 
         /* =========================================
-           1. HERO & ABOUT SECTION
+           1. HERO SECTION (WITH BACKGROUND IMAGE)
            ========================================= */
         .hero {
             min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
             align-items: center; text-align: center; padding: 160px 5% 100px; position: relative; z-index: 10;
+            /* Placeholder dark atmospheric background */
+            background: linear-gradient(rgba(3,3,5,0.7), rgba(3,3,5,0.95)), url('https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
         }
 
+        /* Corner Crosshairs for HUD feel */
+        .hero::before, .hero::after { content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--accent); opacity: 0.5; pointer-events: none;}
+        .hero::before { top: 120px; left: 5%; border-right: none; border-bottom: none; }
+        .hero::after { bottom: 40px; right: 5%; border-left: none; border-top: none; }
+
         .hero h1 {
-            font-size: clamp(3.5rem, 12vw, 10rem); line-height: 0.9; color: transparent;
-            -webkit-text-stroke: 2px var(--text-main); text-shadow: -4px 4px 0px rgba(255,42,42,0.8);
-            margin: 0 0 20px 0; font-style: italic;
+            font-size: clamp(3.5rem, 12vw, 9rem); line-height: 1; color: var(--text-main);
+            text-shadow: 0 0 20px rgba(255,255,255,0.2); margin: 0 0 20px 0; font-style: italic;
         }
 
         .slogan {
-            font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--accent); font-family: 'Chakra Petch', sans-serif;
-            font-weight: 700; letter-spacing: 8px; margin-bottom: 80px; 
-            background: rgba(255,42,42,0.1); padding: 10px 30px; border-left: 4px solid var(--accent);
+            font-size: clamp(1rem, 2vw, 1.2rem); color: var(--bg-pure); font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700; letter-spacing: 6px; margin-bottom: 60px; 
+            background: var(--accent); padding: 5px 20px;
         }
 
         .about-box {
-            max-width: 800px; background: rgba(13, 13, 18, 0.8); 
-            border: 1px solid rgba(255, 42, 42, 0.3);
-            padding: 40px 50px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+            max-width: 750px; background: rgba(10, 10, 14, 0.85); 
+            border-left: 3px solid var(--accent); border-right: 1px solid rgba(255, 42, 42, 0.2);
+            padding: 30px 40px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            text-align: left; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
         }
-        
-        .about-box p { font-size: 1.25rem; font-weight: 500; line-height: 1.8; color: var(--text-main); }
+        .about-box p { font-size: 1.15rem; font-weight: 500; line-height: 1.7; color: var(--text-grey); }
+        .about-box strong { color: var(--text-main); }
 
         /* =========================================
            2. DEAD IGNITION SPOTLIGHT
            ========================================= */
         .spotlight {
-            padding: 120px 5%; display: flex; flex-direction: column; align-items: center;
-            text-align: center; background: linear-gradient(to bottom, transparent, rgba(255,42,42,0.05), transparent);
-            position: relative; z-index: 10;
+            padding: 100px 5%; display: flex; flex-direction: column; align-items: center;
+            text-align: center; background: var(--bg-pure); position: relative; z-index: 10;
         }
 
-        .spotlight img { width: 160px; height: 160px; margin-bottom: 30px; border: 2px solid var(--accent); box-shadow: 0 0 40px var(--accent-glow); clip-path: polygon(20% 0%, 100% 0, 100% 80%, 80% 100%, 0 100%, 0% 20%);}
-        .spotlight h2 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 10px; font-style: italic;}
-        .spotlight p { font-size: 1.3rem; font-weight: 700; color: var(--accent); letter-spacing: 4px; }
+        .spotlight img { width: 140px; height: 140px; margin-bottom: 25px; border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(255,42,42,0.2); clip-path: polygon(15% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 15%);}
+        .spotlight h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 5px; color: var(--text-main);}
+        .spotlight p { font-size: 1.1rem; font-weight: 600; color: var(--accent); letter-spacing: 5px; background: rgba(255,42,42,0.1); padding: 5px 15px;}
         
         .btn { 
-            margin-top: 40px; display: inline-block; background: transparent; color: var(--accent); 
-            border: 2px solid var(--accent); padding: 15px 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; transition: var(--transition); 
+            margin-top: 35px; display: inline-block; background: var(--accent); color: var(--bg-pure); 
+            padding: 12px 40px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: var(--transition); 
             clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
         }
-        .btn:hover { background: var(--accent); color: var(--bg-pure); box-shadow: 0 0 30px var(--accent-glow); }
+        .btn:hover { background: var(--text-main); color: var(--bg-pure); box-shadow: 0 0 20px rgba(255,255,255,0.5); transform: translateY(-3px);}
 
         /* =========================================
-           3. NEWSWIRE
+           3. NEWSWIRE (NOW WITH IMAGES)
            ========================================= */
-        .newswire-section { padding: 100px 5% 80px; position: relative; z-index: 10; } 
-        .section-title { font-size: 3.5rem; margin-bottom: 50px; border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 5px; font-style: italic;}
+        .newswire-section { padding: 80px 5% 100px; background: var(--bg-panel); position: relative; z-index: 10; border-top: 1px solid rgba(255,42,42,0.1);} 
+        .section-title { font-size: 2.5rem; margin-bottom: 40px; border-left: 4px solid var(--accent); padding-left: 15px;}
 
-        .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+        .news-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
 
         .news-card {
-            background: var(--bg-panel); border: 1px solid rgba(255, 42, 42, 0.2); border-top: 3px solid var(--accent);
-            padding: 30px; display: flex; flex-direction: column; transition: var(--transition);
+            background: var(--bg-pure); border: 1px solid rgba(255, 42, 42, 0.15);
+            display: flex; flex-direction: column; transition: var(--transition);
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
         }
-        .news-card:hover { border-color: var(--accent); transform: translateY(-10px); background: rgba(255,42,42,0.05); }
-        .news-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.2; font-style: italic; }
-        .news-card p { font-size: 1.05rem; color: var(--text-grey); line-height: 1.6; margin-bottom: 30px; flex-grow: 1; font-weight: 500;}
-        .read-more { color: var(--accent); font-family: 'Chakra Petch', sans-serif; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .read-more:hover { text-shadow: 0 0 10px var(--accent-glow); }
+        .news-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.8); }
+        
+        .news-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid rgba(255,42,42,0.2); filter: grayscale(50%) contrast(120%); transition: var(--transition);}
+        .news-card:hover .news-img { filter: grayscale(0%) contrast(100%); }
+
+        .news-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1;}
+        .news-tag { color: var(--accent); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; display: block;}
+        .news-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.2; }
+        .news-card p { font-size: 1rem; color: var(--text-grey); line-height: 1.6; margin-bottom: 25px; flex-grow: 1;}
+        .read-more { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid transparent; align-self: flex-start;}
+        .read-more:hover { color: var(--accent); border-bottom: 1px solid var(--accent); }
 
         /* =========================================
            4. FOOTER
            ========================================= */
         footer {
-            background-color: var(--bg-pure); border-top: 2px solid var(--accent);
+            background-color: var(--bg-pure); border-top: 1px solid rgba(255,42,42,0.2);
             display: flex; flex-direction: column; align-items: center; text-align: center;
             padding: 60px 5% 0px; position: relative; z-index: 10;
         }
 
-        .footer-links { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
-        .footer-links a { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; transition: var(--transition); }
+        .footer-links { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .footer-links a { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; transition: var(--transition); }
         .footer-links a:hover { color: var(--accent); }
 
         .social-icons { display: flex; gap: 30px; margin-bottom: 40px; }
-        .social-icons svg { width: 35px; height: 35px; fill: var(--text-grey); transition: var(--transition); cursor: pointer; }
-        .social-icons svg:hover { fill: var(--accent); transform: scale(1.1); filter: drop-shadow(0 0 10px var(--accent)); }
+        .social-icons svg { width: 30px; height: 30px; fill: var(--text-grey); transition: var(--transition); cursor: pointer; }
+        .social-icons svg:hover { fill: var(--accent); transform: scale(1.1); }
 
-        .final-notice { width: 100%; border-top: 1px solid rgba(255, 42, 42, 0.2); padding: 30px 0; }
-        .final-notice p { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 3px; color: var(--text-grey); text-transform: uppercase; }
+        .final-notice { width: 100%; border-top: 1px solid rgba(255, 42, 42, 0.1); padding: 25px 0; background: #010102;}
+        .final-notice p { font-size: 0.85rem; font-weight: 600; letter-spacing: 3px; color: #555; text-transform: uppercase; }
 
         /* =========================================
            MOBILE RESPONSIVENESS
            ========================================= */
         @media (max-width: 768px) {
             nav { padding: 0 20px; height: 80px; }
-            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
-            .logo-img { height: 50px; }
-            .hamburger { display: flex; position: absolute; left: 20px; }
+            .hud-status { display: none; } /* Hide HUD on mobile to save space */
+            .logo-img { height: 45px; }
+            .hamburger { display: flex; }
             
             .nav-links {
                 position: fixed; top: 80px; left: 0; width: 100%;
-                background: rgba(5, 5, 7, 0.98); flex-direction: column; gap: 0;
+                background: rgba(3, 3, 5, 0.98); flex-direction: column; gap: 0;
                 transform: translateY(-150%); transition: var(--transition);
-                border-bottom: 3px solid var(--accent); max-height: calc(100vh - 80px); overflow-y: auto;
+                border-bottom: 2px solid var(--accent); max-height: calc(100vh - 80px); overflow-y: auto;
             }
             .nav-links.active { transform: translateY(0); }
             .nav-links > li { width: 100%; text-align: center; border-bottom: 1px solid rgba(255,42,42,0.1); }
-            .nav-links a { padding: 20px 0; font-size: 1.3rem; }
-            
-            .dropdown-menu { display: none; position: static; box-shadow: none; border: none; background: rgba(255, 42, 42, 0.05); padding: 0; }
-            .dropdown.mobile-open .dropdown-menu { display: block; }
-            .dropdown-menu a { padding: 15px 0; font-size: 1rem !important; color: var(--accent) !important; }
+            .nav-links a { padding: 20px 0; font-size: 1.2rem; }
 
-            .nav-links a.support-btn { margin: 20px auto; width: 80%; background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+            .nav-links a.support-btn { margin: 20px auto; width: 80%; }
 
-            .hero { padding-top: 140px; }
-            .hero h1 { text-shadow: -3px 3px 0px rgba(255,42,42,0.8); }
-            .slogan { letter-spacing: 4px; padding: 10px; font-size: 0.9rem;}
-            .about-box { padding: 30px 20px; margin: 0 10px; }
-            .about-box p { font-size: 1.1rem; }
+            .hero { padding-top: 130px; }
+            .hero::before, .hero::after { display: none; }
+            .slogan { letter-spacing: 4px; font-size: 0.85rem;}
+            .about-box { padding: 25px 20px; margin: 0 10px; border-left: 2px solid var(--accent); }
+            .about-box p { font-size: 1rem; }
             
-            .news-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 30px; scrollbar-width: none; gap: 20px; padding-right: 20px; -webkit-overflow-scrolling: touch; }
+            .news-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 20px; scrollbar-width: none; gap: 15px; padding-right: 20px; margin-right: -5%; margin-left: -5%; padding-left: 5%;}
             .news-container::-webkit-scrollbar { display: none; }
-            .news-card { min-width: 80vw; scroll-snap-align: start; }
+            .news-card { min-width: 85vw; scroll-snap-align: center; }
             
             .footer-links { gap: 20px; flex-direction: column; }
         }
@@ -257,43 +263,36 @@
 </head>
 <body>
 
-    <!-- Lightweight Background & Vignette -->
-    <div class="bg-matrix"></div>
-    <div class="vignette"></div>
-
     <!-- 1. SMART NAVBAR -->
     <nav id="navbar">
+        <div class="logo-container">
+            <a href="/"><img src="logo.png" alt="Inka Studio Logo" class="logo-img"></a>
+            <div class="hud-status">
+                <div class="hud-dot"></div> SYSTEM ONLINE
+            </div>
+        </div>
+
         <div class="hamburger" id="hamburger">
             <div></div><div></div><div></div>
         </div>
-
-        <div class="logo-container">
-            <a href="/">
-                <img src="logo.png" alt="Inka Studio Logo" class="logo-img">
-            </a>
-        </div>
         
         <ul class="nav-links" id="navLinks">
-            <li class="dropdown" id="games-dropdown">
-                <a href="javascript:void(0);" id="games-btn">Games ▾</a>
-                <div class="dropdown-menu">
-                    <a href="/games">Dead Ignition</a>
-                </div>
-            </li>
+            <li><a href="/games">Games</a></li>
             <li><a href="/news">Newswire</a></li>
             <li><a href="/videos">Videos</a></li>
             <li><a href="/downloads">Downloads</a></li>
-            <li><a href="#footer-section" class="support-btn" id="mobile-support-btn">Support</a></li>
+            <li><a href="#footer-section" class="support-btn" id="mobile-support-btn">SUPPORT US</a></li>
         </ul>
     </nav>
 
-    <!-- 2. HERO & ABOUT -->
+    <!-- 2. HERO & ABOUT (WITH BG IMAGE & GLITCH) -->
     <section class="hero">
-        <h1 class="reveal-zoom">INKA STUDIO</h1>
-        <h3 class="slogan reveal-blur">Official Website of Inka Studio</h3>
+        <h1 class="reveal glitch" data-text="INKA STUDIO">INKA STUDIO</h1>
+        <h3 class="slogan reveal-delay">INDEPENDENT DEVELOPMENT GRID</h3>
         <div class="about-box reveal-delay">
             <p>
-                We are an independent game development studio built on a zero-budget, DIY ethos. We specialize in atmospheric, C++ engineered survival horror experiences without corporate bloat or asset flips.
+                <strong>We are an independent game development studio built on a zero-budget, DIY ethos.</strong><br><br>
+                We specialize in atmospheric, C++ engineered survival horror experiences. No corporate bloat. No asset flips. Just raw code and psychological dread.
             </p>
         </div>
     </section>
@@ -302,39 +301,50 @@
     <section class="spotlight">
         <img src="icon.png" alt="Dead Ignition Icon" class="reveal">
         <h2 class="reveal">DEAD IGNITION</h2>
-        <p class="reveal">IN DEVELOPMENT // COMING SOON</p>
-        <a href="/games" class="btn reveal">VIEW PROJECT</a>
+        <p class="reveal">SURVIVAL HORROR // IN DEVELOPMENT</p>
+        <a href="/games" class="btn reveal">ACCESS PROJECT DATA</a>
     </section>
 
-    <!-- 4. NEWSWIRE -->
+    <!-- 4. NEWSWIRE (WITH IMAGES) -->
     <section class="newswire-section">
-        <h2 class="section-title reveal">NEWSWIRE</h2>
+        <h2 class="section-title reveal">LATEST INTEL</h2>
         
         <div class="news-container reveal">
+            <!-- News Card 1 -->
             <div class="news-card">
-                <h3>GRAPHIC DESIGNER WANTED</h3>
-                <p>We are expanding the core indie team. Seeking high-contrast, zero-budget dark aesthetics.</p>
-                <a href="/news" class="read-more">Learn More &rarr;</a>
+                <!-- Using Unsplash placeholder, swap with your own art later -->
+                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" alt="Code" class="news-img">
+                <div class="news-content">
+                    <span class="news-tag">DEVLOG // 04</span>
+                    <h3>LEVEL DRESSING PROGRESS</h3>
+                    <p>First look at the raw C++ engine implementation for the urban ruins sector. Optimization metrics included.</p>
+                    <a href="/news" class="read-more">Decrypt File &rarr;</a>
+                </div>
             </div>
+            <!-- News Card 2 -->
             <div class="news-card">
-                <h3>LEVEL DRESSING PROGRESS</h3>
-                <p>First look at the raw C++ engine implementation for the urban ruins sector.</p>
-                <a href="/news" class="read-more">Learn More &rarr;</a>
+                <img src="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=600&auto=format&fit=crop" alt="Lore" class="news-img">
+                <div class="news-content">
+                    <span class="news-tag">LORE DROP</span>
+                    <h3>THE IGNITION PROTOCOL</h3>
+                    <p>When the grid failed, the rules changed. A brief lore drop introducing core resource mechanics.</p>
+                    <a href="/news" class="read-more">Decrypt File &rarr;</a>
+                </div>
             </div>
+            <!-- News Card 3 -->
             <div class="news-card">
-                <h3>THE IGNITION PROTOCOL</h3>
-                <p>When the grid failed, the rules changed. A brief lore drop introducing resource mechanics.</p>
-                <a href="/news" class="read-more">Learn More &rarr;</a>
-            </div>
-            <div class="news-card">
-                <h3>VIEW ALL UPDATES</h3>
-                <p>Access the full archive of studio updates, devlogs, and recruitment posts.</p>
-                <a href="/news" class="btn" style="margin-top:0; font-size: 1.1rem; padding: 10px 20px;">GO TO NEWSWIRE</a>
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop" alt="Hiring" class="news-img">
+                <div class="news-content">
+                    <span class="news-tag">RECRUITMENT</span>
+                    <h3>GRAPHIC DESIGNER WANTED</h3>
+                    <p>We are expanding the core indie team. Seeking high-contrast, zero-budget dark aesthetics.</p>
+                    <a href="/news" class="read-more">Decrypt File &rarr;</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 5 & 6. FOOTER -->
+    <!-- 5. FOOTER -->
     <footer id="footer-section">
         <div class="footer-links reveal">
             <a href="/contact">Contact</a>
@@ -352,45 +362,22 @@
             <a href="https://x.com/InkaStudio" target="_blank" aria-label="Twitter">
                 <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
-            <!-- YouTube -->
-            <a href="https://youtube.com/@inkastudioofficial?si=4-EwV8QyCGsZXG4k" target="_blank" aria-label="YouTube">
-                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
         </div>
 
-        <div class="final-notice reveal">
-            <p>&copy; 2026 Inka Studio &bull; India &bull; All rights reserved</p>
+        <div class="final-notice">
+            <p>&copy; 2026 INKA STUDIO &bull; SYSTEM ARCHITECTURE SECURE</p>
         </div>
     </footer>
 
-    <!-- =========================================
-         JAVASCRIPT ENGINE
-         ========================================= -->
+    <!-- JAVASCRIPT ENGINE -->
     <script>
-        // 1. Mobile Menu & Smart Dropdown
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         const mobileSupportBtn = document.getElementById('mobile-support-btn');
-        const gamesBtn = document.getElementById('games-btn');
-        const gamesDropdown = document.getElementById('games-dropdown');
 
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            if (!navLinks.classList.contains('active')) { gamesDropdown.classList.remove('mobile-open'); }
-        });
+        hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+        mobileSupportBtn.addEventListener('click', () => { navLinks.classList.remove('active'); });
 
-        gamesBtn.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) { gamesDropdown.classList.toggle('mobile-open'); }
-        });
-
-        mobileSupportBtn.addEventListener('click', () => {
-            if (navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                gamesDropdown.classList.remove('mobile-open');
-            }
-        });
-
-        // 2. Smart Header
         let lastScrollY = window.scrollY;
         let ticking = false;
         const navbar = document.getElementById('navbar');
@@ -412,8 +399,7 @@
             }
         });
 
-        // 3. Advanced Scroll Animations
-        const revealElements = document.querySelectorAll('.reveal, .reveal-zoom, .reveal-blur, .reveal-delay');
+        const revealElements = document.querySelectorAll('.reveal, .reveal-delay');
         const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
 
         const revealOnScroll = new IntersectionObserver(function(entries) {
@@ -421,9 +407,7 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 } else {
-                    if (entry.boundingClientRect.top > 0) {
-                        entry.target.classList.remove('active');
-                    }
+                    if (entry.boundingClientRect.top > 0) { entry.target.classList.remove('active'); }
                 }
             });
         }, revealOptions);
