@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inka Studio</title>
     
-    <!-- Favicon updated to favicon.png -->
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     
@@ -37,11 +36,21 @@
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
+            /* Background moved to pseudo-element for GPU performance */
+        }
+
+        /* PERFORMANCE FIX: Independent fixed background layer */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background-image: 
                 radial-gradient(var(--cyan-glow) 1px, transparent 1px),
                 linear-gradient(to bottom, transparent 0%, var(--bg-pure) 100%);
             background-size: 40px 40px, 100% 100%;
-            background-attachment: fixed;
+            z-index: -2;
+            pointer-events: none;
+            will-change: transform;
         }
 
         h1, h2, h3, .nav-links a, .btn {
@@ -53,23 +62,24 @@
         a { text-decoration: none; }
 
         /* =========================================
-           ATMOSPHERIC EFFECTS (FOG & VIGNETTE)
+           ATMOSPHERIC EFFECTS (GPU ACCELERATED)
            ========================================= */
         .vignette {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at center, transparent 40%, rgba(3,3,3,0.95) 130%);
             pointer-events: none;
-            z-index: 50; /* Sits above content, below navbar */
+            z-index: 50; 
+            will-change: transform;
         }
 
         .fog-container {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
-            z-index: -1; /* Behind content */
+            z-index: -1; 
             overflow: hidden;
-            opacity: 0.15; /* Subtle cinematic atmosphere */
+            opacity: 0.15; 
         }
 
         .fog-1, .fog-2 {
@@ -77,49 +87,48 @@
             width: 150vw; height: 100vh;
             background: radial-gradient(circle at center, var(--cyan) 0%, transparent 60%);
             filter: blur(80px);
+            /* PERFORMANCE FIX: GPU Hardware Acceleration */
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .fog-1 { animation: drift1 20s ease-in-out infinite alternate; top: 10%; left: -25%; opacity: 0.5; }
         .fog-2 { animation: drift2 25s ease-in-out infinite alternate; top: 40%; left: 0%; opacity: 0.3; }
 
-        @keyframes drift1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(15vw, 5vh) scale(1.2); } }
-        @keyframes drift2 { 0% { transform: translate(0, 0) scale(1.2); } 100% { transform: translate(-15vw, -5vh) scale(1); } }
+        /* translate3d forces the graphics card to render this instead of the CPU */
+        @keyframes drift1 { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(15vw, 5vh, 0) scale(1.2); } }
+        @keyframes drift2 { 0% { transform: translate3d(0, 0, 0) scale(1.2); } 100% { transform: translate3d(-15vw, -5vh, 0) scale(1); } }
 
         /* =========================================
            ADVANCED SCROLL ANIMATIONS
            ========================================= */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* Changed translateY to translate3d for better scrolling performance */
+        .reveal { opacity: 0; transform: translate3d(0, 40px, 0); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
+        .reveal.active { opacity: 1; transform: translate3d(0, 0, 0); }
 
-        .reveal-zoom { opacity: 0; transform: scale(0.9); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal-zoom.active { opacity: 1; transform: scale(1); }
+        .reveal-zoom { opacity: 0; transform: scale(0.9) translate3d(0,0,0); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
+        .reveal-zoom.active { opacity: 1; transform: scale(1) translate3d(0,0,0); }
 
-        .reveal-blur { opacity: 0; filter: blur(10px); transition: all 1s ease 0.2s; }
+        .reveal-blur { opacity: 0; filter: blur(10px); transition: all 1s ease 0.2s; will-change: opacity, filter; }
         .reveal-blur.active { opacity: 1; filter: blur(0); }
 
-        .reveal-delay { opacity: 0; transform: translateY(30px); transition: all 0.8s ease 0.4s; }
-        .reveal-delay.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay { opacity: 0; transform: translate3d(0, 30px, 0); transition: all 0.8s ease 0.4s; will-change: opacity, transform; }
+        .reveal-delay.active { opacity: 1; transform: translate3d(0, 0, 0); }
 
         /* =========================================
            SMART HEADER
            ========================================= */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
+            position: fixed; top: 0; width: 100%; height: 100px;
+            display: flex; align-items: center; padding: 0 5%;
             background: rgba(3, 3, 3, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid rgba(0, 229, 255, 0.15);
             transition: transform 0.4s ease;
+            will-change: transform;
         }
 
-        nav.nav-hidden { transform: translateY(-100%); }
+        nav.nav-hidden { transform: translate3d(0, -100%, 0); }
 
         .logo-container { flex: 1; display: flex; align-items: center; }
         .logo-img { height: 90px; width: auto; object-fit: contain; position: relative; z-index: 1001; }
@@ -136,10 +145,11 @@
         .dropdown-menu {
             position: absolute; top: 100%; left: 0; background: var(--bg-pure);
             border: 1px solid var(--cyan); border-top: 3px solid var(--cyan); min-width: 180px;
-            opacity: 0; pointer-events: none; transform: translateY(10px); transition: var(--transition);
+            opacity: 0; pointer-events: none; transform: translate3d(0, 10px, 0); transition: var(--transition);
             box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            will-change: transform, opacity;
         }
-        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translate3d(0, 0, 0); }
         .dropdown-menu a { padding: 15px 20px; font-size: 0.85rem; color: var(--text-grey); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .dropdown-menu a:hover { background: rgba(0, 229, 255, 0.1); color: var(--cyan); }
 
@@ -147,51 +157,29 @@
         .hamburger div { width: 30px; height: 3px; background-color: var(--cyan); }
 
         /* =========================================
-           1. HERO & ABOUT SECTION (Expanded Spacing)
+           1. HERO & ABOUT SECTION
            ========================================= */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 160px 5% 100px;
-            position: relative;
-            z-index: 10;
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 160px 5% 100px; position: relative; z-index: 10;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 12vw, 9rem);
-            line-height: 1;
-            color: transparent;
-            -webkit-text-stroke: 2px var(--cyan);
-            text-shadow: 0 0 40px rgba(0,229,255,0.2);
-            margin: 0 0 40px 0; /* Expanded spacing */
+            font-size: clamp(3rem, 12vw, 9rem); line-height: 1; color: transparent;
+            -webkit-text-stroke: 2px var(--cyan); text-shadow: 0 0 40px rgba(0,229,255,0.2); margin: 0 0 40px 0; 
         }
 
         .slogan {
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-            color: var(--cyan);
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-bottom: 80px; /* Expanded spacing */
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem); color: var(--cyan); font-family: 'Montserrat', sans-serif;
+            font-weight: 600; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 80px; 
         }
 
         .about-box {
-            max-width: 800px;
-            background: rgba(10, 10, 10, 0.6); 
-            border-top: 2px solid var(--cyan);
-            border-bottom: 2px solid var(--cyan);
-            border-left: 1px solid rgba(0, 229, 255, 0.1);
-            border-right: 1px solid rgba(0, 229, 255, 0.1);
-            padding: 40px 50px;
-            backdrop-filter: blur(8px);
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-            border-radius: 4px;
+            max-width: 800px; background: rgba(10, 10, 10, 0.6); 
+            border-top: 2px solid var(--cyan); border-bottom: 2px solid var(--cyan);
+            border-left: 1px solid rgba(0, 229, 255, 0.1); border-right: 1px solid rgba(0, 229, 255, 0.1);
+            padding: 40px 50px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); border-radius: 4px;
         }
         
         .about-box p { font-size: 1.1rem; line-height: 1.9; color: var(--text-main); }
@@ -200,14 +188,9 @@
            2. DEAD IGNITION SPOTLIGHT
            ========================================= */
         .spotlight {
-            padding: 120px 5%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.8), transparent);
-            position: relative;
-            z-index: 10;
+            padding: 120px 5%; display: flex; flex-direction: column; align-items: center;
+            text-align: center; background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.8), transparent);
+            position: relative; z-index: 10;
         }
 
         .spotlight img { width: 150px; height: 150px; margin-bottom: 30px; border-radius: 20px; border: 2px solid var(--cyan); box-shadow: 0 0 30px var(--cyan-glow); }
@@ -229,7 +212,7 @@
             background: var(--bg-panel); border: 1px solid rgba(0, 229, 255, 0.2);
             padding: 30px; display: flex; flex-direction: column; transition: var(--transition);
         }
-        .news-card:hover { border-color: var(--cyan); transform: translateY(-10px); box-shadow: 0 10px 30px var(--cyan-glow); }
+        .news-card:hover { border-color: var(--cyan); transform: translate3d(0, -10px, 0); box-shadow: 0 10px 30px var(--cyan-glow); }
         .news-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--cyan); line-height: 1.2; }
         .news-card p { font-size: 0.95rem; color: #ccc; line-height: 1.6; margin-bottom: 30px; flex-grow: 1;}
         .read-more { color: var(--text-main); font-family: 'Oswald', sans-serif; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
@@ -266,10 +249,10 @@
             .nav-links {
                 position: fixed; top: 80px; left: 0; width: 100%;
                 background: rgba(3, 3, 3, 0.98); flex-direction: column; gap: 0;
-                transform: translateY(-150%); transition: var(--transition);
+                transform: translate3d(0, -150%, 0); transition: var(--transition);
                 border-bottom: 2px solid var(--cyan); max-height: calc(100vh - 80px); overflow-y: auto;
             }
-            .nav-links.active { transform: translateY(0); }
+            .nav-links.active { transform: translate3d(0, 0, 0); }
             .nav-links > li { width: 100%; text-align: center; border-bottom: 1px solid rgba(0,229,255,0.1); }
             .nav-links a { padding: 20px 0; font-size: 1.1rem; }
             
@@ -285,7 +268,8 @@
             .about-box { padding: 30px 20px; margin: 0 10px; }
             .about-box p { font-size: 1rem; }
             
-            .news-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 30px; scrollbar-width: none; gap: 15px; padding-right: 20px; }
+            /* Hardware Accelerated Horizontal Scroll */
+            .news-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 30px; scrollbar-width: none; gap: 15px; padding-right: 20px; -webkit-overflow-scrolling: touch; }
             .news-container::-webkit-scrollbar { display: none; }
             .news-card { min-width: 75vw; scroll-snap-align: start; }
             
@@ -405,7 +389,7 @@
     </footer>
 
     <!-- =========================================
-         JAVASCRIPT ENGINE (Flicker Fixed)
+         JAVASCRIPT ENGINE (Hardware Accelerated Frame Sync)
          ========================================= -->
     <script>
         // 1. Mobile Menu & Smart Dropdown
@@ -431,36 +415,38 @@
             }
         });
 
-        // 2. Smart Header (Hide on scroll down)
+        // 2. Smart Header (requestAnimationFrame for Zero Scroll Lag)
         let lastScrollY = window.scrollY;
+        let ticking = false;
         const navbar = document.getElementById('navbar');
 
         window.addEventListener('scroll', () => {
-            if (!navLinks.classList.contains('active')) {
-                if (lastScrollY < window.scrollY && window.scrollY > 100) {
-                    navbar.classList.add('nav-hidden');
-                } else {
-                    navbar.classList.remove('nav-hidden');
-                }
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    if (!navLinks.classList.contains('active')) {
+                        if (lastScrollY < window.scrollY && window.scrollY > 100) {
+                            navbar.classList.add('nav-hidden');
+                        } else {
+                            navbar.classList.remove('nav-hidden');
+                        }
+                    }
+                    lastScrollY = window.scrollY;
+                    ticking = false;
+                });
+                ticking = true;
             }
-            lastScrollY = window.scrollY;
         });
 
-        // 3. Advanced Scroll Animations (Flicker Fix Applied)
+        // 3. Advanced Scroll Animations (Flicker Fixed)
         const revealElements = document.querySelectorAll('.reveal, .reveal-zoom, .reveal-blur, .reveal-delay');
         
-        const revealOptions = {
-            threshold: 0.1, 
-            rootMargin: "0px 0px -50px 0px"
-        };
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
 
         const revealOnScroll = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 } else {
-                    // FLICKER FIX: Only remove the 'active' class if the element goes off the BOTTOM of the screen.
-                    // If it goes off the top edge, we leave it active so it doesn't jump and cause an infinite loop.
                     if (entry.boundingClientRect.top > 0) {
                         entry.target.classList.remove('active');
                     }
@@ -468,9 +454,7 @@
             });
         }, revealOptions);
 
-        revealElements.forEach(el => {
-            revealOnScroll.observe(el);
-        });
+        revealElements.forEach(el => { revealOnScroll.observe(el); });
     </script>
 </body>
 </html>
