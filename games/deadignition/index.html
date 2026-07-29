@@ -16,7 +16,7 @@
 
     <style>
         /* =========================================
-           GLOBAL THEME
+           GLOBAL THEME & RESETS
            ========================================= */
         :root {
             --bg-pure: #050507; 
@@ -39,7 +39,7 @@
         h1, h2, h3, .nav-links a, .btn { font-family: 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         a { text-decoration: none; }
 
-        /* OVERLAYS */
+        /* OVERLAYS (Scanlines & Grid) */
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px); pointer-events: none; z-index: 9999; }
         .bg-matrix { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(rgba(255, 42, 42, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 42, 42, 0.05) 1px, transparent 1px); background-size: 60px 60px; z-index: -2; pointer-events: none; }
         .vignette { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at center, transparent 40%, rgba(5,5,7,0.95) 130%); pointer-events: none; z-index: 50; }
@@ -80,26 +80,39 @@
         .btn:hover::before { left: 150%; }
 
         /* =========================================
-           DEAD IGNITION HERO (PARALLAX + GLITCH)
+           PARALLAX SYSTEM (HERO & DIVIDERS)
            ========================================= */
-        .game-hero {
+        .parallax-window {
             position: relative;
-            height: 100vh;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            overflow: hidden;
             z-index: 10;
         }
 
-        /* Parallax Background */
-        .game-hero-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 120%; /* Extra height for parallax */
-            background: linear-gradient(to bottom, rgba(5,5,7,0.3) 0%, var(--bg-pure) 100%), url('../gameback.jpg') center/cover no-repeat;
+        .parallax-layer {
+            position: absolute;
+            top: -20%; /* Offset to allow movement */
+            left: 0;
+            width: 100%;
+            height: 140%; /* Taller than container for scrolling */
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             z-index: -1;
-            /* The javascript will move this to create the parallax effect */
+            will-change: transform;
+        }
+
+        /* Hero Specifics */
+        .game-hero {
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .game-hero .parallax-layer {
+            background-image: linear-gradient(rgba(5,5,7,0.4) 0%, var(--bg-pure) 100%), url('../gameback.jpg');
         }
 
         .hero-icon {
@@ -111,26 +124,50 @@
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* CSS Glitch Text */
         .glitch-title {
-            font-size: clamp(3.5rem, 10vw, 8rem);
-            color: var(--text-main);
-            font-style: italic;
-            position: relative;
-            margin-bottom: 20px;
+            font-size: clamp(3.5rem, 10vw, 8rem); color: var(--text-main);
+            font-style: italic; margin-bottom: 20px;
             text-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
         .tagline {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: var(--accent);
-            letter-spacing: 5px;
-            background: rgba(13, 13, 18, 0.8);
-            padding: 10px 30px;
-            border-left: 4px solid var(--accent);
-            border-right: 4px solid var(--accent);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--accent);
+            letter-spacing: 5px; background: rgba(13, 13, 18, 0.8);
+            padding: 10px 30px; border-left: 4px solid var(--accent); border-right: 4px solid var(--accent);
             margin-bottom: 40px;
         }
+
+        /* Divider Specifics */
+        .image-divider {
+            height: 400px;
+            width: 100%;
+            border-top: 2px solid rgba(255,42,42,0.3);
+            border-bottom: 2px solid rgba(255,42,42,0.3);
+        }
+        
+        .image-divider .parallax-layer {
+            /* We add a dark overlay to img1 and img2 so the red text pops out around it */
+            box-shadow: inset 0 0 100px #000; 
+        }
+
+        /* =========================================
+           EXPANDED STORY SECTIONS
+           ========================================= */
+        .story-section {
+            padding: 100px 5%; max-width: 900px; margin: 0 auto;
+            text-align: center; position: relative; z-index: 10;
+        }
+        
+        .story-section h3 {
+            font-size: 2.2rem; color: var(--text-main); margin-bottom: 25px; font-style: italic;
+        }
+        .story-section h3 span { color: var(--accent); }
+
+        .story-section p {
+            font-size: 1.25rem; line-height: 1.8; color: var(--text-grey);
+            margin-bottom: 20px; font-weight: 500;
+        }
+        .story-section p strong { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; letter-spacing: 1px; }
 
         /* =========================================
            TRAILER SECTION (YOUTUBE EMBED)
@@ -138,10 +175,15 @@
         .trailer-section {
             padding: 100px 5%;
             display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: 10;
+            position: relative; z-index: 10; text-align: center;
         }
         
-        .section-title { font-size: 3rem; margin-bottom: 50px; border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 5px; font-style: italic;}
+        /* Mobile alignment fix applied here */
+        .trailer-section .section-title { 
+            font-size: 3rem; margin-bottom: 50px; 
+            border-bottom: 4px solid var(--accent); 
+            display: inline-block; padding-bottom: 5px; font-style: italic;
+        }
 
         .video-container {
             width: 100%;
@@ -155,48 +197,9 @@
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
         }
 
-        /* The actual YouTube iframe */
         .video-container iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
         }
-
-        /* =========================================
-           STORY / LORE SECTION
-           ========================================= */
-        .lore-section {
-            padding: 80px 5%; max-width: 900px; margin: 0 auto;
-            text-align: center; position: relative; z-index: 10;
-        }
-        .lore-section p {
-            font-size: 1.3rem; line-height: 1.8; color: var(--text-grey);
-            margin-bottom: 20px;
-        }
-        .lore-section p strong { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; letter-spacing: 1px; }
-
-        /* =========================================
-           GALLERY GRID (PLACEHOLDER)
-           ========================================= */
-        .gallery-section {
-            padding: 100px 5%;
-            position: relative; z-index: 10;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px; margin: 0 auto;
-        }
-        .gallery-item {
-            width: 100%; aspect-ratio: 16/9;
-            background: var(--bg-panel);
-            border: 1px solid rgba(255,42,42,0.2);
-            transition: var(--transition);
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-            /* Background image injected via style tag below when you provide names */
-        }
-        .gallery-item:hover { border-color: var(--accent); transform: scale(1.03); z-index: 2;}
 
         /* =========================================
            FOOTER (EXACT MATCH)
@@ -228,7 +231,14 @@
             .dropdown-menu a { padding: 15px 0; font-size: 1rem !important; color: var(--accent) !important; }
             .nav-links a.support-btn { margin: 20px auto; width: 80%; background: transparent; border: 2px solid var(--accent); color: var(--accent); }
 
-            .glitch-title { font-size: 3rem; }
+            /* Fix Mobile Zoom for Parallax Images */
+            .game-hero { height: 80vh; min-height: 500px; }
+            .parallax-layer { height: 120%; top: -10%; } 
+            .image-divider { height: 250px; }
+
+            .glitch-title { font-size: 3.5rem; }
+            .trailer-section .section-title { font-size: 2.2rem; }
+            
             .footer-links { gap: 20px; flex-direction: column; }
         }
     </style>
@@ -265,40 +275,47 @@
         </ul>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header class="game-hero">
-        <div class="game-hero-bg" id="parallax-bg"></div>
-        <img src="/icon.png" alt="Dead Ignition Icon" class="hero-icon reveal">
-        <h1 class="glitch-title reveal">DEAD IGNITION</h1>
-        <p class="tagline reveal-delay">SURVIVE THE NIGHT. FIX THE RIDE.</p>
-        <a href="#trailer" class="btn reveal-delay">WATCH TRAILER</a>
+    <!-- HERO SECTION (gameback.jpg) -->
+    <header class="parallax-window game-hero">
+        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.3) 0%, var(--bg-pure) 100%), url('../gameback.jpg');" data-speed="0.4"></div>
+        <div style="z-index: 2;">
+            <img src="/icon.png" alt="Dead Ignition Icon" class="hero-icon reveal">
+            <h1 class="glitch-title reveal">DEAD IGNITION</h1>
+            <p class="tagline reveal-delay">SURVIVE THE NIGHT. FIX THE RIDE.</p>
+            <a href="#trailer" class="btn reveal-delay">WATCH TRAILER</a>
+        </div>
     </header>
 
-    <!-- STORY LORE -->
-    <section class="lore-section reveal">
-        <p>Your engine died. The radio is silent. And the shadows are moving.</p>
-        <p><strong>Dead Ignition</strong> is a zero-budget, high-tension survival horror experience built for Android. Stranded in an abandoned industrial zone, you must scour the darkness for vehicle parts to repair your car. But you are not alone.</p>
-        <p>Manage your flashlight battery, hide from what stalks you in the fog, and collect the tools needed to escape before the night consumes you entirely.</p>
+    <!-- STORY PART 1 -->
+    <section class="story-section reveal">
+        <h3>THE ENGINE DIES. <span>THE NIGHTMARE BEGINS.</span></h3>
+        <p>You are stranded. Your vehicle has broken down in a massive, desolate industrial zone far from civilization. The radio emits nothing but static, and the shadows just outside your headlights seem to be shifting.</p>
+        <p><strong>Dead Ignition</strong> is a zero-budget, high-tension survival horror game designed for Android. No hand-holding. No auto-saves. You must step into the dark and face what lies within.</p>
     </section>
+
+    <!-- PARALLAX IMAGE 1 (img1.jpeg) -->
+    <div class="parallax-window image-divider reveal">
+        <!-- Slightly darkened gradient so it blends nicely -->
+        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.5), rgba(5,5,7,0.5)), url('img1.jpeg');" data-speed="0.25"></div>
+    </div>
+
+    <!-- STORY PART 2 -->
+    <section class="story-section reveal">
+        <h3>SCAVENGE. REPAIR. <span>SURVIVE.</span></h3>
+        <p>Your only escape is the car you arrived in, but vital parts are missing. You must cautiously explore abandoned warehouses, rusted scrapyards, and bloodstained offices to find the spark plugs, fuel, and wire you need to repair your engine.</p>
+        <p>Every noise you make matters. Every second you leave your flashlight on drains the battery. Gather supplies, manage your inventory, and hide from the locals—because they aren't human anymore, and they are hunting you.</p>
+    </section>
+
+    <!-- PARALLAX IMAGE 2 (img2.jpeg) -->
+    <div class="parallax-window image-divider reveal">
+        <div class="parallax-layer" style="background-image: linear-gradient(rgba(5,5,7,0.5), rgba(5,5,7,0.5)), url('img2.jpeg');" data-speed="0.25"></div>
+    </div>
 
     <!-- TRAILER EMBED -->
     <section id="trailer" class="trailer-section reveal">
-        <h2 class="section-title">OFFICIAL TRANSMISSION</h2>
+        <h2 class="section-title">OFFICIAL TRAILER</h2>
         <div class="video-container">
-            <!-- Replace 'dQw4w9WgXcQ' with your actual YouTube Video ID when ready! -->
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=abcdefgh" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </div>
-    </section>
-
-    <!-- SCREENSHOT GALLERY -->
-    <section class="gallery-section">
-        <h2 class="section-title reveal" style="text-align: center; display: block;">ARCHIVES</h2>
-        <div class="gallery-grid reveal-delay">
-            <!-- I will hook up your actual images here once you give me the names -->
-            <div class="gallery-item" style="background-color: #1a1a24;"></div>
-            <div class="gallery-item" style="background-color: #1a1a24;"></div>
-            <div class="gallery-item" style="background-color: #1a1a24;"></div>
-            <div class="gallery-item" style="background-color: #1a1a24;"></div>
+            <iframe src="https://www.youtube.com/embed/wiVz7bhZ_5I" title="Dead Ignition Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
     </section>
 
@@ -351,11 +368,11 @@
             }
         });
 
-        // Parallax Effect & Smart Header
+        // Universal Parallax Logic
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
         let lastScrollY = window.scrollY;
         let ticking = false;
         const navbar = document.getElementById('navbar');
-        const parallaxBg = document.getElementById('parallax-bg');
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -369,11 +386,19 @@
                         }
                     }
                     
-                    // Parallax Logic (Lightweight)
-                    let scrollPosition = window.scrollY;
-                    if(scrollPosition < window.innerHeight) {
-                        parallaxBg.style.transform = `translateY(${scrollPosition * 0.4}px)`;
-                    }
+                    // Parallax Scroll Math (Calculates position based on screen center)
+                    parallaxLayers.forEach(layer => {
+                        const speed = layer.getAttribute('data-speed') || 0.3;
+                        const parent = layer.parentElement;
+                        const rect = parent.getBoundingClientRect();
+                        
+                        // Only do the math if the image is actually visible on the screen
+                        if (rect.top < window.innerHeight && rect.bottom > 0) {
+                            const distanceToCenter = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+                            const yPos = distanceToCenter * speed;
+                            layer.style.transform = `translateY(${yPos}px)`;
+                        }
+                    });
 
                     lastScrollY = window.scrollY;
                     ticking = false;
@@ -382,7 +407,7 @@
             }
         });
 
-        // Scroll Reveal
+        // Scroll Reveal Array
         const revealElements = document.querySelectorAll('.reveal, .reveal-zoom, .reveal-delay');
         const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const revealOnScroll = new IntersectionObserver(function(entries) {
