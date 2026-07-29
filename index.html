@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inka Studio</title>
     
-    <!-- This line fixes the "Globe" issue and adds your icon to the browser tab! -->
-    <link rel="icon" type="image/png" href="icon.png">
+    <!-- Tab Icon (Favicon) updated to logo.png -->
+    <link rel="icon" type="image/png" href="logo.png">
     
     <!-- AAA Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        html { scroll-behavior: smooth; } /* Enables smooth scrolling for the Support button */
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-pure);
@@ -52,18 +52,23 @@
         a { text-decoration: none; }
 
         /* =========================================
-           CONTINUOUS SCROLL ANIMATIONS
+           ADVANCED SCROLL ANIMATIONS
            ========================================= */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Standard Slide Up */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Hero Main Text Zoom */
+        .reveal-zoom { opacity: 0; transform: scale(0.9); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-zoom.active { opacity: 1; transform: scale(1); }
+
+        /* Slogan Blur Reveal */
+        .reveal-blur { opacity: 0; filter: blur(10px); transition: all 1s ease 0.2s; }
+        .reveal-blur.active { opacity: 1; filter: blur(0); }
+
+        /* About Box Delay */
+        .reveal-delay { opacity: 0; transform: translateY(30px); transition: all 0.8s ease 0.4s; }
+        .reveal-delay.active { opacity: 1; transform: translateY(0); }
 
         /* =========================================
            SMART HEADER
@@ -72,7 +77,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            height: 90px;
+            height: 100px;
             display: flex;
             align-items: center;
             padding: 0 5%;
@@ -86,25 +91,13 @@
 
         nav.nav-hidden { transform: translateY(-100%); }
 
-        .logo-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img {
-            height: 75px; /* Increased logo size */
-            width: auto;
-            object-fit: contain;
-        }
+        .logo-container { flex: 1; display: flex; align-items: center; }
+        
+        /* Enlarged Logo */
+        .logo-img { height: 90px; width: auto; object-fit: contain; }
 
         /* Desktop Nav Links */
-        .nav-links {
-            display: flex;
-            gap: 35px;
-            align-items: center;
-        }
-
+        .nav-links { display: flex; gap: 35px; align-items: center; }
         .nav-links > li { list-style: none; position: relative; }
 
         .nav-links a {
@@ -115,18 +108,15 @@
             padding: 10px 0;
         }
 
-        .nav-links a:hover {
-            color: var(--cyan);
-            text-shadow: 0 0 10px var(--cyan-glow);
-        }
+        .nav-links a:hover { color: var(--cyan); text-shadow: 0 0 10px var(--cyan-glow); }
 
-        /* Bold Support Button */
+        /* Desktop Support Button */
         .nav-links a.support-btn {
             background-color: var(--cyan);
             color: var(--bg-pure);
-            padding: 8px 20px;
+            padding: 8px 25px;
             font-weight: 700;
-            border-radius: 4px;
+            border-radius: 2px;
         }
         .nav-links a.support-btn:hover {
             background-color: transparent;
@@ -135,7 +125,7 @@
             text-shadow: none;
         }
 
-        /* Dropdown Logic */
+        /* PC Dropdown Logic */
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -143,7 +133,7 @@
             background: var(--bg-pure);
             border: 1px solid var(--cyan);
             border-top: 3px solid var(--cyan);
-            min-width: 200px;
+            min-width: 180px;
             opacity: 0;
             pointer-events: none;
             transform: translateY(10px);
@@ -151,30 +141,22 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
 
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(0);
-        }
+        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
 
+        /* Dropdown text smaller than main text */
         .dropdown-menu a {
             padding: 15px 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem; 
+            color: var(--text-grey);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .dropdown-menu a:hover { background: rgba(0, 229, 255, 0.1); }
+        .dropdown-menu a:hover { background: rgba(0, 229, 255, 0.1); color: var(--cyan); }
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 1100;
-        }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1100; }
         .hamburger div { width: 30px; height: 3px; background-color: var(--cyan); }
 
         /* =========================================
-           1. HERO & ABOUT SECTION
+           1. HERO & ABOUT SECTION (UI Overhaul)
            ========================================= */
         .hero {
             min-height: 100vh;
@@ -183,31 +165,41 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 120px 5% 50px;
+            padding: 140px 5% 50px;
             position: relative;
         }
 
         .hero h1 {
-            font-size: clamp(3.5rem, 12vw, 10rem);
+            font-size: clamp(3rem, 12vw, 9rem);
             line-height: 1;
             color: transparent;
             -webkit-text-stroke: 2px var(--cyan);
             text-shadow: 0 0 40px rgba(0,229,255,0.2);
-            margin: 0;
+            margin: 0 0 20px 0; /* Spacing adjusted */
         }
 
         .slogan {
-            font-size: clamp(1rem, 3vw, 1.8rem);
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
             color: var(--cyan);
-            font-family: 'Oswald', sans-serif;
-            letter-spacing: 5px;
-            margin-top: 10px;
+            font-family: 'Montserrat', sans-serif; /* Cleaner font for slogan */
+            font-weight: 600;
+            letter-spacing: 6px;
             text-transform: uppercase;
+            margin-bottom: 50px;
         }
 
-        .about-text {
-            max-width: 700px;
-            margin-top: 30px;
+        /* Glassmorphic About Box UI */
+        .about-box {
+            max-width: 800px;
+            background: rgba(0, 229, 255, 0.03);
+            border-left: 4px solid var(--cyan);
+            padding: 30px 40px;
+            backdrop-filter: blur(5px);
+            text-align: left;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .about-box p {
             font-size: 1.1rem;
             line-height: 1.8;
             color: var(--text-main);
@@ -225,15 +217,7 @@
             background: linear-gradient(to bottom, transparent, var(--bg-panel), transparent);
         }
 
-        .spotlight img {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 30px;
-            border-radius: 20px;
-            border: 2px solid var(--cyan);
-            box-shadow: 0 0 30px var(--cyan-glow);
-        }
-
+        .spotlight img { width: 150px; height: 150px; margin-bottom: 30px; border-radius: 20px; border: 2px solid var(--cyan); box-shadow: 0 0 30px var(--cyan-glow); }
         .spotlight h2 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 10px; }
         .spotlight p { font-size: 1.2rem; font-weight: 600; color: var(--cyan); letter-spacing: 4px; }
         
@@ -251,17 +235,12 @@
         .btn:hover { background: var(--cyan); color: var(--bg-pure); box-shadow: 0 0 20px var(--cyan-glow); }
 
         /* =========================================
-           3. NEWSWIRE (PC 4-Grid / Mobile Scroll)
+           3. NEWSWIRE (Fixed Padding)
            ========================================= */
-        .newswire-section { padding: 100px 5% 150px; }
+        .newswire-section { padding: 100px 5% 50px; } /* Reduced bottom padding to fix footer cutoff */
         .section-title { font-size: 3rem; margin-bottom: 40px; border-bottom: 2px solid var(--cyan); display: inline-block; padding-bottom: 10px;}
 
-        /* Desktop Default: 4 Columns */
-        .news-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
+        .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
         .news-card {
             background: var(--bg-panel);
@@ -271,12 +250,7 @@
             flex-direction: column;
             transition: var(--transition);
         }
-        .news-card:hover {
-            border-color: var(--cyan);
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px var(--cyan-glow);
-        }
-
+        .news-card:hover { border-color: var(--cyan); transform: translateY(-10px); box-shadow: 0 10px 30px var(--cyan-glow); }
         .news-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--cyan); line-height: 1.2; }
         .news-card p { font-size: 0.95rem; color: #ccc; line-height: 1.6; margin-bottom: 30px; flex-grow: 1;}
         .read-more { color: var(--text-main); font-family: 'Oswald', sans-serif; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
@@ -291,91 +265,76 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 80px 5% 40px;
+            padding: 60px 5% 30px; /* Tighter padding so copyright is visible */
         }
 
-        .footer-links {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 50px;
-        }
-        .footer-links a {
-            color: var(--text-main);
-            font-family: 'Oswald', sans-serif;
-            font-size: 1rem; /* Professional scaled down size */
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: var(--transition);
-        }
+        .footer-links { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+        .footer-links a { color: var(--text-main); font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; transition: var(--transition); }
         .footer-links a:hover { color: var(--cyan); text-shadow: 0 0 10px var(--cyan-glow); }
 
-        .social-icons { display: flex; gap: 30px; margin-bottom: 80px; }
-        .social-icons svg {
-            width: 30px;
-            height: 30px;
-            fill: var(--cyan);
-            transition: var(--transition);
-            cursor: pointer;
-        }
+        .social-icons { display: flex; gap: 30px; margin-bottom: 50px; }
+        .social-icons svg { width: 30px; height: 30px; fill: var(--cyan); transition: var(--transition); cursor: pointer; }
         .social-icons svg:hover { transform: scale(1.2); filter: drop-shadow(0 0 10px var(--cyan)); }
 
-        .final-notice {
-            width: 100%;
-            border-top: 1px solid rgba(0, 229, 255, 0.2);
-            padding-top: 40px;
-        }
-        /* Sleek grey notice text */
-        .final-notice p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: var(--text-grey);
-            text-transform: uppercase;
-        }
+        .final-notice { width: 100%; border-top: 1px solid rgba(0, 229, 255, 0.2); padding-top: 30px; }
+        .final-notice p { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; letter-spacing: 2px; color: var(--text-grey); text-transform: uppercase; }
 
         /* =========================================
            MOBILE RESPONSIVENESS
            ========================================= */
         @media (max-width: 768px) {
-            nav { padding: 0 20px; }
+            nav { padding: 0 20px; height: 80px; }
             .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
             
-            /* Hamburger on the Left */
+            /* Mobile Logo Size */
+            .logo-img { height: 60px; }
+            
             .hamburger { display: flex; position: absolute; left: 20px; }
             
             .nav-links {
-                position: fixed;
-                top: 90px;
-                left: 0;
-                width: 100%;
+                position: fixed; top: 80px; left: 0; width: 100%;
                 background: rgba(3, 3, 3, 0.98);
-                flex-direction: column;
-                gap: 0;
+                flex-direction: column; gap: 0;
                 transform: translateY(-150%);
                 transition: var(--transition);
                 border-bottom: 2px solid var(--cyan);
             }
             .nav-links.active { transform: translateY(0); }
+            
+            /* General Nav Links in Mobile */
             .nav-links > li { width: 100%; text-align: center; border-bottom: 1px solid rgba(0,229,255,0.1); }
-            /* Mobile Nav Text scaled down nicely */
             .nav-links a { padding: 20px 0; font-size: 1.1rem; }
             
-            .nav-links a.support-btn { border-radius: 0; }
-
-            .dropdown-menu { position: static; box-shadow: none; border: none; display: none; }
-            .dropdown:hover .dropdown-menu { display: block; }
-
-            /* Mobile Horizontal Scroll for Newswire */
-            .news-container {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                padding-bottom: 30px;
-                scrollbar-width: none;
-                gap: 20px;
+            /* Mobile Dropdown Fixes */
+            .dropdown-menu {
+                position: static; box-shadow: none; border: none; display: block;
+                background: rgba(0, 229, 255, 0.05); /* Slight tint for contrast */
+                padding: 0;
             }
+            .dropdown-menu a {
+                padding: 15px 0;
+                font-size: 0.85rem !important; /* Smaller than main mobile text */
+                color: var(--cyan) !important;
+                letter-spacing: 2px;
+            }
+
+            /* Mobile Support Button Design */
+            .nav-links a.support-btn {
+                margin: 20px auto;
+                width: 80%;
+                background: transparent;
+                border: 1px solid var(--cyan);
+                color: var(--cyan);
+                border-radius: 4px;
+            }
+
+            /* UI Mobile Adjustments */
+            .hero { padding-top: 120px; }
+            .about-box { padding: 25px; margin: 0 20px; }
+            .about-box p { font-size: 1rem; }
+            
+            /* Mobile Horizontal Scroll for Newswire */
+            .news-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 30px; scrollbar-width: none; gap: 20px; }
             .news-container::-webkit-scrollbar { display: none; }
             .news-card { min-width: 85vw; scroll-snap-align: center; }
             
@@ -387,11 +346,8 @@
 
     <!-- 1. SMART NAVBAR -->
     <nav id="navbar">
-        <!-- Mobile menu icon left -->
         <div class="hamburger" id="hamburger">
-            <div></div>
-            <div></div>
-            <div></div>
+            <div></div><div></div><div></div>
         </div>
 
         <div class="logo-container">
@@ -402,7 +358,6 @@
         
         <ul class="nav-links" id="navLinks">
             <li class="dropdown">
-                <!-- href="javascript:void(0)" stops the main Games button from doing anything -->
                 <a href="javascript:void(0);">Games ▾</a>
                 <div class="dropdown-menu">
                     <a href="/games/dead-ignition">Dead Ignition</a>
@@ -411,18 +366,20 @@
             <li><a href="/news">Newswire</a></li>
             <li><a href="/videos">Videos</a></li>
             <li><a href="/downloads">Downloads</a></li>
-            <!-- Support Button anchors down to the footer -->
-            <li><a href="#footer-section" class="support-btn">Support</a></li>
+            <!-- ID target for smooth scrolling -->
+            <li><a href="#footer-section" class="support-btn" id="mobile-support-btn">Support</a></li>
         </ul>
     </nav>
 
     <!-- 2. HERO & ABOUT -->
     <section class="hero">
-        <h1 class="reveal">INKA STUDIO</h1>
-        <h3 class="slogan reveal">Building the Dark</h3>
-        <p class="about-text reveal">
-            We are an independent game development studio built on a zero-budget, DIY ethos. We specialize in atmospheric, C++ engineered survival horror experiences without corporate bloat or asset flips.
-        </p>
+        <h1 class="reveal-zoom">INKA STUDIO</h1>
+        <h3 class="slogan reveal-blur">Official Website of Inka Studio</h3>
+        <div class="about-box reveal-delay">
+            <p>
+                We are an independent game development studio built on a zero-budget, DIY ethos. We specialize in atmospheric, C++ engineered survival horror experiences without corporate bloat or asset flips.
+            </p>
+        </div>
     </section>
 
     <!-- 3. DEAD IGNITION SPOTLIGHT -->
@@ -433,7 +390,7 @@
         <a href="/games/dead-ignition" class="btn reveal">VIEW PROJECT</a>
     </section>
 
-    <!-- 4. NEWSWIRE (4-Grid PC / Scroll Mobile) -->
+    <!-- 4. NEWSWIRE -->
     <section class="newswire-section">
         <h2 class="section-title reveal">NEWSWIRE</h2>
         
@@ -453,7 +410,6 @@
                 <p>When the grid failed, the rules changed. A brief lore drop introducing resource mechanics.</p>
                 <a href="/news/lore" class="read-more">Read More &rarr;</a>
             </div>
-            <!-- 4th Card matches layout perfectly for PC -->
             <div class="news-card">
                 <h3>VIEW ALL UPDATES</h3>
                 <p>Access the full archive of studio updates, devlogs, and recruitment posts.</p>
@@ -462,7 +418,7 @@
         </div>
     </section>
 
-    <!-- 5 & 6. FOOTER (Contact, Careers, Privacy) -->
+    <!-- 5 & 6. FOOTER (With ID for support anchor) -->
     <footer id="footer-section">
         <div class="footer-links reveal">
             <a href="/contact">Contact</a>
@@ -480,8 +436,8 @@
             <a href="https://x.com/InkaStudio" target="_blank" aria-label="Twitter">
                 <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
-            <!-- YouTube -->
-            <a href="https://youtube.com/@InkaStudioOffical" target="_blank" aria-label="YouTube">
+            <!-- YouTube (Updated Link) -->
+            <a href="https://youtube.com/@inkastudioofficial?si=4-EwV8QyCGsZXG4k" target="_blank" aria-label="YouTube">
                 <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
         </div>
@@ -495,12 +451,20 @@
          JAVASCRIPT ENGINE
          ========================================= -->
     <script>
-        // 1. Mobile Menu Toggle
+        // 1. Mobile Menu Toggle & Auto-Close on Support Click
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
+        const mobileSupportBtn = document.getElementById('mobile-support-btn');
         
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when "Support" is clicked
+        mobileSupportBtn.addEventListener('click', () => {
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
         });
 
         // 2. Smart Header (Hide on scroll down)
@@ -518,11 +482,11 @@
             lastScrollY = window.scrollY;
         });
 
-        // 3. Continuous Scroll Animations
-        const revealElements = document.querySelectorAll('.reveal');
+        // 3. Multi-Tier Scroll Animations
+        const revealElements = document.querySelectorAll('.reveal, .reveal-zoom, .reveal-blur, .reveal-delay');
         
         const revealOptions = {
-            threshold: 0.15, 
+            threshold: 0.1, 
             rootMargin: "0px 0px -50px 0px"
         };
 
