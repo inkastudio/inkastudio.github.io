@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Games - Inka Studio</title>
+    <title>Our Games - Inka Studio</title>
     
     <link rel="icon" type="image/png" sizes="192x192" href="../favicon.png">
     <link rel="apple-touch-icon" href="../favicon.png">
@@ -86,7 +86,9 @@
         .reveal-delay { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out 0.4s; }
         .reveal-delay.active { opacity: 1; transform: translateY(0); }
 
-        /* SMART HEADER */
+        /* =========================================
+           SMART HEADER (Tech UI Style)
+           ========================================= */
         nav {
             position: fixed; top: 0; width: 100%; height: 90px;
             display: flex; align-items: center; padding: 0 5%;
@@ -103,11 +105,15 @@
             will-change: transform;
         }
         @keyframes data-stream { 0% { transform: translateX(0); } 100% { transform: translateX(200%); } }
+
         nav.nav-hidden { transform: translateY(-100%); }
+
         .logo-container { flex: 1; display: flex; align-items: center; }
         .logo-img { height: 70px; width: auto; object-fit: contain; position: relative; z-index: 1001; }
+
         .nav-links { display: flex; gap: 40px; align-items: center; z-index: 1001; }
         .nav-links > li { list-style: none; position: relative; }
+
         .nav-links a { color: var(--text-main); font-size: 1.1rem; font-weight: 700; transition: var(--transition); display: block; padding: 10px 0; }
         .nav-links a:hover { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
@@ -147,7 +153,7 @@
         .btn:hover::before { left: 150%; }
 
         /* =========================================
-           GAMES ROSTER HEADER
+           PAGE HEADER
            ========================================= */
         .page-header {
             padding: 180px 5% 60px;
@@ -164,106 +170,101 @@
         }
         .page-header p {
             font-size: 1.2rem; color: var(--text-grey);
-            letter-spacing: 4px; text-transform: uppercase;
+            letter-spacing: 4px; text-transform: uppercase; font-weight: 600;
         }
 
         /* =========================================
-           GAMES SHOWCASE GRID
+           NEW GAME BANNER DESIGN
            ========================================= */
-        .games-roster {
+        .games-container {
             padding: 0 5% 100px;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             position: relative; z-index: 10;
             display: flex;
             flex-direction: column;
-            gap: 50px;
+            gap: 60px;
         }
 
-        /* Horizontal Cinematic Card */
-        .game-card {
-            display: flex;
+        .game-banner {
             background: rgba(13, 13, 18, 0.85);
-            border: 1px solid rgba(255, 42, 42, 0.2);
-            border-left: 4px solid var(--accent);
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
-            transition: var(--transition);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
         }
-        .game-card:hover {
+
+        .game-banner:hover {
             border-color: var(--accent);
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,42,42,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        /* Left Side: Icon/Image */
-        .card-visual {
-            width: 45%;
+        /* Banner Top Image */
+        .banner-img {
+            width: 100%;
+            height: 350px;
+            /* Placeholder for a cool dark screenshot or art */
+            background: url('https://images.unsplash.com/photo-1505506874110-6a7a6c9924cb?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+            border-bottom: 2px solid var(--accent);
             position: relative;
-            overflow: hidden;
-            background: #000;
-            display: flex; justify-content: center; align-items: center;
-        }
-        
-        /* Using CSS to inject a cinematic fallback texture */
-        .card-visual::after {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
-            background: url('https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=800&auto=format&fit=crop') center/cover;
-            opacity: 0.3; filter: grayscale(100%); transition: var(--transition);
-        }
-        .game-card:hover .card-visual::after { opacity: 0.5; filter: grayscale(0%); transform: scale(1.05);}
-        
-        .card-icon {
-            position: relative; z-index: 2;
-            width: 140px; height: 140px;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-            clip-path: polygon(20% 0%, 100% 0, 100% 80%, 80% 100%, 0 100%, 0% 20%);
         }
 
-        /* Right Side: Info */
-        .card-content {
-            width: 55%;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        /* Overlapping Game Icon */
+        .game-icon-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: 40px;
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--accent);
+            background-color: var(--bg-pure);
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0,0,0,0.9);
+            z-index: 2;
+            clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
         }
+
+        /* Banner Text Content */
+        .banner-content {
+            padding: 70px 40px 40px 40px;
+        }
+
         .status-badge {
             display: inline-block;
             background: rgba(255,42,42,0.1);
             color: var(--accent);
             padding: 5px 15px;
             font-size: 0.9rem; font-weight: 700; letter-spacing: 2px;
-            margin-bottom: 15px; align-self: flex-start;
+            margin-bottom: 15px;
             border: 1px solid rgba(255,42,42,0.3);
         }
-        .card-content h2 {
-            font-size: 2.8rem; margin-bottom: 15px; font-style: italic; color: var(--text-main);
+
+        .banner-content h2 {
+            font-size: 2.5rem; margin-bottom: 15px; font-style: italic; color: var(--text-main);
         }
-        .card-content p {
+
+        .banner-content p {
             color: var(--text-grey); font-size: 1.15rem; line-height: 1.7; margin-bottom: 30px; font-weight: 500;
         }
 
-        /* "Coming Soon" Classified Card */
-        .classified-card {
-            border-left: 4px solid var(--text-grey);
+        /* "Coming Soon" Box Overrides */
+        .soon-banner {
             border-color: rgba(255,255,255,0.1);
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
             text-align: center;
         }
-        .classified-card .card-visual { display: none; }
-        .classified-card .card-content { width: 100%; align-items: center; padding: 20px;}
-        .classified-card h2 { color: var(--text-grey); font-size: 2.2rem; }
-        .classified-card .status-badge { color: var(--text-grey); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); align-self: center;}
-        
-        /* CSS-Only lightweight scanline animation for the soon card */
-        .classified-card::before {
-            content: ''; position: absolute; top:0; left:0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255,255,255,0.02) 4px, rgba(255,255,255,0.02) 8px);
-            z-index: 0; pointer-events: none;
+        .soon-banner .banner-content {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .soon-banner h2 { color: var(--text-grey); }
+        .soon-banner .status-badge { 
+            color: var(--text-grey); 
+            background: rgba(255,255,255,0.05); 
+            border-color: rgba(255,255,255,0.2); 
         }
 
         /* =========================================
@@ -310,11 +311,11 @@
 
             .page-header { padding-top: 140px; }
             
-            /* Responsive Game Cards */
-            .game-card { flex-direction: column; }
-            .card-visual { width: 100%; height: 250px; }
-            .card-content { width: 100%; padding: 30px 20px; text-align: center; }
-            .status-badge { align-self: center; }
+            /* Responsive adjustments for the new banner layout */
+            .banner-img { height: 200px; }
+            .game-icon-overlay { width: 90px; height: 90px; bottom: -45px; left: 20px; }
+            .banner-content { padding: 60px 20px 30px 20px; text-align: left; }
+            .banner-content h2 { font-size: 2rem; }
             
             .footer-links { gap: 20px; flex-direction: column; }
         }
@@ -334,7 +335,6 @@
 
         <div class="logo-container">
             <a href="/">
-                <!-- Note: Adjusted path to logo if needed. If logo is in root, use /logo.png -->
                 <img src="/logo.png" alt="Inka Studio Logo" class="logo-img">
             </a>
         </div>
@@ -356,36 +356,32 @@
 
     <!-- 2. PAGE HEADER -->
     <header class="page-header">
-        <h1 class="reveal-zoom">OUR TITLES</h1>
-        <p class="reveal-delay">The Inka Studio Roster</p>
+        <h1 class="reveal-zoom">OUR GAMES</h1>
+        <p class="reveal-delay">Explore our games</p>
     </header>
 
     <!-- 3. GAMES GRID -->
-    <section class="games-roster">
+    <section class="games-container">
         
-        <!-- DEAD IGNITION CARD -->
-        <article class="game-card reveal">
-            <div class="card-visual">
-                <!-- Using the same icon format as the homepage -->
-                <img src="/icon.png" alt="Dead Ignition Icon" class="card-icon">
+        <!-- DEAD IGNITION BANNER CARD -->
+        <article class="game-banner reveal">
+            <div class="banner-img">
+                <img src="/icon.png" alt="Dead Ignition Icon" class="game-icon-overlay">
             </div>
-            <div class="card-content">
-                <span class="status-badge">IN DEVELOPMENT</span>
+            <div class="banner-content">
+                <span class="status-badge">ANDROID GAME</span>
                 <h2>DEAD IGNITION</h2>
-                <p>An atmospheric, C++ engineered survival horror experience built from the ground up. When the grid failed, the rules changed. Scavenge, survive, and uncover the truth in a harsh, unyielding world.</p>
-                <div>
-                    <!-- Links to the specific game page -->
-                    <a href="/games/deadignition" class="btn">LEARN MORE</a>
-                </div>
+                <p>A survival horror game for Android. Your car has broken down in a dark, dangerous zone. To escape, you must explore the shadows, find the missing parts, and fix your vehicle. Manage your supplies, hide from enemies, and do whatever it takes to survive the night.</p>
+                <a href="/games/deadignition" class="btn">LEARN MORE</a>
             </div>
         </article>
 
-        <!-- MORE GAMES SOON CARD -->
-        <article class="game-card classified-card reveal-delay">
-            <div class="card-content" style="position: relative; z-index: 2;">
-                <span class="status-badge">CLASSIFIED</span>
-                <h2>TRANSMISSION INCOMING...</h2>
-                <p>Additional projects are currently undergoing raw engineering protocol. Stay tuned to the newswire for classified drops.</p>
+        <!-- MORE GAMES SOON BANNER CARD -->
+        <article class="game-banner soon-banner reveal-delay">
+            <div class="banner-content">
+                <span class="status-badge">COMING SOON</span>
+                <h2>MORE GAMES SOON</h2>
+                <p>We are currently working on new ideas and projects. Follow our social media and check back here for future game announcements.</p>
             </div>
         </article>
 
