@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Studio</title>
+    <title>Inka Studio | Indie Game Developer</title>
     
-    <!-- AAA Gaming Typography: Bebas Neue for massive headers, Montserrat for clean, stark body text -->
+    <!-- AAA Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Oswald for aggressive headers, Roboto for clean reading -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
         /* =========================================
-           PURE MONOCHROME AAA THEME
+           ELECTRIC DARK THEME VARIABLES
            ========================================= */
         :root {
-            --pure-black: #000000;
-            --dark-grey: #0c0c0c;
-            --border-grey: #222222;
-            --pure-white: #ffffff;
-            --text-grey: #999999;
-            --transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --bg-deep: #02040a; /* Pitch black with a 1% hint of blue */
+            --bg-card: #080c14; /* Slightly lighter for depth */
+            --accent-blue: #00e5ff; /* Electric/Neon Light Blue */
+            --accent-glow: rgba(0, 229, 255, 0.4);
+            --text-main: #f0f4f8;
+            --text-muted: #8a9bb0;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -30,28 +33,44 @@
         }
 
         body {
-            background-color: var(--pure-black);
-            color: var(--pure-white);
-            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3, .menu-link {
-            font-family: 'Bebas Neue', sans-serif;
+        h1, h2, h3, h4, .nav-links a, .btn {
+            font-family: 'Oswald', sans-serif;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         a { text-decoration: none; }
-        
+
         /* =========================================
-           SCROLL ANIMATIONS
+           BACKGROUND GLOW EFFECT
+           ========================================= */
+        .ambient-glow {
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* =========================================
+           SCROLL REVEAL ANIMATIONS
            ========================================= */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
         }
         .reveal.active {
             opacity: 1;
@@ -59,432 +78,388 @@
         }
 
         /* =========================================
-           CENTERED NAVBAR (Rockstar Style)
+           GLASSMORPHISM NAVBAR
            ========================================= */
-        .navbar {
+        nav {
             position: fixed;
             top: 0;
             width: 100%;
             height: 80px;
-            background-color: var(--pure-black);
-            border-bottom: 1px solid var(--border-grey);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 40px;
+            padding: 0 5%;
+            background: rgba(2, 4, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        /* The Hamburger Icon */
-        .hamburger {
-            width: 35px;
-            height: 24px;
+        .logo-img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+        }
+
+        .nav-links {
             display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .menu-btn {
+            display: none;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 6px;
             cursor: pointer;
             z-index: 1100;
         }
-        .hamburger .line {
-            width: 100%;
-            height: 3px;
-            background-color: var(--pure-white);
+
+        .menu-btn div {
+            width: 30px;
+            height: 2px;
+            background-color: var(--text-main);
             transition: var(--transition);
-        }
-        .hamburger:hover .line {
-            background-color: var(--text-grey);
-        }
-
-        /* Centered Logo Wrapper */
-        .logo-container {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .logo-container img {
-            height: 55px; /* Much larger, prominent logo */
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Right side placeholder (keeps flexbox balanced) */
-        .nav-right {
-            width: 35px; /* Matches hamburger width to keep logo dead center */
         }
 
         /* =========================================
-           SLIDE-OUT DRAWER MENU
-           ========================================= */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -100%; /* Hidden off-screen by default */
-            width: 400px;
-            max-width: 100%;
-            height: 100vh;
-            background-color: var(--dark-grey);
-            border-right: 1px solid var(--border-grey);
-            z-index: 1050; /* Below hamburger, above page */
-            display: flex;
-            flex-direction: column;
-            padding: 120px 40px 40px 40px;
-            transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 20px 0 50px rgba(0,0,0,0.8);
-        }
-
-        .side-menu.open {
-            left: 0; /* Slides in */
-        }
-
-        .side-menu ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .side-menu ul li {
-            border-bottom: 1px solid var(--border-grey);
-            padding-bottom: 10px;
-        }
-
-        .menu-link {
-            color: var(--pure-white);
-            font-size: 3rem;
-            transition: var(--transition);
-            display: block;
-        }
-
-        .menu-link:hover {
-            color: var(--text-grey);
-            padding-left: 10px; /* Slight indent on hover */
-        }
-
-        /* Menu Overlay (Darkens background when menu is open) */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0,0,0,0.7);
-            z-index: 1040;
-            opacity: 0;
-            pointer-events: none;
-            transition: var(--transition);
-            backdrop-filter: blur(5px);
-        }
-        .menu-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* =========================================
-           HERO SECTION
+           HERO SECTION (DEAD IGNITION)
            ========================================= */
         .hero {
             height: 100vh;
-            padding-top: 80px; /* Offset for navbar */
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            padding-bottom: 10%;
-            padding-left: 5%;
-            padding-right: 5%;
-            /* Subtle dark gradient overlay. You will put your background image here later */
-            background: linear-gradient(0deg, var(--pure-black) 0%, rgba(0,0,0,0.2) 100%),
-                        var(--dark-grey); 
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
             position: relative;
+            /* Placeholder for your background game art */
+            background: linear-gradient(to bottom, rgba(2,4,10,0.3) 0%, var(--bg-deep) 100%),
+                        url('https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
         }
 
-        .hero-content {
-            max-width: 900px;
-            z-index: 10;
-        }
-
-        .hero-tag {
-            font-weight: 800;
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            color: var(--text-grey);
-            margin-bottom: 10px;
-            display: block;
+        .status-badge {
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         .hero h1 {
-            font-size: clamp(4rem, 12vw, 9rem); /* Massive scalable text */
-            line-height: 0.9;
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            line-height: 1;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
         }
 
         .btn {
-            display: inline-block;
-            padding: 15px 35px;
-            background-color: var(--pure-white);
-            color: var(--pure-black);
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            border: 2px solid var(--pure-white);
+            background-color: transparent;
+            color: var(--accent-blue);
+            border: 2px solid var(--accent-blue);
+            padding: 15px 40px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn:hover {
-            background-color: transparent;
-            color: var(--pure-white);
+            background-color: var(--accent-blue);
+            color: var(--bg-deep);
+            box-shadow: 0 0 25px var(--accent-glow);
         }
 
         /* =========================================
-           NEWSWIRE GRID (Brutalist style)
+           GAME SPOTLIGHT SECTION
            ========================================= */
-        .section-padding {
+        .spotlight {
             padding: 120px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            background-color: var(--bg-deep);
+        }
+
+        .spotlight-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .spotlight-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 20px;
+        }
+
+        .spotlight-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .spotlight-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-icon {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-glow);
+            transition: var(--transition);
+        }
+
+        .game-icon:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        /* =========================================
+           NEWSWIRE GRID
+           ========================================= */
+        .newswire {
+            padding: 100px 5%;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 50px;
-            border-bottom: 2px solid var(--border-grey);
-            padding-bottom: 15px;
+            align-items: flex-end;
+            margin-bottom: 60px;
         }
 
-        .section-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
         }
-
-        .view-all {
-            color: var(--pure-white);
-            font-weight: 800;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: var(--transition);
-        }
-        .view-all:hover { color: var(--text-grey); }
 
         .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
         }
 
         .news-card {
-            background-color: var(--dark-grey);
-            border: 1px solid var(--border-grey);
+            background-color: var(--bg-deep);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 10px;
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
-            transition: var(--transition);
-            position: relative;
         }
 
         .news-card:hover {
-            border-color: var(--pure-white); /* High contrast hover */
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
             transform: translateY(-5px);
         }
 
-        .news-image {
-            height: 220px;
-            background-color: #1a1a1a;
-            width: 100%;
-            border-bottom: 1px solid var(--border-grey);
-        }
-
-        .news-content {
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .news-date {
-            font-family: 'Bebas Neue', sans-serif;
-            color: var(--text-grey);
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+        .news-tag {
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
         .news-title {
-            font-size: 2rem;
+            font-size: 1.6rem;
             margin-bottom: 15px;
-            line-height: 1.1;
         }
 
         .news-card p {
-            color: var(--text-grey);
-            font-size: 0.95rem;
+            color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-grow: 1;
         }
 
         /* =========================================
-           DEEP FOOTER
+           FOOTER
            ========================================= */
         footer {
-            border-top: 1px solid var(--border-grey);
+            background-color: #010205;
             padding: 80px 5% 40px;
-            background-color: var(--pure-black);
+            border-top: 1px solid var(--border-color);
         }
 
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 50px;
-            margin-bottom: 80px;
+            gap: 40px;
+            margin-bottom: 60px;
         }
 
         .footer-col h4 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: var(--text-grey);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
         }
 
         .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 15px; }
-
+        .footer-col ul li { margin-bottom: 12px; }
         .footer-col ul li a {
-            color: var(--pure-white);
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--text-muted);
             transition: var(--transition);
         }
-        .footer-col ul li a:hover { color: var(--text-grey); }
+        .footer-col ul li a:hover { color: var(--accent-blue); }
 
         .footer-bottom {
-            border-top: 1px solid var(--border-grey);
+            border-top: 1px solid var(--border-color);
             padding-top: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        .legal-text {
-            color: var(--text-grey);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .location {
-            color: var(--pure-white);
-            font-size: 0.85rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
-
-        /* Mobile Adjustments */
+        /* =========================================
+           MOBILE RESPONSIVENESS
+           ========================================= */
         @media (max-width: 768px) {
-            .navbar { padding: 0 20px; }
-            .side-menu { width: 85%; padding: 100px 20px 20px; }
-            .menu-link { font-size: 2.2rem; }
-            .section-padding { padding: 80px 5%; }
-            .section-header { flex-direction: column; gap: 10px; }
-            .footer-bottom { flex-direction: column; text-align: center; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 100%;
+                background-color: var(--bg-deep);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: var(--transition);
+                z-index: 1050;
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 2rem; margin: 15px 0; }
+            .menu-btn { display: flex; }
+            .menu-btn.active div:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .menu-btn.active div:nth-child(2) { opacity: 0; }
+            .menu-btn.active div:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+            
+            .spotlight { flex-direction: column; text-align: center; }
+            .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. CENTERED NAVBAR -->
-    <nav class="navbar">
-        <!-- Hamburger Icon on the Left -->
-        <div class="hamburger" id="hamburger">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+    <!-- Ambient Glowing Orb -->
+    <div class="ambient-glow"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="/" class="logo">
+            <!-- Using your logo.png -->
+            <img src="logo.png" alt="Inka Studio" class="logo-img">
+        </a>
+        
+        <div class="nav-links">
+            <a href="/games">Games</a>
+            <a href="/news">Newswire</a>
+            <a href="/studio">The Studio</a>
+            <a href="/support">Support</a>
         </div>
 
-        <!-- Huge Logo Dead Center -->
-        <div class="logo-container">
-            <a href="/">
-                <img src="logo.png" alt="Inka Studio Logo">
-            </a>
+        <div class="menu-btn" id="menu-btn">
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
-
-        <!-- Right Placeholder to keep logo centered -->
-        <div class="nav-right"></div>
     </nav>
 
-    <!-- 2. SLIDE-OUT DRAWER MENU -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-    <div class="side-menu" id="sideMenu">
-        <ul>
-            <li><a href="/" class="menu-link">Home</a></li>
-            <li><a href="/games/dead-ignition" class="menu-link">Dead Ignition</a></li>
-            <li><a href="/news" class="menu-link">Newswire</a></li>
-            <li><a href="/studio" class="menu-link">The Studio</a></li>
-            <li><a href="/support" class="menu-link">Support</a></li>
-        </ul>
-    </div>
-
-    <!-- 3. MASSIVE HERO SECTION -->
+    <!-- HERO SECTION -->
     <header class="hero">
-        <div class="hero-content reveal">
-            <span class="hero-tag">IN DEVELOPMENT</span>
+        <div class="reveal">
+            <div class="status-badge">HORROR SURVIVAL</div>
             <h1>DEAD IGNITION</h1>
-            <a href="/games/dead-ignition" class="btn">VIEW PROJECT</a>
+            <p>The grid failed. The rules changed. Survive the uncompromising dark in our flagship mobile experience.</p>
+            <a href="/games/dead-ignition" class="btn">
+                <span>VIEW PROJECT</span>
+            </a>
         </div>
     </header>
 
-    <!-- 4. NEWSWIRE GRID -->
-    <section class="section-padding" id="newswire">
+    <!-- GAME SPOTLIGHT -->
+    <section class="spotlight">
+        <div class="spotlight-visual reveal">
+            <!-- Using your icon.png for the game box art / icon -->
+            <img src="icon.png" alt="Dead Ignition Icon" class="game-icon">
+        </div>
+        <div class="spotlight-content reveal">
+            <h2>BUILT IN THE DARK</h2>
+            <p>Inka Studio operates on a pure DIY ethos. No corporate backing, no asset flips. Just a core team building an uncompromising horror survival game engineered specifically for high-end mobile devices.</p>
+            <a href="/games" class="btn">DISCOVER OUR GAMES</a>
+        </div>
+    </section>
+
+    <!-- NEWSWIRE -->
+    <section class="newswire" id="news">
         <div class="section-header reveal">
-            <h2 class="section-title">NEWSWIRE</h2>
-            <a href="/news" class="view-all">View All Updates</a>
+            <h2>NEWSWIRE</h2>
+            <a href="/news" class="btn" style="padding: 10px 20px; font-size: 0.9rem;">VIEW ALL</a>
         </div>
 
         <div class="news-grid">
-            <!-- News Card 1 -->
-            <a href="/news/hiring-designer" class="news-card reveal">
-                <div class="news-image"></div>
-                <div class="news-content">
-                    <span class="news-date">JUL 29, 2026</span>
-                    <h3 class="news-title">GRAPHIC DESIGNER WANTED</h3>
-                    <p>We are expanding the core team. If you can create dark, minimalist, gritty aesthetics with zero budget, we want you.</p>
-                </div>
+            <a href="/news/hiring" class="news-card reveal">
+                <div class="news-tag">Careers</div>
+                <h3 class="news-title">Graphic Designer Wanted</h3>
+                <p>We are expanding the core indie team. If you can create dark, gritty, high-contrast aesthetics, we want you.</p>
             </a>
-
-            <!-- News Card 2 -->
-            <a href="/news/engine-update" class="news-card reveal">
-                <div class="news-image"></div>
-                <div class="news-content">
-                    <span class="news-date">JUL 15, 2026</span>
-                    <h3 class="news-title">LEVEL DRESSING PROGRESS</h3>
-                    <p>First look at the raw engine implementation for the urban ruins sector. Pure atmospheric tension.</p>
-                </div>
+            <a href="/news/devlog-1" class="news-card reveal">
+                <div class="news-tag">Devlog</div>
+                <h3 class="news-title">Level Dressing Progress</h3>
+                <p>First look at the raw engine implementation for the urban ruins sector. Pure atmospheric tension.</p>
             </a>
-
-            <!-- News Card 3 -->
-            <a href="/news/ignition-protocol" class="news-card reveal">
-                <div class="news-image"></div>
-                <div class="news-content">
-                    <span class="news-date">JUL 01, 2026</span>
-                    <h3 class="news-title">THE IGNITION PROTOCOL</h3>
-                    <p>When the grid failed, the rules changed. A brief lore drop introducing the mechanics behind resource scarcity.</p>
-                </div>
+            <a href="/news/lore" class="news-card reveal">
+                <div class="news-tag">Lore</div>
+                <h3 class="news-title">The Ignition Protocol</h3>
+                <p>When the grid failed, the rules changed. A brief lore drop introducing the mechanics behind resource scarcity.</p>
             </a>
         </div>
     </section>
 
-    <!-- 5. DEEP FOOTER -->
+    <!-- FOOTER -->
     <footer>
         <div class="footer-grid reveal">
             <div class="footer-col">
-                <h4>GAMES</h4>
+                <h4>PROJECTS</h4>
                 <ul>
                     <li><a href="/games/dead-ignition">Dead Ignition</a></li>
                 </ul>
@@ -494,6 +469,7 @@
                 <ul>
                     <li><a href="/news">Newswire</a></li>
                     <li><a href="/careers">Careers</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -506,38 +482,34 @@
         </div>
 
         <div class="footer-bottom reveal">
-            <div class="legal-text">
+            <div class="copyright">
                 &copy; 2026 INKA STUDIO. ALL RIGHTS RESERVED.
             </div>
             <div class="location">
-                INDIA
+                BASED IN GUWAHATI, ASSAM, INDIA
             </div>
         </div>
     </footer>
 
-    <!-- =========================================
-         JAVASCRIPT FOR MENU & SCROLL
-         ========================================= -->
+    <!-- JAVASCRIPT ANIMATIONS & MENU -->
     <script>
-        // 1. Drawer Menu Logic
-        const hamburger = document.getElementById('hamburger');
-        const sideMenu = document.getElementById('sideMenu');
-        const menuOverlay = document.getElementById('menuOverlay');
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.querySelector('.nav-links');
 
-        function toggleMenu() {
-            sideMenu.classList.toggle('open');
-            menuOverlay.classList.toggle('open');
-        }
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
 
-        hamburger.addEventListener('click', toggleMenu);
-        menuOverlay.addEventListener('click', toggleMenu); // Closes menu if you click outside it
-
-        // 2. Scroll Reveal Animation Logic
+        // Scroll Reveal Animation (Intersection Observer)
         const revealElements = document.querySelectorAll('.reveal');
+        
         const revealOptions = {
-            threshold: 0.15,
+            threshold: 0.15, // Trigger when 15% of the element is visible
             rootMargin: "0px 0px -50px 0px"
         };
+
         const revealOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
