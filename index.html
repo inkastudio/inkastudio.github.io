@@ -37,19 +37,16 @@
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.1rem;
             overflow-x: hidden;
-            cursor: crosshair; /* UPGRADE: Gaming Crosshair Cursor */
         }
 
-        /* UPGRADE: Custom Selection Highlight */
+        /* Custom Selection Highlight */
         ::selection { background: var(--accent); color: var(--bg-pure); }
         
-        /* UPGRADE: Custom Cyber Scrollbar */
+        /* Custom Cyber Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-pure); border-left: 1px solid rgba(255,42,42,0.15); }
         ::-webkit-scrollbar-thumb { background: var(--accent); }
         ::-webkit-scrollbar-thumb:hover { background: #ff5555; }
-
-        a, button, .btn, .hamburger { cursor: pointer; }
 
         /* CINEMATIC SCANLINES OVERLAY */
         body::after {
@@ -107,14 +104,14 @@
             transition: transform 0.4s ease;
         }
 
-        /* UPGRADE: Animated Data Stream on Navbar border */
+        /* GPU-Accelerated Data Stream on Navbar border */
         nav::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; height: 2px; width: 100%;
+            content: ''; position: absolute; bottom: -2px; left: -100%; height: 2px; width: 100%;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            background-size: 200% 100%;
             animation: data-stream 3s infinite linear;
+            will-change: transform;
         }
-        @keyframes data-stream { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+        @keyframes data-stream { 0% { transform: translateX(0); } 100% { transform: translateX(200%); } }
 
         nav.nav-hidden { transform: translateY(-100%); }
 
@@ -127,6 +124,7 @@
         .nav-links a { color: var(--text-main); font-size: 1.1rem; font-weight: 700; transition: var(--transition); display: block; padding: 10px 0; }
         .nav-links a:hover { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
+        /* Slanted HUD Support Button */
         .nav-links a.support-btn { 
             background-color: var(--accent); color: var(--bg-pure); 
             padding: 8px 30px; font-weight: 700; 
@@ -157,27 +155,15 @@
             overflow: hidden;
         }
 
-        /* UPGRADE: Scanning Laser Overlay */
-        .hero::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(255,42,42,0.5); box-shadow: 0 0 15px var(--accent);
-            animation: scanline 8s linear infinite; pointer-events: none; z-index: 11;
-        }
-        @keyframes scanline { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
-
         .hero h1 {
             font-size: clamp(3.5rem, 12vw, 10rem); line-height: 0.9; color: transparent;
             -webkit-text-stroke: 2px var(--text-main); 
             text-shadow: -4px 4px 0px rgba(255,42,42,0.8), 0 0 20px rgba(255,42,42,0.4);
             margin: 0 0 30px 0; font-style: italic;
-            animation: pulse-glow 3s infinite alternate;
-        }
-        @keyframes pulse-glow {
-            0% { text-shadow: -4px 4px 0px rgba(255,42,42,0.8), 0 0 10px rgba(255,42,42,0.2); }
-            100% { text-shadow: -4px 4px 0px rgba(255,42,42,1), 0 0 30px rgba(255,42,42,0.6); }
+            /* Text animation removed to prevent heavy mobile lag */
         }
 
-        /* UPGRADE FIXED: Centered, balanced HUD Slogan */
+        /* Centered, balanced HUD Slogan */
         .slogan {
             font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--accent); font-family: 'Chakra Petch', sans-serif;
             font-weight: 700; letter-spacing: 8px; margin-bottom: 80px; 
@@ -191,7 +177,7 @@
         .slogan::before { left: 0; border-right: none; }
         .slogan::after { right: 0; border-left: none; }
 
-        /* UPGRADE FIXED: Unclipped, symmetrical targeting brackets */
+        /* Unclipped, symmetrical targeting brackets */
         .about-box {
             position: relative;
             max-width: 800px; background: rgba(13, 13, 18, 0.85); 
@@ -218,7 +204,7 @@
         .spotlight h2 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 10px; font-style: italic;}
         .spotlight p { font-size: 1.3rem; font-weight: 700; color: var(--accent); letter-spacing: 4px; background: rgba(255,42,42,0.1); padding: 5px 20px;}
         
-        /* UPGRADE: Button Laser Sweep Effect */
+        /* Button Laser Sweep Effect */
         .btn { 
             position: relative; overflow: hidden;
             margin-top: 40px; display: inline-block; background: transparent; color: var(--accent); 
