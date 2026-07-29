@@ -1,1 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead Ignition - Inka Studio</title>
+    
+    <!-- Path goes up two levels to the main root for the favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    
+    <!-- EXPERIMENTAL GAMER TYPOGRAPHY -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
+    <style>
+        /* =========================================
+           GLOBAL THEME
+           ========================================= */
+        :root {
+            --bg-pure: #050507; 
+            --bg-panel: #0d0d12;
+            --accent: #ff2a2a; 
+            --accent-glow: rgba(255, 42, 42, 0.5);
+            --text-main: #f0f4f8;
+            --text-grey: #8a93a2;
+            --transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-pure); color: var(--text-main); font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; overflow-x: hidden; }
+        ::selection { background: var(--accent); color: var(--bg-pure); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-pure); border-left: 1px solid rgba(255,42,42,0.15); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); }
+        
+        h1, h2, h3, .nav-links a, .btn { font-family: 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+        a { text-decoration: none; }
+
+        /* OVERLAYS */
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px); pointer-events: none; z-index: 9999; }
+        .bg-matrix { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(rgba(255, 42, 42, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 42, 42, 0.05) 1px, transparent 1px); background-size: 60px 60px; z-index: -2; pointer-events: none; }
+        .vignette { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at center, transparent 40%, rgba(5,5,7,0.95) 130%); pointer-events: none; z-index: 50; }
+
+        /* SCROLL ANIMATIONS */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out 0.4s; }
+        .reveal-delay.active { opacity: 1; transform: translateY(0); }
+
+        /* =========================================
+           SMART HEADER
+           ========================================= */
+        nav { position: fixed; top: 0; width: 100%; height: 90px; display: flex; align-items: center; padding: 0 5%; background: rgba(5, 5, 7, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; border-bottom: 2px solid rgba(255, 42, 42, 0.2); transition: transform 0.4s ease; }
+        nav::after { content: ''; position: absolute; bottom: -2px; left: -100%; height: 2px; width: 100%; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: data-stream 3s infinite linear; will-change: transform; }
+        @keyframes data-stream { 0% { transform: translateX(0); } 100% { transform: translateX(200%); } }
+        nav.nav-hidden { transform: translateY(-100%); }
+        .logo-container { flex: 1; display: flex; align-items: center; }
+        .logo-img { height: 70px; width: auto; object-fit: contain; position: relative; z-index: 1001; }
+        .nav-links { display: flex; gap: 40px; align-items: center; z-index: 1001; }
+        .nav-links > li { list-style: none; position: relative; }
+        .nav-links a { color: var(--text-main); font-size: 1.1rem; font-weight: 700; transition: var(--transition); display: block; padding: 10px 0; }
+        .nav-links a:hover { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
+        .nav-links a.support-btn { background-color: var(--accent); color: var(--bg-pure); padding: 8px 30px; font-weight: 700; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+        .nav-links a.support-btn:hover { background-color: var(--text-main); color: var(--bg-pure); text-shadow: none; box-shadow: 0 0 20px var(--accent-glow); }
+        
+        .dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--bg-panel); border: 1px solid var(--accent); border-top: 4px solid var(--accent); min-width: 200px; opacity: 0; pointer-events: none; transform: translateY(15px); transition: var(--transition); box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
+        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .dropdown-menu a { padding: 15px 20px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-grey); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dropdown-menu a:hover { background: rgba(255, 42, 42, 0.1); color: var(--accent); padding-left: 25px; }
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1100; }
+        .hamburger div { width: 35px; height: 3px; background-color: var(--accent); }
+
+        /* BUTTONS */
+        .btn { position: relative; overflow: hidden; display: inline-block; background: transparent; color: var(--accent); border: 2px solid var(--accent); padding: 15px 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; transition: var(--transition); clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-25deg); transition: 0.6s ease; }
+        .btn:hover { background: var(--accent); color: var(--bg-pure); box-shadow: 0 0 30px var(--accent-glow); }
+        .btn:hover::before { left: 150%; }
+
+        /* =========================================
+           DEAD IGNITION HERO (PARALLAX + GLITCH)
+           ========================================= */
+        .game-hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Parallax Background */
+        .game-hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%; /* Extra height for parallax */
+            background: linear-gradient(to bottom, rgba(5,5,7,0.3) 0%, var(--bg-pure) 100%), url('../gameback.jpg') center/cover no-repeat;
+            z-index: -1;
+            /* The javascript will move this to create the parallax effect */
+        }
+
+        .hero-icon {
+            width: 150px; height: 150px; border: 2px solid var(--accent);
+            box-shadow: 0 0 40px var(--accent-glow); margin-bottom: 20px;
+            clip-path: polygon(20% 0%, 100% 0, 100% 80%, 80% 100%, 0 100%, 0% 20%);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* CSS Glitch Text */
+        .glitch-title {
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            color: var(--text-main);
+            font-style: italic;
+            position: relative;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .tagline {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--accent);
+            letter-spacing: 5px;
+            background: rgba(13, 13, 18, 0.8);
+            padding: 10px 30px;
+            border-left: 4px solid var(--accent);
+            border-right: 4px solid var(--accent);
+            margin-bottom: 40px;
+        }
+
+        /* =========================================
+           TRAILER SECTION (YOUTUBE EMBED)
+           ========================================= */
+        .trailer-section {
+            padding: 100px 5%;
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 10;
+        }
+        
+        .section-title { font-size: 3rem; margin-bottom: 50px; border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 5px; font-style: italic;}
+
+        .video-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border: 2px solid rgba(255,42,42,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(255,42,42,0.1);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        /* The actual YouTube iframe */
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+        }
+
+        /* =========================================
+           STORY / LORE SECTION
+           ========================================= */
+        .lore-section {
+            padding: 80px 5%; max-width: 900px; margin: 0 auto;
+            text-align: center; position: relative; z-index: 10;
+        }
+        .lore-section p {
+            font-size: 1.3rem; line-height: 1.8; color: var(--text-grey);
+            margin-bottom: 20px;
+        }
+        .lore-section p strong { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; letter-spacing: 1px; }
+
+        /* =========================================
+           GALLERY GRID (PLACEHOLDER)
+           ========================================= */
+        .gallery-section {
+            padding: 100px 5%;
+            position: relative; z-index: 10;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .gallery-item {
+            width: 100%; aspect-ratio: 16/9;
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,42,42,0.2);
+            transition: var(--transition);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            /* Background image injected via style tag below when you provide names */
+        }
+        .gallery-item:hover { border-color: var(--accent); transform: scale(1.03); z-index: 2;}
+
+        /* =========================================
+           FOOTER (EXACT MATCH)
+           ========================================= */
+        footer { background-color: var(--bg-pure); border-top: 2px solid var(--accent); display: flex; flex-direction: column; align-items: center; text-align: center; padding: 60px 5% 0px; position: relative; z-index: 10; }
+        .footer-links { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+        .footer-links a { color: var(--text-main); font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; transition: var(--transition); }
+        .footer-links a:hover { color: var(--accent); }
+        .social-icons { display: flex; gap: 30px; margin-bottom: 40px; }
+        .social-icons svg { width: 35px; height: 35px; fill: var(--text-grey); transition: var(--transition); cursor: pointer; }
+        .social-icons svg:hover { fill: var(--accent); transform: scale(1.1); filter: drop-shadow(0 0 10px var(--accent)); }
+        .final-notice { width: 100%; border-top: 1px solid rgba(255, 42, 42, 0.2); padding: 30px 0; }
+        .final-notice p { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 3px; color: var(--text-grey); text-transform: uppercase; }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS
+           ========================================= */
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; height: 80px; }
+            .logo-container { position: absolute; left: 50%; transform: translateX(-50%); }
+            .logo-img { height: 50px; }
+            .hamburger { display: flex; position: absolute; left: 20px; }
+            .nav-links { position: fixed; top: 80px; left: 0; width: 100%; background: rgba(5, 5, 7, 0.98); flex-direction: column; gap: 0; transform: translateY(-150%); transition: var(--transition); border-bottom: 3px solid var(--accent); max-height: calc(100vh - 80px); overflow-y: auto; }
+            .nav-links.active { transform: translateY(0); }
+            .nav-links > li { width: 100%; text-align: center; border-bottom: 1px solid rgba(255,42,42,0.1); }
+            .nav-links a { padding: 20px 0; font-size: 1.3rem; }
+            .dropdown-menu { display: none; position: static; box-shadow: none; border: none; background: rgba(255, 42, 42, 0.05); padding: 0; }
+            .dropdown.mobile-open .dropdown-menu { display: block; }
+            .dropdown-menu a { padding: 15px 0; font-size: 1rem !important; color: var(--accent) !important; }
+            .nav-links a.support-btn { margin: 20px auto; width: 80%; background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+
+            .glitch-title { font-size: 3rem; }
+            .footer-links { gap: 20px; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-matrix"></div>
+    <div class="vignette"></div>
+
+    <!-- SMART NAVBAR -->
+    <nav id="navbar">
+        <div class="hamburger" id="hamburger">
+            <div></div><div></div><div></div>
+        </div>
+
+        <div class="logo-container">
+            <a href="/">
+                <img src="/logo.png" alt="Inka Studio Logo" class="logo-img">
+            </a>
+        </div>
+        
+        <ul class="nav-links" id="navLinks">
+            <li class="dropdown" id="games-dropdown">
+                <a href="javascript:void(0);" id="games-btn">Games ▾</a>
+                <div class="dropdown-menu">
+                    <a href="/games/deadignition">Dead Ignition</a>
+                    <a href="/games">All Games</a>
+                </div>
+            </li>
+            <li><a href="/news">Newswire</a></li>
+            <li><a href="/videos">Videos</a></li>
+            <li><a href="/downloads">Downloads</a></li>
+            <li><a href="#footer-section" class="support-btn" id="mobile-support-btn">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="game-hero">
+        <div class="game-hero-bg" id="parallax-bg"></div>
+        <img src="/icon.png" alt="Dead Ignition Icon" class="hero-icon reveal">
+        <h1 class="glitch-title reveal">DEAD IGNITION</h1>
+        <p class="tagline reveal-delay">SURVIVE THE NIGHT. FIX THE RIDE.</p>
+        <a href="#trailer" class="btn reveal-delay">WATCH TRAILER</a>
+    </header>
+
+    <!-- STORY LORE -->
+    <section class="lore-section reveal">
+        <p>Your engine died. The radio is silent. And the shadows are moving.</p>
+        <p><strong>Dead Ignition</strong> is a zero-budget, high-tension survival horror experience built for Android. Stranded in an abandoned industrial zone, you must scour the darkness for vehicle parts to repair your car. But you are not alone.</p>
+        <p>Manage your flashlight battery, hide from what stalks you in the fog, and collect the tools needed to escape before the night consumes you entirely.</p>
+    </section>
+
+    <!-- TRAILER EMBED -->
+    <section id="trailer" class="trailer-section reveal">
+        <h2 class="section-title">OFFICIAL TRANSMISSION</h2>
+        <div class="video-container">
+            <!-- Replace 'dQw4w9WgXcQ' with your actual YouTube Video ID when ready! -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=abcdefgh" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- SCREENSHOT GALLERY -->
+    <section class="gallery-section">
+        <h2 class="section-title reveal" style="text-align: center; display: block;">ARCHIVES</h2>
+        <div class="gallery-grid reveal-delay">
+            <!-- I will hook up your actual images here once you give me the names -->
+            <div class="gallery-item" style="background-color: #1a1a24;"></div>
+            <div class="gallery-item" style="background-color: #1a1a24;"></div>
+            <div class="gallery-item" style="background-color: #1a1a24;"></div>
+            <div class="gallery-item" style="background-color: #1a1a24;"></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer-section">
+        <div class="footer-links reveal">
+            <a href="/contact">Contact</a>
+            <a href="/careers">Careers</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+        </div>
+
+        <div class="social-icons reveal">
+            <a href="https://instagram.com/Inkastudioofficial" target="_blank" aria-label="Instagram">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://x.com/InkaStudio" target="_blank" aria-label="Twitter">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://youtube.com/@inkastudioofficial?si=4-EwV8QyCGsZXG4k" target="_blank" aria-label="YouTube">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+        </div>
+
+        <div class="final-notice reveal">
+            <p>&copy; 2026 Inka Studio &bull; India &bull; All rights reserved</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Navbar Logistics
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const mobileSupportBtn = document.getElementById('mobile-support-btn');
+        const gamesBtn = document.getElementById('games-btn');
+        const gamesDropdown = document.getElementById('games-dropdown');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            if (!navLinks.classList.contains('active')) { gamesDropdown.classList.remove('mobile-open'); }
+        });
+        gamesBtn.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) { gamesDropdown.classList.toggle('mobile-open'); }
+        });
+        mobileSupportBtn.addEventListener('click', () => {
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                gamesDropdown.classList.remove('mobile-open');
+            }
+        });
+
+        // Parallax Effect & Smart Header
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        const navbar = document.getElementById('navbar');
+        const parallaxBg = document.getElementById('parallax-bg');
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    // Smart Header Logic
+                    if (!navLinks.classList.contains('active')) {
+                        if (lastScrollY < window.scrollY && window.scrollY > 100) {
+                            navbar.classList.add('nav-hidden');
+                        } else {
+                            navbar.classList.remove('nav-hidden');
+                        }
+                    }
+                    
+                    // Parallax Logic (Lightweight)
+                    let scrollPosition = window.scrollY;
+                    if(scrollPosition < window.innerHeight) {
+                        parallaxBg.style.transform = `translateY(${scrollPosition * 0.4}px)`;
+                    }
+
+                    lastScrollY = window.scrollY;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal, .reveal-zoom, .reveal-delay');
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('active'); } 
+                else { if (entry.boundingClientRect.top > 0) { entry.target.classList.remove('active'); } }
+            });
+        }, revealOptions);
+        revealElements.forEach(el => { revealOnScroll.observe(el); });
+    </script>
+</body>
+</html>
