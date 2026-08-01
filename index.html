@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Interactive | Core Engine</title>
+    <title>Inka Interactive | The Spatial Core</title>
     
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     
@@ -19,7 +19,7 @@
 
     <style>
         /* =========================================
-           CORE GAMING/PROFESSIONAL VARIABLES
+           CORE PREMIUM VARIABLES
            ========================================= */
         :root {
             --bg-pure: #ffffff; 
@@ -28,11 +28,8 @@
             --accent: #e63946; /* Inka Red */
             --accent-hover: #d62828;
             
-            /* Enhanced UI Shadows for Depth */
-            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
-            --shadow-hard: 0 20px 50px rgba(0,0,0,0.15);
-            --shadow-red: 0 15px 35px rgba(230, 57, 70, 0.25);
-            
+            --shadow-soft: 0 15px 35px rgba(0,0,0,0.06);
+            --shadow-hard: 0 25px 50px rgba(0,0,0,0.12);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -46,8 +43,8 @@
 
         ::selection { background: var(--accent); color: white; }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f4f4f4; }
-        ::-webkit-scrollbar-thumb { background: #bbb; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #f8f9fa; }
+        ::-webkit-scrollbar-thumb { background: #cccccc; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 900; letter-spacing: -1px; }
@@ -59,27 +56,45 @@
         #webgl-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1; pointer-events: none; 
-            background: radial-gradient(circle at center, #fdfdfd 0%, #ececec 100%);
+            background: radial-gradient(circle at center, #ffffff 0%, #f0f2f5 100%);
         }
 
         /* =========================================
-           1. PREMIUM NAVBAR
+           1. PREMIUM NAVBAR (WITH DROPDOWN)
            ========================================= */
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
             display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
         }
         nav.nav-hidden { transform: translateY(-100%); }
 
-        .logo-text { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1.5px;}
+        .logo-text { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px;}
+        
         .nav-links { display: flex; gap: 35px; align-items: center; list-style: none; }
         .nav-links a { font-size: 0.95rem; font-weight: 700; color: var(--text-main); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
         .nav-links a:hover { color: var(--accent); }
+        
+        /* Dropdown CSS */
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            position: absolute; top: 100%; left: -20px; background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px); border: 1px solid rgba(0,0,0,0.05); border-radius: 16px;
+            min-width: 200px; opacity: 0; pointer-events: none;
+            transform: translateY(15px); transition: var(--transition);
+            box-shadow: var(--shadow-hard); padding: 10px 0;
+        }
+        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .dropdown-menu a { display: block; padding: 12px 25px; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+        .dropdown-menu a:hover { background: rgba(230,57,70,0.05); color: var(--accent); padding-left: 30px;}
+
         .nav-links a.support-btn { border: 2px solid var(--text-main); padding: 10px 24px; border-radius: 50px; }
         .nav-links a.support-btn:hover { background: var(--text-main); color: white; }
+
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); transition: var(--transition);}
 
         /* =========================================
            SECTIONS & UI
@@ -93,21 +108,21 @@
         .hero h3 { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--accent); font-weight: 700; margin-bottom: 40px; letter-spacing: 4px; text-transform: uppercase;}
         
         .about-box {
-            max-width: 700px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
-            border-radius: 20px; padding: 40px; box-shadow: var(--shadow-soft); border: 1px solid rgba(255,255,255,1);
+            max-width: 700px; background: rgba(255,255,255,0.7); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 24px; padding: 45px; box-shadow: var(--shadow-soft); border: 1px solid rgba(255,255,255,1);
         }
         .about-box p { font-size: 1.15rem; color: var(--text-main); font-weight: 500;}
 
-        /* --- 3. DEAD IGNITION --- */
-        .spotlight { align-items: flex-start; } /* Kept left so the planet can go right */
+        /* --- 3. DEAD IGNITION (Left Aligned for Desktop) --- */
+        .spotlight { align-items: flex-start; } 
         .spotlight-content {
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
-            border-radius: 30px; padding: 60px; max-width: 650px;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px; padding: 60px; max-width: 600px;
             box-shadow: var(--shadow-hard); border: 1px solid rgba(255,255,255,1);
         }
         .spotlight img { width: 90px; height: 90px; margin-bottom: 25px; border-radius: 20px; box-shadow: var(--shadow-soft); border: 2px solid var(--bg-pure);}
-        .spotlight h2 { font-size: clamp(3rem, 5vw, 5rem); line-height: 1; margin-bottom: 10px;}
-        .spotlight p.subtitle { font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; margin-bottom: 30px; text-transform: uppercase; }
+        .spotlight h2 { font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 10px;}
+        .spotlight p.subtitle { font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; }
         .spotlight p.desc { font-size: 1.15rem; margin-bottom: 35px; color: var(--text-grey); }
 
         .btn-primary {
@@ -115,22 +130,20 @@
             padding: 18px 45px; font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.1rem;
             border-radius: 50px; transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-primary:hover { background: var(--accent); transform: translateY(-5px); box-shadow: var(--shadow-red); }
+        .btn-primary:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(230, 57, 70, 0.3); }
 
-        /* --- 4. NEWSWIRE (BULLETPROOF VISIBILITY) --- */
+        /* --- 4. NEWSWIRE (Opaque Cards for Visibility) --- */
         .newswire-section { align-items: center; justify-content: center;}
-        .section-title { font-size: 4.5rem; margin-bottom: 60px; text-transform: uppercase;}
+        .section-title { font-size: 4rem; margin-bottom: 60px; text-transform: uppercase;}
         
         .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1400px; width: 100%;}
         
-        /* SOLID WHITE BACKGROUND - Will never disappear */
         .news-card {
             background: #ffffff; border: 1px solid rgba(0,0,0,0.05); 
             border-radius: 24px; padding: 40px 30px; display: flex; flex-direction: column;
-            box-shadow: var(--shadow-hard); transition: var(--transition);
-            position: relative; z-index: 50; /* Forces it above everything */
+            box-shadow: var(--shadow-soft); transition: var(--transition); position: relative; z-index: 50;
         }
-        .news-card:hover { transform: translateY(-12px); border-color: var(--accent); box-shadow: 0 25px 60px rgba(230,57,70,0.15); }
+        .news-card:hover { transform: translateY(-12px); border-color: var(--accent); box-shadow: var(--shadow-hard); }
         .news-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.2; }
         .news-card p { font-size: 1.05rem; color: var(--text-grey); margin-bottom: 30px; flex-grow: 1; }
         .read-more { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);}
@@ -138,7 +151,7 @@
 
         /* --- 5. NEWSLETTER --- */
         .newsletter { padding: 100px 5%; background: var(--accent); color: white; text-align: center; border-radius: 50px 50px 0 0;}
-        .newsletter h2 { font-size: 4rem; margin-bottom: 15px; color: white; text-transform: uppercase;}
+        .newsletter h2 { font-size: 3.5rem; margin-bottom: 15px; color: white; text-transform: uppercase;}
         .newsletter p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
 
         .form-group { display: flex; justify-content: center; gap: 15px; max-width: 650px; margin: 0 auto; }
@@ -153,30 +166,52 @@
         .footer-links a:hover { color: var(--accent); }
         .copyright { font-size: 0.95rem; color: var(--text-grey); margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;}
 
-        /* GSAP CLASSES */
         .gs-reveal { will-change: transform, opacity; }
 
+        /* =========================================
+           MOBILE RESPONSIVENESS
+           ========================================= */
         @media (max-width: 1200px) { .news-container { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
             nav { height: 70px; }
-            .nav-links { display: none; } /* Add your mobile menu toggle if needed */
+            .hamburger { display: flex; }
+            .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px 0; gap: 0; transform: translateY(-150%); opacity: 0; transition: var(--transition); border-bottom: 1px solid rgba(0,0,0,0.05);}
+            .nav-links.active { transform: translateY(0); opacity: 1; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 15px; }
+            
+            .dropdown-menu { position: static; box-shadow: none; border: none; background: #f9f9f9; display: none; opacity: 1; pointer-events: all; transform: none;}
+            .dropdown.mobile-open .dropdown-menu { display: block; }
+            
             .news-container { grid-template-columns: 1fr; }
             .form-group { flex-direction: column; }
             .form-group button { width: 100%; }
             .spotlight { align-items: center; text-align: center;}
+            .spotlight-content { padding: 40px 30px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- THE MASSIVE SATURN CORE 3D ENGINE -->
+    <!-- THE MASSIVE GLASS SATURN CORE & STARFIELD -->
     <canvas id="webgl-canvas"></canvas>
 
     <!-- NAVBAR -->
     <nav id="navbar">
         <a href="/"><span class="logo-text">INKA</span></a>
+        
+        <div class="hamburger" id="hamburger">
+            <div></div><div></div><div></div>
+        </div>
+
         <ul class="nav-links" id="navLinks">
-            <li><a href="/games/deadignition">Dead Ignition</a></li>
+            <li class="dropdown" id="games-dropdown">
+                <a href="javascript:void(0);" id="games-btn">Games ▾</a>
+                <div class="dropdown-menu">
+                    <a href="/games/deadignition">Dead Ignition</a>
+                    <a href="/games">All Games</a>
+                </div>
+            </li>
             <li><a href="/news">Newswire</a></li>
             <li><a href="/videos">Videos</a></li>
             <li><a href="#footer-section" class="support-btn">Support</a></li>
@@ -196,7 +231,7 @@
         <!-- DEAD IGNITION -->
         <section class="section-wrapper spotlight" id="spotlight-trigger">
             <div class="spotlight-content gs-reveal">
-                <img src="icon.png" alt="Dead Ignition" onerror="this.src='https://via.placeholder.com/100/cccccc/666666?text=Icon';">
+                <img src="icon.png" alt="Dead Ignition" onerror="this.src='https://via.placeholder.com/90/cccccc/666666?text=Icon';">
                 <h2>DEAD IGNITION</h2>
                 <p class="subtitle">In Development // Coming Soon</p>
                 <p class="desc">Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension.</p>
@@ -254,90 +289,108 @@
     </footer>
 
     <!-- =========================================
-         JAVASCRIPT ENGINES (Smooth Saturn Tech)
+         JAVASCRIPT ENGINES (Flawless Mobile & Desktop Physics)
          ========================================= -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Header Hide on Scroll
+        // --- MOBILE NAV LOGIC ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const gamesBtn = document.getElementById('games-btn');
+        const gamesDropdown = document.getElementById('games-dropdown');
+        
+        hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+        gamesBtn.addEventListener('click', () => { if (window.innerWidth <= 768) gamesDropdown.classList.toggle('mobile-open'); });
+        
         let lastScroll = window.scrollY;
         window.addEventListener('scroll', () => {
-            document.getElementById('navbar').classList.toggle('nav-hidden', lastScroll < window.scrollY && window.scrollY > 80);
+            if (!navLinks.classList.contains('active')) {
+                document.getElementById('navbar').classList.toggle('nav-hidden', lastScroll < window.scrollY && window.scrollY > 80);
+            }
             lastScroll = window.scrollY;
         });
 
         /* =========================================
-           THREE.JS - THE SATURN CORE
+           THREE.JS - THE GLASS CORE & STARFIELD
            ========================================= */
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
-        // Add very light fog to fade particles in the distance
-        scene.fog = new THREE.FogExp2(0xfdfdfd, 0.015);
+        scene.fog = new THREE.FogExp2(0xffffff, 0.015);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // High-Contrast Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        // High-End Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(10, 20, 15);
-        scene.add(directionalLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        dirLight.position.set(10, 20, 15);
+        scene.add(dirLight);
         
-        // Deep Red Core Light
-        const coreLight = new THREE.PointLight(0xe63946, 10, 50);
+        const coreLight = new THREE.PointLight(0xe63946, 5, 40);
         scene.add(coreLight);
 
-        // Materials (Deep Gaming Black & Neon Red)
-        const darkPlanetMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.2 });
-        const wireRedMat = new THREE.MeshBasicMaterial({ color: 0xe63946, wireframe: true, transparent: true, opacity: 0.4 });
-        const ringMatWhite = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true, transparent: true, opacity: 0.2 });
-        const ringMatRed = new THREE.MeshPhysicalMaterial({ color: 0xe63946, metalness: 0.2, roughness: 0.1, side: THREE.DoubleSide });
+        // Materials: Removed Black. Now Premium Glassy White & Red
+        const glassPlanetMat = new THREE.MeshPhysicalMaterial({ 
+            color: 0xffffff, metalness: 0.1, roughness: 0.1, transmission: 0.5, clearcoat: 1.0 
+        });
+        const wireRedMat = new THREE.MeshBasicMaterial({ color: 0xe63946, wireframe: true, transparent: true, opacity: 0.6 });
+        const ringMatRed = new THREE.MeshPhysicalMaterial({ color: 0xe63946, metalness: 0.3, roughness: 0.2, side: THREE.DoubleSide });
 
-        // --- MASTER SATURN GROUP ---
+        // --- MASTER GROUP (Handles Position & Scale to fix GSAP Glitch) ---
+        const masterGroup = new THREE.Group();
+        scene.add(masterGroup);
+
+        // --- SATURN GROUP (Handles Rotation Only) ---
         const saturnGroup = new THREE.Group();
-        scene.add(saturnGroup);
+        masterGroup.add(saturnGroup);
 
-        // 1. The Planet Sphere (Solid core + Wireframe fault lines)
-        const planetGeo = new THREE.SphereGeometry(3.5, 32, 32);
-        const planetSolid = new THREE.Mesh(planetGeo, darkPlanetMat);
-        const planetWire = new THREE.Mesh(new THREE.SphereGeometry(3.55, 16, 16), wireRedMat);
+        // 1. The Glass Planet
+        const planetSolid = new THREE.Mesh(new THREE.SphereGeometry(3.5, 32, 32), glassPlanetMat);
+        const planetWire = new THREE.Mesh(new THREE.SphereGeometry(3.6, 16, 16), wireRedMat);
         saturnGroup.add(planetSolid, planetWire);
 
-        // 2. The Accretion Rings (Saturn style)
-        const ring1 = new THREE.Mesh(new THREE.RingGeometry(4.5, 4.6, 64), ringMatRed);
-        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(5.5, 0.05, 16, 100), ringMatWhite);
-        const ring3 = new THREE.Mesh(new THREE.TorusGeometry(6.5, 0.1, 16, 100), wireRedMat);
-        
-        // Tilt the rings flat
+        // 2. Accretion Rings
+        const ring1 = new THREE.Mesh(new THREE.RingGeometry(4.8, 5.0, 64), ringMatRed);
+        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(6.0, 0.05, 16, 100), wireRedMat);
         ring1.rotation.x = Math.PI / 2;
         ring2.rotation.x = Math.PI / 2;
-        ring3.rotation.x = Math.PI / 2;
-        saturnGroup.add(ring1, ring2, ring3);
+        saturnGroup.add(ring1, ring2);
 
-        // 3. Dense Asteroid/Particle Belt
-        const particlesGeo = new THREE.BufferGeometry();
-        const particleCount = 1500;
-        const posArray = new Float32Array(particleCount * 3);
-        
-        for(let i = 0; i < particleCount * 3; i+=3) {
-            // Create a wide, flat disk shape for the particles
-            const radius = 5 + Math.random() * 15;
+        // 3. Inner Asteroid Belt (Spins with planet)
+        const innerStarsGeo = new THREE.BufferGeometry();
+        const innerCount = 800;
+        const innerPos = new Float32Array(innerCount * 3);
+        for(let i = 0; i < innerCount * 3; i+=3) {
+            const radius = 6 + Math.random() * 8;
             const theta = Math.random() * Math.PI * 2;
-            posArray[i] = Math.cos(theta) * radius; // x
-            posArray[i+1] = (Math.random() - 0.5) * 2; // y (tight height)
-            posArray[i+2] = Math.sin(theta) * radius; // z
+            innerPos[i] = Math.cos(theta) * radius;
+            innerPos[i+1] = (Math.random() - 0.5) * 1.5;
+            innerPos[i+2] = Math.sin(theta) * radius;
         }
-        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particleMat = new THREE.PointsMaterial({ size: 0.05, color: 0xe63946, transparent: true, opacity: 0.6 });
-        const asteroidBelt = new THREE.Points(particlesGeo, particleMat);
-        saturnGroup.add(asteroidBelt); // Add particles inside the Saturn group so they move with it
+        innerStarsGeo.setAttribute('position', new THREE.BufferAttribute(innerPos, 3));
+        const innerStarMat = new THREE.PointsMaterial({ size: 0.06, color: 0xe63946, transparent: true, opacity: 0.7 });
+        const innerBelt = new THREE.Points(innerStarsGeo, innerStarMat);
+        saturnGroup.add(innerBelt);
 
-        // Initial Orbital Tilt
-        saturnGroup.rotation.x = Math.PI / 5;
-        camera.position.z = 15;
+        // 4. Massive Background Starfield (Independent of planet)
+        const globalStarsGeo = new THREE.BufferGeometry();
+        const globalCount = 2500; // Tons of stars
+        const globalPos = new Float32Array(globalCount * 3);
+        for(let i = 0; i < globalCount * 3; i++) {
+            globalPos[i] = (Math.random() - 0.5) * 100;
+        }
+        globalStarsGeo.setAttribute('position', new THREE.BufferAttribute(globalPos, 3));
+        const globalStarMat = new THREE.PointsMaterial({ size: 0.08, color: 0xcccccc, transparent: true, opacity: 0.5 });
+        const starField = new THREE.Points(globalStarsGeo, globalStarMat);
+        scene.add(starField); // Added directly to scene
+
+        // Initial Setup
+        saturnGroup.rotation.x = Math.PI / 6;
+        camera.position.z = 18;
 
         // --- CONTINUOUS ANIMATION LOOP ---
         const clock = new THREE.Clock();
@@ -345,18 +398,23 @@
             requestAnimationFrame(animate3D);
             const t = clock.getElapsedTime();
 
-            // Continuous smooth rotation for the planet and rings
+            // Smooth idle rotations
             planetSolid.rotation.y += 0.002;
             planetWire.rotation.y -= 0.001;
             planetWire.rotation.z += 0.001;
             
-            ring2.rotation.z -= 0.003;
-            ring3.rotation.z += 0.005;
+            ring2.rotation.z -= 0.004;
+            innerBelt.rotation.y += 0.002; 
+            
+            // Starfield slowly drifts
+            starField.rotation.y += 0.0005;
+            starField.rotation.x += 0.0002;
 
-            asteroidBelt.rotation.y += 0.002; // Particles orbit the planet
-
-            // Subtle floating up and down
-            saturnGroup.position.y += Math.sin(t * 1.5) * 0.002;
+            // Heartbeat glow
+            coreLight.intensity = 5 + Math.sin(t * 3) * 3;
+            
+            // Subtle idle float for the master group
+            masterGroup.position.y += Math.sin(t * 2) * 0.002;
 
             renderer.render(scene, camera);
         }
@@ -369,32 +427,66 @@
         });
 
         /* =========================================
-           GSAP SCROLL-TIED PHYSICS (Smooth alignment)
+           GSAP MATCHMEDIA (Perfect Desktop & Mobile Physics)
            ========================================= */
-        
-        // 1. Overall Planet Rotation (Tied directly to total page scroll)
-        gsap.to(saturnGroup.rotation, {
-            y: Math.PI * 1.5,
-            z: Math.PI / 4,
-            ease: "none",
-            scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 } // Scrub 2 = buttery smooth
+        let mm = gsap.matchMedia();
+
+        // --- DESKTOP (Planet goes right, gets massive) ---
+        mm.add("(min-width: 769px)", () => {
+            
+            // 1. Master Rotation (Spins as you scroll entire page)
+            gsap.to(saturnGroup.rotation, {
+                y: Math.PI * 2,
+                z: Math.PI / 4,
+                ease: "none",
+                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1.5 }
+            });
+
+            // 2. Starfield Parallax (Camera flies through stars)
+            gsap.to(starField.position, {
+                z: 40, 
+                ease: "none",
+                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 }
+            });
+
+            // 3. Spotlight Section: SCALE UP and MOVE RIGHT
+            const tlSpotlight = gsap.timeline({
+                scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 1.5 }
+            });
+            tlSpotlight.to(masterGroup.position, { x: 7, z: 2, ease: "power2.inOut" }, 0)
+                       .to(masterGroup.scale, { x: 1.7, y: 1.7, z: 1.7, ease: "power2.inOut" }, 0); // Gets 70% Bigger!
+
+            // 4. Newswire Section: MOVE TOP CENTER and SCALE DOWN
+            const tlNews = gsap.timeline({
+                scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 1.5 }
+            });
+            tlNews.to(masterGroup.position, { x: 0, y: 6, z: -10, ease: "power2.inOut" }, 0)
+                  .to(masterGroup.scale, { x: 0.9, y: 0.9, z: 0.9, ease: "power2.inOut" }, 0);
         });
 
-        // 2. Alignment: Move Planet RIGHT for Dead Ignition
-        gsap.to(saturnGroup.position, {
-            x: 8, // Moves far right so UI is clear
-            z: -5,
-            ease: "power2.inOut",
-            scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }
-        });
+        // --- MOBILE (Planet stays center, scales down, moves up) ---
+        mm.add("(max-width: 768px)", () => {
+            
+            // Rotate normally
+            gsap.to(saturnGroup.rotation, {
+                y: Math.PI * 2,
+                ease: "none",
+                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1.5 }
+            });
 
-        // 3. Alignment: Move Planet TOP CENTER for Newswire
-        gsap.to(saturnGroup.position, {
-            x: 0, // Back to center
-            y: 5, // Moves up high above the cards
-            z: -12, // Pushes deeper into the background
-            ease: "power2.inOut",
-            scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }
+            // Spotlight: Stays center, goes slightly up behind UI
+            const tlSpotlightMobile = gsap.timeline({
+                scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 1.5 }
+            });
+            tlSpotlightMobile.to(masterGroup.position, { x: 0, y: 3, z: -5, ease: "power2.inOut" }, 0)
+                             .to(masterGroup.scale, { x: 1.1, y: 1.1, z: 1.1, ease: "power2.inOut" }, 0);
+
+            // Newswire: Goes higher so it doesn't block cards
+            const tlNewsMobile = gsap.timeline({
+                scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 1.5 }
+            });
+            tlNewsMobile.to(masterGroup.position, { x: 0, y: 8, z: -15, ease: "power2.inOut" }, 0)
+                        .to(masterGroup.scale, { x: 0.8, y: 0.8, z: 0.8, ease: "power2.inOut" }, 0);
         });
 
         /* =========================================
