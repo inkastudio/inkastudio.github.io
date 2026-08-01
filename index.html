@@ -73,7 +73,7 @@
 
         .logo-text { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px;}
         
-        .nav-links { display: flex; gap: 35px; align-items: center; list-style: none; }
+        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
         .nav-links a { font-size: 0.95rem; font-weight: 700; color: var(--text-main); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
         .nav-links a:hover { color: var(--accent); }
         
@@ -90,7 +90,7 @@
         .dropdown-menu a { display: block; padding: 12px 25px; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
         .dropdown-menu a:hover { background: rgba(230,57,70,0.05); color: var(--accent); padding-left: 30px;}
 
-        .nav-links a.support-btn { border: 2px solid var(--text-main); padding: 10px 24px; border-radius: 50px; }
+        .nav-links a.support-btn { border: 2px solid var(--text-main); padding: 8px 24px; border-radius: 50px; }
         .nav-links a.support-btn:hover { background: var(--text-main); color: white; }
 
         .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
@@ -234,11 +234,13 @@
             </li>
             <li><a href="/news">Newswire</a></li>
             <li><a href="/videos">Videos</a></li>
+            <li><a href="/downloads">Downloads</a></li>
             <li><a href="#footer-section" class="support-btn">Support</a></li>
         </ul>
     </nav>
 
-    <main>
+    <!-- MAIN SCROLL CONTAINER -->
+    <main id="main-scroll">
         <!-- HERO -->
         <section class="section-wrapper hero">
             <h1 class="gs-reveal">INKA INTERACTIVE</h1>
@@ -249,7 +251,7 @@
         </section>
 
         <!-- DEAD IGNITION -->
-        <section class="section-wrapper spotlight" id="spotlight-trigger">
+        <section class="section-wrapper spotlight">
             <div class="spotlight-content gs-reveal">
                 <img src="icon.png" alt="Dead Ignition" onerror="this.src='https://via.placeholder.com/90/cccccc/666666?text=Icon';">
                 <h2>DEAD IGNITION</h2>
@@ -260,7 +262,7 @@
         </section>
 
         <!-- NEWSWIRE -->
-        <section class="section-wrapper newswire-section" id="news-trigger">
+        <section class="section-wrapper newswire-section">
             <h2 class="section-title gs-reveal">Latest News</h2>
             <div class="news-container">
                 <div class="news-card gs-reveal">
@@ -309,7 +311,7 @@
     </footer>
 
     <!-- =========================================
-         JAVASCRIPT ENGINES (Flawless Mobile & Desktop Physics)
+         JAVASCRIPT ENGINES (Flawless Physics Engine)
          ========================================= -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
@@ -353,24 +355,30 @@
         const coreLight = new THREE.PointLight(0xe63946, 6, 40);
         scene.add(coreLight);
 
-        // Advanced Materials
+        // Advanced Materials (No Black, Pure Glass/White/Red)
         const glassPlanetMat = new THREE.MeshPhysicalMaterial({ 
-            color: 0xffffff, metalness: 0.1, roughness: 0.1, transmission: 0.7, clearcoat: 1.0, thickness: 1.5
+            color: 0xffffff, metalness: 0.1, roughness: 0.1, transmission: 0.7, clearcoat: 1.0
         });
         const innerGlowMat = new THREE.MeshBasicMaterial({ color: 0xaa0000 }); // Deep red core
         const wireRedMat = new THREE.MeshBasicMaterial({ color: 0xe63946, wireframe: true, transparent: true, opacity: 0.4 });
         const ringMatRed = new THREE.MeshPhysicalMaterial({ color: 0xe63946, metalness: 0.3, roughness: 0.2, side: THREE.DoubleSide });
-        const cageMat = new THREE.MeshBasicMaterial({ color: 0x555555, wireframe: true, transparent: true, opacity: 0.15 });
+        const cageMat = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true, transparent: true, opacity: 0.2 });
 
-        // --- MASTER GROUP (Handles Position & Scale) ---
+        /* --- PHYSICS SEPARATION --- 
+           MasterGroup: Moved and scaled by GSAP
+           ScrollTiltGroup: Tilted by GSAP
+           SaturnGroup: Rotates continuously on its own
+        */
         const masterGroup = new THREE.Group();
         scene.add(masterGroup);
 
-        // --- SATURN GROUP (Handles Rotation) ---
-        const saturnGroup = new THREE.Group();
-        masterGroup.add(saturnGroup);
+        const scrollTiltGroup = new THREE.Group();
+        masterGroup.add(scrollTiltGroup);
 
-        // 1. The Planet (Inner Core + Glass Shell + Red Wireframe)
+        const saturnGroup = new THREE.Group();
+        scrollTiltGroup.add(saturnGroup);
+
+        // 1. The Planet
         const innerCore = new THREE.Mesh(new THREE.SphereGeometry(2.5, 32, 32), innerGlowMat);
         const planetSolid = new THREE.Mesh(new THREE.SphereGeometry(3.5, 32, 32), glassPlanetMat);
         const planetWire = new THREE.Mesh(new THREE.SphereGeometry(3.6, 16, 16), wireRedMat);
@@ -387,54 +395,43 @@
         ring2.rotation.x = Math.PI / 2;
         saturnGroup.add(ring1, ring2);
 
-        // 4. Inner Glowing Asteroid Belt (Additive Blending makes them glow)
-        const innerStarsGeo = new THREE.BufferGeometry();
-        const innerCount = 600;
-        const innerPos = new Float32Array(innerCount * 3);
-        for(let i = 0; i < innerCount * 3; i+=3) {
-            const radius = 6 + Math.random() * 8;
-            const theta = Math.random() * Math.PI * 2;
-            innerPos[i] = Math.cos(theta) * radius;
-            innerPos[i+1] = (Math.random() - 0.5) * 1.5;
-            innerPos[i+2] = Math.sin(theta) * radius;
+        // --- 4. MULTI-COLORED STARFIELD (White, Grey, Charcoal) ---
+        function createStars(count, size, color, spread) {
+            const geo = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            for(let i = 0; i < count * 3; i++) {
+                pos[i] = (Math.random() - 0.5) * spread;
+            }
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({ size: size, color: color, transparent: true, opacity: 0.8 });
+            return new THREE.Points(geo, mat);
         }
-        innerStarsGeo.setAttribute('position', new THREE.BufferAttribute(innerPos, 3));
-        const innerStarMat = new THREE.PointsMaterial({ size: 0.2, color: 0xff3333, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
-        const innerBelt = new THREE.Points(innerStarsGeo, innerStarMat);
-        saturnGroup.add(innerBelt);
 
-        // 5. Massive Background Starfield
-        const globalStarsGeo = new THREE.BufferGeometry();
-        const globalCount = 2000; 
-        const globalPos = new Float32Array(globalCount * 3);
-        for(let i = 0; i < globalCount * 3; i++) {
-            globalPos[i] = (Math.random() - 0.5) * 100;
-        }
-        globalStarsGeo.setAttribute('position', new THREE.BufferAttribute(globalPos, 3));
-        const globalStarMat = new THREE.PointsMaterial({ size: 0.25, color: 0xffffff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
-        const starField = new THREE.Points(globalStarsGeo, globalStarMat);
+        const starsWhite = createStars(800, 0.15, 0xffffff, 80);
+        const starsGrey = createStars(800, 0.2, 0xaaaaaa, 80);
+        const starsDark = createStars(800, 0.25, 0x333333, 80); // Dark charcoal, acts as negative space particles
+        
+        const starField = new THREE.Group();
+        starField.add(starsWhite, starsGrey, starsDark);
         scene.add(starField);
 
         // Initial Setup
-        saturnGroup.rotation.x = Math.PI / 6;
+        scrollTiltGroup.rotation.x = Math.PI / 6;
         camera.position.z = 18;
 
-        // --- CONTINUOUS ANIMATION LOOP ---
+        // --- CONTINUOUS ANIMATION LOOP (Never interrupted by GSAP) ---
         const clock = new THREE.Clock();
         function animate3D() {
             requestAnimationFrame(animate3D);
             const t = clock.getElapsedTime();
 
-            // Smooth idle rotations
+            // Constant independent rotation
             planetSolid.rotation.y += 0.002;
             innerCore.rotation.x -= 0.003;
             planetWire.rotation.y -= 0.001;
-            planetWire.rotation.z += 0.001;
             cageMesh.rotation.y += 0.003;
-            cageMesh.rotation.z -= 0.002;
             
             ring2.rotation.z -= 0.004;
-            innerBelt.rotation.y += 0.002; 
             
             // Starfield slowly drifts
             starField.rotation.y += 0.0005;
@@ -443,7 +440,7 @@
             // Heartbeat glow
             coreLight.intensity = 5 + Math.sin(t * 3) * 3;
             
-            // Subtle idle float for the master group
+            // Subtle idle float
             masterGroup.position.y += Math.sin(t * 2) * 0.003;
 
             renderer.render(scene, camera);
@@ -457,81 +454,52 @@
         });
 
         /* =========================================
-           GSAP MATCHMEDIA (Flawless Desktop & Mobile Physics)
-           *overwrite: "auto"* prevents the glitch on fast scrolls
+           FLAWLESS GSAP TIMELINE ENGINE
+           (Using a single continuous timeline so it NEVER glitches on fast scrolls)
            ========================================= */
         let mm = gsap.matchMedia();
 
-        // --- DESKTOP (Planet goes right, gets massive at newswire, plunges at newsletter) ---
         mm.add("(min-width: 769px)", () => {
-            
-            // 1. Starfield Parallax (Camera flies through stars constantly)
-            gsap.to(starField.position, {
-                z: 30, ease: "none",
-                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 }
+            // Master Scroll Timeline tied to the entire page
+            let tl = gsap.timeline({
+                scrollTrigger: { trigger: "#main-scroll", start: "top top", end: "bottom bottom", scrub: 1 }
             });
 
-            // 2. Spotlight Section: SCALE UP and MOVE RIGHT
-            gsap.to(masterGroup.position, {
-                x: 7, y: 0, z: 2, ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }
-            });
-            gsap.to(masterGroup.scale, {
-                x: 1.5, y: 1.5, z: 1.5, ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }
-            });
+            // Frame 1: Hero to Dead Ignition (Moves Right, Scales Up)
+            tl.to(masterGroup.position, { x: 7, y: 0, z: 2, duration: 1 }, 0)
+              .to(masterGroup.scale, { x: 1.5, y: 1.5, z: 1.5, duration: 1 }, 0)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 4, duration: 1 }, 0)
+              .to(starField.position, { z: 10, duration: 1 }, 0)
 
-            // 3. Newswire Section: MASSIVE SCALE and HALO TILT
-            gsap.to(masterGroup.position, {
-                x: 0, y: 0, z: -5, ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }
-            });
-            gsap.to(masterGroup.scale, {
-                x: 2.5, y: 2.5, z: 2.5, ease: "power2.inOut", overwrite: "auto", // Gets 250% Bigger!
-                scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }
-            });
-            gsap.to(saturnGroup.rotation, {
-                x: Math.PI / 2, // Tilts so the rings frame the content like a halo
-                ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }
-            });
+            // Frame 2: Dead Ignition to Newswire (Moves Center, Scales MASSIVE, Halos)
+              .to(masterGroup.position, { x: 0, y: 0, z: -5, duration: 1 }, 1)
+              .to(masterGroup.scale, { x: 2.5, y: 2.5, z: 2.5, duration: 1 }, 1)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 2, duration: 1 }, 1)
+              .to(starField.position, { z: 20, duration: 1 }, 1)
 
-            // 4. Newsletter Section: SUCK DOWN and RESET
-            gsap.to(masterGroup.position, {
-                x: 0, y: -8, z: 5, ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: ".newsletter", start: "top bottom", end: "center center", scrub: 2 }
-            });
-            gsap.to(masterGroup.scale, {
-                x: 1, y: 1, z: 1, ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: ".newsletter", start: "top bottom", end: "center center", scrub: 2 }
-            });
-            gsap.to(saturnGroup.rotation, {
-                x: Math.PI / 6, // Resets tilt
-                ease: "power2.inOut", overwrite: "auto",
-                scrollTrigger: { trigger: ".newsletter", start: "top bottom", end: "center center", scrub: 2 }
-            });
+            // Frame 3: Newswire to Newsletter (Plunges down, Resets Scale)
+              .to(masterGroup.position, { x: 0, y: -8, z: 5, duration: 1 }, 2)
+              .to(masterGroup.scale, { x: 1, y: 1, z: 1, duration: 1 }, 2)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 6, duration: 1 }, 2)
+              .to(starField.position, { z: 30, duration: 1 }, 2);
         });
 
-        // --- MOBILE (Planet stays center background, scales carefully to preserve readability) ---
         mm.add("(max-width: 768px)", () => {
-            
-            // Continuous subtle rotation
-            gsap.to(saturnGroup.rotation, {
-                y: Math.PI * 2, x: Math.PI / 3, ease: "none",
-                scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 }
+            // Mobile Specific Physics
+            let tlMobile = gsap.timeline({
+                scrollTrigger: { trigger: "#main-scroll", start: "top top", end: "bottom bottom", scrub: 1 }
             });
 
-            // Spotlight: Subtle scale and push back
-            gsap.to(masterGroup.position, { y: 2, z: -5, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }});
-            gsap.to(masterGroup.scale, { x: 1.2, y: 1.2, z: 1.2, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }});
+            tlMobile.to(masterGroup.position, { x: 0, y: 2, z: -5, duration: 1 }, 0)
+                    .to(masterGroup.scale, { x: 1.1, y: 1.1, z: 1.1, duration: 1 }, 0)
 
-            // News: Shift up so it doesn't block cards
-            gsap.to(masterGroup.position, { y: 6, z: -10, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }});
-            gsap.to(masterGroup.scale, { x: 1.4, y: 1.4, z: 1.4, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }});
-            
-            // Newsletter: Plunge down slightly
-            gsap.to(masterGroup.position, { y: -3, z: -5, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: ".newsletter", start: "top bottom", end: "center center", scrub: 2 }});
-            gsap.to(masterGroup.scale, { x: 1, y: 1, z: 1, ease: "power2.inOut", overwrite: "auto", scrollTrigger: { trigger: ".newsletter", start: "top bottom", end: "center center", scrub: 2 }});
+                    .to(masterGroup.position, { x: 0, y: 6, z: -10, duration: 1 }, 1)
+                    .to(masterGroup.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 1 }, 1)
+                    .to(scrollTiltGroup.rotation, { x: Math.PI / 2, duration: 1 }, 1)
+
+                    .to(masterGroup.position, { x: 0, y: -3, z: -5, duration: 1 }, 2)
+                    .to(masterGroup.scale, { x: 1, y: 1, z: 1, duration: 1 }, 2)
+                    .to(scrollTiltGroup.rotation, { x: Math.PI / 6, duration: 1 }, 2);
         });
 
         /* =========================================
