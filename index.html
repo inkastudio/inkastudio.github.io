@@ -3,45 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Interactive | The Core</title>
+    <title>Inka Interactive | Core Engine</title>
     
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     
-    <!-- MODERN CLEAN TYPOGRAPHY -->
+    <!-- PREMIUM TYPOGRAPHY -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- THREE.JS & GSAP (The true 3D engines, removing the basic particles.js) -->
+    <!-- THREE.JS & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
         /* =========================================
-           CLEAN WHITE MINIMALIST VARIABLES
+           CORE GAMING/PROFESSIONAL VARIABLES
            ========================================= */
         :root {
             --bg-pure: #ffffff; 
-            --bg-offwhite: transparent; /* Changed to let 3D show through */
-            --text-main: #111111;
+            --text-main: #0a0a0a;
             --text-grey: #555555;
-            --accent: #e63946; 
+            --accent: #e63946; /* Inka Red */
             --accent-hover: #d62828;
-            --border-light: rgba(255,255,255,0.4);
             
-            /* Glass UI Variables */
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-blur: blur(20px);
-            --shadow-soft: 0 15px 35px rgba(0,0,0,0.05);
-            --shadow-hover: 0 20px 40px rgba(0,0,0,0.1);
+            /* Enhanced UI Shadows for Depth */
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-hard: 0 20px 50px rgba(0,0,0,0.15);
+            --shadow-red: 0 15px 35px rgba(230, 57, 70, 0.25);
             
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: auto; /* Let GSAP handle smooth scrolling */ }
-
+        
         body {
             background-color: var(--bg-pure); color: var(--text-main);
             font-family: 'Inter', sans-serif; font-size: 1.1rem;
@@ -50,11 +46,11 @@
 
         ::selection { background: var(--accent); color: white; }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f0f0f0; }
-        ::-webkit-scrollbar-thumb { background: #cccccc; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #f4f4f4; }
+        ::-webkit-scrollbar-thumb { background: #bbb; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.5px; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 900; letter-spacing: -1px; }
         a { text-decoration: none; color: inherit; }
 
         /* =========================================
@@ -62,132 +58,108 @@
            ========================================= */
         #webgl-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; pointer-events: none; background: #f8f9fa;
+            z-index: -1; pointer-events: none; 
+            background: radial-gradient(circle at center, #fdfdfd 0%, #ececec 100%);
         }
 
         /* =========================================
-           1. MODERN NAVBAR
+           1. PREMIUM NAVBAR
            ========================================= */
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
             display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: var(--glass-blur);
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
             z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
         }
         nav.nav-hidden { transform: translateY(-100%); }
 
-        .logo-text { font-family: 'Space Grotesk'; font-size: 1.6rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px;}
-        .logo-img { height: 40px; }
-
-        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
-        .nav-links a { font-size: 0.95rem; font-weight: 600; color: var(--text-main); transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
+        .logo-text { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1.5px;}
+        .nav-links { display: flex; gap: 35px; align-items: center; list-style: none; }
+        .nav-links a { font-size: 0.95rem; font-weight: 700; color: var(--text-main); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
         .nav-links a:hover { color: var(--accent); }
-
-        /* Clean Dropdown */
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            position: absolute; top: 100%; left: 0; background: rgba(255,255,255,0.95);
-            backdrop-filter: var(--glass-blur); border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;
-            min-width: 180px; opacity: 0; pointer-events: none;
-            transform: translateY(10px); transition: var(--transition);
-            box-shadow: var(--shadow-soft); padding: 10px 0;
-        }
-        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .dropdown-menu a { display: block; padding: 12px 20px; color: var(--text-main); font-size: 0.9rem; }
-        .dropdown-menu a:hover { background: rgba(230,57,70,0.05); color: var(--accent); padding-left: 25px;}
-
-        .nav-links a.support-btn { border: 2px solid var(--text-main); color: var(--text-main); padding: 8px 24px; border-radius: 50px; font-weight: 700; }
-        .nav-links a.support-btn:hover { background: var(--text-main); color: white; border-color: var(--text-main);}
-
-        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
-        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); transition: var(--transition);}
+        .nav-links a.support-btn { border: 2px solid var(--text-main); padding: 10px 24px; border-radius: 50px; }
+        .nav-links a.support-btn:hover { background: var(--text-main); color: white; }
 
         /* =========================================
-           SECTIONS & GLASS UI
+           SECTIONS & UI
            ========================================= */
         main { position: relative; z-index: 10; }
-        
-        .section-wrapper { position: relative; padding: 120px 5%; overflow: hidden;}
+        .section-wrapper { min-height: 100vh; padding: 120px 5%; display: flex; flex-direction: column; justify-content: center; position: relative;}
 
         /* --- 2. HERO --- */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-size: clamp(3.5rem, 8vw, 7rem); color: var(--text-main); margin-bottom: 10px; line-height: 1; }
-        .hero h3 { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--accent); font-weight: 700; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase;}
+        .hero { align-items: center; text-align: center; }
+        .hero h1 { font-size: clamp(4rem, 8vw, 8rem); line-height: 0.9; margin-bottom: 15px; text-transform: uppercase;}
+        .hero h3 { font-size: clamp(1.2rem, 3vw, 1.8rem); color: var(--accent); font-weight: 700; margin-bottom: 40px; letter-spacing: 4px; text-transform: uppercase;}
         
         .about-box {
-            max-width: 750px; background: var(--glass-bg); backdrop-filter: var(--glass-blur);
-            border-radius: 24px; padding: 50px; box-shadow: var(--shadow-soft); border: 1px solid white;
+            max-width: 700px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+            border-radius: 20px; padding: 40px; box-shadow: var(--shadow-soft); border: 1px solid rgba(255,255,255,1);
         }
-        .about-box p { font-size: 1.2rem; color: var(--text-main); line-height: 1.8; font-weight: 500;}
+        .about-box p { font-size: 1.15rem; color: var(--text-main); font-weight: 500;}
 
-        /* --- 3. SPOTLIGHT (Dead Ignition) --- */
-        .spotlight { min-height: 100vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+        /* --- 3. DEAD IGNITION --- */
+        .spotlight { align-items: flex-start; } /* Kept left so the planet can go right */
         .spotlight-content {
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid white;
-            padding: 60px; border-radius: 30px; box-shadow: var(--shadow-soft); max-width: 600px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 60px; max-width: 650px;
+            box-shadow: var(--shadow-hard); border: 1px solid rgba(255,255,255,1);
         }
-        .spotlight img { width: 100px; height: 100px; margin-bottom: 30px; border-radius: 24px; box-shadow: var(--shadow-soft); border: 2px solid white;}
-        .spotlight h2 { font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 10px; line-height: 1;}
-        .spotlight p { font-size: 1.1rem; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; text-transform: uppercase; }
+        .spotlight img { width: 90px; height: 90px; margin-bottom: 25px; border-radius: 20px; box-shadow: var(--shadow-soft); border: 2px solid var(--bg-pure);}
+        .spotlight h2 { font-size: clamp(3rem, 5vw, 5rem); line-height: 1; margin-bottom: 10px;}
+        .spotlight p.subtitle { font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; margin-bottom: 30px; text-transform: uppercase; }
+        .spotlight p.desc { font-size: 1.15rem; margin-bottom: 35px; color: var(--text-grey); }
 
         .btn-primary {
             display: inline-block; background: var(--text-main); color: white;
-            padding: 16px 45px; font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.1rem;
-            border-radius: 50px; transition: var(--transition); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 18px 45px; font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.1rem;
+            border-radius: 50px; transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-primary:hover { background: var(--accent); transform: translateY(-4px); box-shadow: 0 15px 30px rgba(230, 57, 70, 0.3); color: white;}
+        .btn-primary:hover { background: var(--accent); transform: translateY(-5px); box-shadow: var(--shadow-red); }
 
-        /* --- 4. NEWSWIRE --- */
-        .newswire-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center;}
-        .section-title { font-size: 4rem; margin-bottom: 60px; text-align: center; }
-        .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1400px; margin: 0 auto;}
-
+        /* --- 4. NEWSWIRE (BULLETPROOF VISIBILITY) --- */
+        .newswire-section { align-items: center; justify-content: center;}
+        .section-title { font-size: 4.5rem; margin-bottom: 60px; text-transform: uppercase;}
+        
+        .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1400px; width: 100%;}
+        
+        /* SOLID WHITE BACKGROUND - Will never disappear */
         .news-card {
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid white; 
-            border-radius: 20px; padding: 40px 30px; display: flex; flex-direction: column; transition: var(--transition);
-            box-shadow: var(--shadow-soft);
+            background: #ffffff; border: 1px solid rgba(0,0,0,0.05); 
+            border-radius: 24px; padding: 40px 30px; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-hard); transition: var(--transition);
+            position: relative; z-index: 50; /* Forces it above everything */
         }
-        .news-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
-        .news-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.3; }
+        .news-card:hover { transform: translateY(-12px); border-color: var(--accent); box-shadow: 0 25px 60px rgba(230,57,70,0.15); }
+        .news-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.2; }
         .news-card p { font-size: 1.05rem; color: var(--text-grey); margin-bottom: 30px; flex-grow: 1; }
-        .read-more { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); display: inline-block;}
+        .read-more { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);}
         .read-more:hover { color: var(--accent-hover); transform: translateX(5px); }
 
         /* --- 5. NEWSLETTER --- */
-        .newsletter { padding: 120px 5%; background: var(--accent); color: white; text-align: center; border-radius: 40px 40px 0 0;}
-        .newsletter h2 { font-size: 3.5rem; margin-bottom: 15px; color: white;}
+        .newsletter { padding: 100px 5%; background: var(--accent); color: white; text-align: center; border-radius: 50px 50px 0 0;}
+        .newsletter h2 { font-size: 4rem; margin-bottom: 15px; color: white; text-transform: uppercase;}
         .newsletter p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
 
-        .form-group { display: flex; justify-content: center; gap: 15px; max-width: 600px; margin: 0 auto; }
-        .form-group input { flex: 1; padding: 20px 30px; border: none; border-radius: 50px; font-family: 'Inter'; font-size: 1.1rem; outline: none; }
-        .form-group button { background: var(--text-main); color: white; border: none; padding: 20px 45px; border-radius: 50px; font-family: 'Space Grotesk'; font-weight: 700; cursor: pointer; transition: var(--transition); font-size: 1.1rem;}
-        .form-group button:hover { background: white; color: var(--text-main); }
+        .form-group { display: flex; justify-content: center; gap: 15px; max-width: 650px; margin: 0 auto; }
+        .form-group input { flex: 1; padding: 22px 30px; border: none; border-radius: 50px; font-family: 'Inter'; font-size: 1.1rem; outline: none; box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);}
+        .form-group button { background: var(--text-main); color: white; border: none; padding: 22px 50px; border-radius: 50px; font-family: 'Space Grotesk'; font-weight: 900; cursor: pointer; transition: var(--transition); font-size: 1.1rem; text-transform: uppercase;}
+        .form-group button:hover { background: white; color: var(--text-main); box-shadow: var(--shadow-hard);}
 
         /* --- 6. FOOTER --- */
         footer { padding: 60px 5% 40px; background: white; text-align: center; position: relative; z-index: 10;}
         .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-main); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; transition: var(--transition); }
+        .footer-links a { color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.95rem; transition: var(--transition); }
         .footer-links a:hover { color: var(--accent); }
+        .copyright { font-size: 0.95rem; color: var(--text-grey); margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;}
 
-        .social-icons { display: flex; justify-content: center; gap: 25px; margin-bottom: 30px; }
-        .social-icons svg { width: 24px; height: 24px; fill: var(--text-main); transition: var(--transition); }
-        .social-icons svg:hover { fill: var(--accent); transform: scale(1.2); }
-        .copyright { font-size: 0.9rem; color: var(--text-grey); margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;}
-
-        /* GSAP Animation classes */
+        /* GSAP CLASSES */
         .gs-reveal { will-change: transform, opacity; }
 
-        @media (max-width: 1024px) { .news-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1200px) { .news-container { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
             nav { height: 70px; }
-            .hamburger { display: flex; }
-            .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background: white; flex-direction: column; gap: 0; padding: 20px 0; border-bottom: 1px solid var(--border-light); transform: translateY(-150%); opacity: 0; transition: var(--transition); }
-            .nav-links.active { transform: translateY(0); opacity: 1; }
-            .nav-links li { width: 100%; text-align: center; }
-            .nav-links a { display: block; padding: 15px; font-size: 1.1rem; }
-            .dropdown-menu { position: static; box-shadow: none; border: none; background: #f9f9f9; display: none; opacity: 1; pointer-events: all; transform: none;}
-            .dropdown.mobile-open .dropdown-menu { display: block; }
+            .nav-links { display: none; } /* Add your mobile menu toggle if needed */
             .news-container { grid-template-columns: 1fr; }
             .form-group { flex-direction: column; }
             .form-group button { width: 100%; }
@@ -197,39 +169,22 @@
 </head>
 <body>
 
-    <!-- THE MASSIVE 3D ENGINE -->
+    <!-- THE MASSIVE SATURN CORE 3D ENGINE -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- 1. SMART NAVBAR -->
+    <!-- NAVBAR -->
     <nav id="navbar">
-        <div class="logo-container">
-            <a href="/">
-                <img src="logo.png" alt="Inka Interactive" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <span class="logo-text" style="display:none;">INKA</span>
-            </a>
-        </div>
-        
-        <div class="hamburger" id="hamburger">
-            <div></div><div></div><div></div>
-        </div>
-
+        <a href="/"><span class="logo-text">INKA</span></a>
         <ul class="nav-links" id="navLinks">
-            <li class="dropdown" id="games-dropdown">
-                <a href="javascript:void(0);" id="games-btn">Games ▾</a>
-                <div class="dropdown-menu">
-                    <a href="/games/deadignition">Dead Ignition</a>
-                    <a href="/games">All Games</a>
-                </div>
-            </li>
+            <li><a href="/games/deadignition">Dead Ignition</a></li>
             <li><a href="/news">Newswire</a></li>
             <li><a href="/videos">Videos</a></li>
-            <li><a href="/downloads">Downloads</a></li>
-            <li><a href="#footer-section" class="support-btn" id="mobile-support-btn">Support</a></li>
+            <li><a href="#footer-section" class="support-btn">Support</a></li>
         </ul>
     </nav>
 
     <main>
-        <!-- 2. HERO -->
+        <!-- HERO -->
         <section class="section-wrapper hero">
             <h1 class="gs-reveal">INKA INTERACTIVE</h1>
             <h3 class="gs-reveal">Official Studio Website</h3>
@@ -238,18 +193,18 @@
             </div>
         </section>
 
-        <!-- 3. SPOTLIGHT (Dead Ignition) -->
+        <!-- DEAD IGNITION -->
         <section class="section-wrapper spotlight" id="spotlight-trigger">
             <div class="spotlight-content gs-reveal">
-                <img src="icon.png" alt="Dead Ignition Icon" onerror="this.src='https://via.placeholder.com/100/cccccc/666666?text=Icon';">
+                <img src="icon.png" alt="Dead Ignition" onerror="this.src='https://via.placeholder.com/100/cccccc/666666?text=Icon';">
                 <h2>DEAD IGNITION</h2>
-                <p>In Development // Coming Soon</p>
-                <p style="color: var(--text-main); font-size: 1.15rem; margin-bottom: 30px; font-weight: 500; text-transform: none; letter-spacing: normal;">Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension.</p>
+                <p class="subtitle">In Development // Coming Soon</p>
+                <p class="desc">Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension.</p>
                 <a href="/games/deadignition" class="btn-primary">View Project</a>
             </div>
         </section>
 
-        <!-- 4. NEWSWIRE -->
+        <!-- NEWSWIRE -->
         <section class="section-wrapper newswire-section" id="news-trigger">
             <h2 class="section-title gs-reveal">Latest News</h2>
             <div class="news-container">
@@ -276,7 +231,7 @@
             </div>
         </section>
 
-        <!-- 5. NEWSLETTER -->
+        <!-- NEWSLETTER -->
         <section class="newsletter gs-reveal">
             <h2>Join the Mailing List</h2>
             <p>Get updates on development, playtests, and release dates straight to your inbox.</p>
@@ -287,7 +242,7 @@
         </section>
     </main>
 
-    <!-- 6. FOOTER -->
+    <!-- FOOTER -->
     <footer id="footer-section">
         <div class="footer-links gs-reveal">
             <a href="/contact">Contact</a>
@@ -295,97 +250,94 @@
             <a href="/privacy">Privacy Policy</a>
             <a href="/terms">Terms of Service</a>
         </div>
-        <div class="social-icons gs-reveal">
-            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-            <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-        </div>
         <p class="copyright gs-reveal">&copy; 2026 Inka Interactive &bull; Built in India &bull; All rights reserved</p>
     </footer>
 
     <!-- =========================================
-         JAVASCRIPT ENGINES
+         JAVASCRIPT ENGINES (Smooth Saturn Tech)
          ========================================= -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- MOBILE NAV LOGIC ---
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        const gamesBtn = document.getElementById('games-btn');
-        const gamesDropdown = document.getElementById('games-dropdown');
-        hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
-        gamesBtn.addEventListener('click', () => { if (window.innerWidth <= 768) gamesDropdown.classList.toggle('mobile-open'); });
-        
+        // Header Hide on Scroll
         let lastScroll = window.scrollY;
         window.addEventListener('scroll', () => {
-            if (!navLinks.classList.contains('active')) {
-                document.getElementById('navbar').classList.toggle('nav-hidden', lastScroll < window.scrollY && window.scrollY > 80);
-            }
+            document.getElementById('navbar').classList.toggle('nav-hidden', lastScroll < window.scrollY && window.scrollY > 80);
             lastScroll = window.scrollY;
         });
 
         /* =========================================
-           THREE.JS - THE CENTRAL MASTER CORE
+           THREE.JS - THE SATURN CORE
            ========================================= */
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
+        // Add very light fog to fade particles in the distance
+        scene.fog = new THREE.FogExp2(0xfdfdfd, 0.015);
+
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // High-end Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        // High-Contrast Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
         scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(10, 20, 10);
+        directionalLight.position.set(10, 20, 15);
         scene.add(directionalLight);
         
-        // The pulsing red heart of the core
-        const coreLight = new THREE.PointLight(0xe63946, 8, 30);
+        // Deep Red Core Light
+        const coreLight = new THREE.PointLight(0xe63946, 10, 50);
         scene.add(coreLight);
 
-        // Premium Materials
-        const darkMetal = new THREE.MeshPhysicalMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.2, clearcoat: 1.0 });
-        const redGlass = new THREE.MeshPhysicalMaterial({ color: 0xe63946, transmission: 0.9, opacity: 1, transparent: true, roughness: 0.1 });
-        const wireMaterial = new THREE.MeshBasicMaterial({ color: 0x555555, wireframe: true, transparent: true, opacity: 0.3 });
+        // Materials (Deep Gaming Black & Neon Red)
+        const darkPlanetMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.2 });
+        const wireRedMat = new THREE.MeshBasicMaterial({ color: 0xe63946, wireframe: true, transparent: true, opacity: 0.4 });
+        const ringMatWhite = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true, transparent: true, opacity: 0.2 });
+        const ringMatRed = new THREE.MeshPhysicalMaterial({ color: 0xe63946, metalness: 0.2, roughness: 0.1, side: THREE.DoubleSide });
 
-        // --- THE MASTER GROUP (Stays centered on screen) ---
-        const masterCore = new THREE.Group();
-        scene.add(masterCore);
+        // --- MASTER SATURN GROUP ---
+        const saturnGroup = new THREE.Group();
+        scene.add(saturnGroup);
 
-        // 1. The Inner Energy Orb
-        const innerGeo = new THREE.IcosahedronGeometry(2.5, 2);
-        const innerMesh = new THREE.Mesh(innerGeo, redGlass);
-        masterCore.add(innerMesh);
+        // 1. The Planet Sphere (Solid core + Wireframe fault lines)
+        const planetGeo = new THREE.SphereGeometry(3.5, 32, 32);
+        const planetSolid = new THREE.Mesh(planetGeo, darkPlanetMat);
+        const planetWire = new THREE.Mesh(new THREE.SphereGeometry(3.55, 16, 16), wireRedMat);
+        saturnGroup.add(planetSolid, planetWire);
 
-        // 2. The Heavy Armor Shell (Fractured)
-        const armorGeo = new THREE.IcosahedronGeometry(2.8, 0);
-        const armorMesh = new THREE.Mesh(armorGeo, darkMetal);
-        masterCore.add(armorMesh);
-
-        // 3. Engine Rings
-        const ring1 = new THREE.Mesh(new THREE.TorusGeometry(4, 0.2, 16, 100), darkMetal);
-        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(5, 0.05, 16, 100), wireMaterial);
+        // 2. The Accretion Rings (Saturn style)
+        const ring1 = new THREE.Mesh(new THREE.RingGeometry(4.5, 4.6, 64), ringMatRed);
+        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(5.5, 0.05, 16, 100), ringMatWhite);
+        const ring3 = new THREE.Mesh(new THREE.TorusGeometry(6.5, 0.1, 16, 100), wireRedMat);
+        
+        // Tilt the rings flat
         ring1.rotation.x = Math.PI / 2;
-        ring2.rotation.y = Math.PI / 2;
-        masterCore.add(ring1, ring2);
+        ring2.rotation.x = Math.PI / 2;
+        ring3.rotation.x = Math.PI / 2;
+        saturnGroup.add(ring1, ring2, ring3);
 
-        // 4. Floating 3D Data Particles (Replaces particles.js)
+        // 3. Dense Asteroid/Particle Belt
         const particlesGeo = new THREE.BufferGeometry();
-        const particleCount = 400;
+        const particleCount = 1500;
         const posArray = new Float32Array(particleCount * 3);
-        for(let i = 0; i < particleCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 40; // Spread wide
+        
+        for(let i = 0; i < particleCount * 3; i+=3) {
+            // Create a wide, flat disk shape for the particles
+            const radius = 5 + Math.random() * 15;
+            const theta = Math.random() * Math.PI * 2;
+            posArray[i] = Math.cos(theta) * radius; // x
+            posArray[i+1] = (Math.random() - 0.5) * 2; // y (tight height)
+            posArray[i+2] = Math.sin(theta) * radius; // z
         }
         particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particleMat = new THREE.PointsMaterial({ size: 0.08, color: 0x888888, transparent: true, opacity: 0.6 });
-        const particleSystem = new THREE.Points(particlesGeo, particleMat);
-        scene.add(particleSystem);
+        const particleMat = new THREE.PointsMaterial({ size: 0.05, color: 0xe63946, transparent: true, opacity: 0.6 });
+        const asteroidBelt = new THREE.Points(particlesGeo, particleMat);
+        saturnGroup.add(asteroidBelt); // Add particles inside the Saturn group so they move with it
 
-        // Camera stays static, we move the model!
-        camera.position.z = 12;
+        // Initial Orbital Tilt
+        saturnGroup.rotation.x = Math.PI / 5;
+        camera.position.z = 15;
 
         // --- CONTINUOUS ANIMATION LOOP ---
         const clock = new THREE.Clock();
@@ -393,22 +345,18 @@
             requestAnimationFrame(animate3D);
             const t = clock.getElapsedTime();
 
-            // Idle floating
-            masterCore.position.y = Math.sin(t * 1.5) * 0.3;
+            // Continuous smooth rotation for the planet and rings
+            planetSolid.rotation.y += 0.002;
+            planetWire.rotation.y -= 0.001;
+            planetWire.rotation.z += 0.001;
             
-            // Idle spinning
-            innerMesh.rotation.y += 0.005;
-            innerMesh.rotation.x += 0.003;
-            armorMesh.rotation.y -= 0.002;
-            
-            ring1.rotation.z += 0.005;
-            ring2.rotation.x -= 0.003;
+            ring2.rotation.z -= 0.003;
+            ring3.rotation.z += 0.005;
 
-            // Rotate background particles slowly
-            particleSystem.rotation.y += 0.001;
+            asteroidBelt.rotation.y += 0.002; // Particles orbit the planet
 
-            // Heartbeat light pulse
-            coreLight.intensity = 5 + Math.sin(t * 4) * 3;
+            // Subtle floating up and down
+            saturnGroup.position.y += Math.sin(t * 1.5) * 0.002;
 
             renderer.render(scene, camera);
         }
@@ -421,58 +369,49 @@
         });
 
         /* =========================================
-           GSAP SCROLL-TIED PHYSICS
+           GSAP SCROLL-TIED PHYSICS (Smooth alignment)
            ========================================= */
         
-        // TIMELINE 1: Hero to Dead Ignition
-        // Action: Move core to the RIGHT side, expand the Engine Rings
-        gsap.to(masterCore.position, {
-            x: 5, // Shift Right
-            ease: "power1.inOut",
-            scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 1 }
-        });
-        gsap.to(ring1.scale, {
-            x: 1.5, y: 1.5, z: 1.5, // Rings expand
-            scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 1 }
-        });
-        gsap.to(ring1.rotation, {
-            x: Math.PI, // Flip ring
-            scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 1 }
+        // 1. Overall Planet Rotation (Tied directly to total page scroll)
+        gsap.to(saturnGroup.rotation, {
+            y: Math.PI * 1.5,
+            z: Math.PI / 4,
+            ease: "none",
+            scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 } // Scrub 2 = buttery smooth
         });
 
-        // TIMELINE 2: Dead Ignition to Newswire
-        // Action: Move core back to CENTER, EXPLODE the armor shell, turn red
-        gsap.to(masterCore.position, {
+        // 2. Alignment: Move Planet RIGHT for Dead Ignition
+        gsap.to(saturnGroup.position, {
+            x: 8, // Moves far right so UI is clear
+            z: -5,
+            ease: "power2.inOut",
+            scrollTrigger: { trigger: "#spotlight-trigger", start: "top bottom", end: "center center", scrub: 2 }
+        });
+
+        // 3. Alignment: Move Planet TOP CENTER for Newswire
+        gsap.to(saturnGroup.position, {
             x: 0, // Back to center
-            ease: "power1.inOut",
-            scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 1 }
-        });
-        gsap.to(armorMesh.scale, {
-            x: 2.5, y: 2.5, z: 2.5, // Explode the dark shell
-            ease: "power2.out",
-            scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 1 }
-        });
-        gsap.to(armorMesh.rotation, {
-            y: Math.PI * 2, // Spin fast during transition
-            scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 1 }
+            y: 5, // Moves up high above the cards
+            z: -12, // Pushes deeper into the background
+            ease: "power2.inOut",
+            scrollTrigger: { trigger: "#news-trigger", start: "top bottom", end: "center center", scrub: 2 }
         });
 
         /* =========================================
-           GSAP HTML UI REVEALS (EVERY TIME)
+           GSAP HTML UI REVEALS (Play/Reverse every time)
            ========================================= */
         gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
             gsap.from(elem, {
                 scrollTrigger: {
                     trigger: elem,
-                    start: "top 90%", // Start revealing when element is 10% up from bottom
-                    end: "bottom 10%",
-                    toggleActions: "play reverse play reverse" // Magic setting to play up AND down
+                    start: "top 95%", 
+                    end: "bottom 5%",
+                    toggleActions: "play reverse play reverse"
                 },
-                y: 60,
+                y: 50,
                 opacity: 0,
                 duration: 0.8,
-                ease: "power3.out",
-                stagger: 0.1
+                ease: "power3.out"
             });
         });
     </script>
