@@ -3,409 +3,611 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Since 1998 | Premium Metalcraft</title>
-    <!-- Google Fonts for elegant typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Since 1998 | Luxury Metalcraft</title>
     
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- DESIGN TOKENS & RESET --- */
         :root {
-            --bg-color: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --primary-gold: #d4af37;
-            --gold-hover: #f3e5ab;
-            --text-light: #f5f5f5;
-            --text-muted: #a0a0a0;
+            --bg-base: #0a0a0a;
+            --bg-surface: #141414;
+            --bg-surface-hover: #1f1f1f;
+            --accent-gold: #c5a059;
+            --accent-gold-hover: #dfb971;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: #2a2a2a;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
             scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        h1, h2, h3, .brand {
-            font-family: 'Playfair Display', serif;
+        h1, h2, h3, h4, .brand-logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
         }
 
-        /* --- WELCOME SCREEN --- */
-        #welcome-screen {
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+        /* --- SPLASH SCREEN --- */
+        #splash-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            inset: 0;
             background-color: #000;
+            z-index: 9999;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 1s ease-in-out;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        #welcome-screen h1 {
-            color: var(--primary-gold);
-            font-size: 4rem;
-            letter-spacing: 2px;
-            animation: glow 2s infinite alternate;
+        .splash-logo {
+            color: var(--accent-gold);
+            font-size: 3rem;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeInOut 2s ease-in-out forwards;
         }
 
-        #welcome-screen p {
-            color: var(--text-muted);
-            margin-top: 10px;
-            font-style: italic;
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.95); }
+            30% { opacity: 1; transform: scale(1); }
+            70% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.05); }
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37; }
-            to { text-shadow: 0 0 20px #f3e5ab, 0 0 30px #f3e5ab; }
+        .splash-hidden {
+            transform: translateY(-100%);
         }
 
-        /* --- NAVBAR --- */
+        /* --- NAVBAR (GLASSMORPHISM) --- */
         header {
+            position: fixed;
+            top: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background-color: rgba(10, 10, 10, 0.95);
-            position: sticky;
-            top: 0;
+            padding: 1.5rem 5%;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
-            border-bottom: 1px solid #333;
+            transition: padding 0.3s ease;
         }
 
-        .brand {
-            font-size: 2rem;
-            color: var(--primary-gold);
-            font-weight: 700;
+        header.scrolled { padding: 1rem 5%; }
+
+        .brand-logo {
+            font-size: 1.75rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
         }
 
-        nav ul {
+        .nav-links {
             display: flex;
-            list-style: none;
-            gap: 30px;
+            gap: 2.5rem;
         }
 
-        nav ul li a {
-            color: var(--text-light);
-            text-decoration: none;
+        .nav-links a {
+            font-size: 0.85rem;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: color 0.3s;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
         }
 
-        nav ul li a:hover {
-            color: var(--primary-gold);
+        .nav-links a:hover { color: var(--accent-gold); }
+
+        .nav-actions {
+            display: flex;
+            gap: 1.5rem;
         }
 
-        .nav-icons i {
-            font-size: 1.2rem;
-            margin-left: 20px;
-            cursor: pointer;
-            transition: color 0.3s, transform 0.3s;
+        .nav-actions button {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: var(--transition-smooth);
+            position: relative;
         }
 
-        .nav-icons i:hover {
-            color: var(--primary-gold);
-            transform: scale(1.1);
+        .nav-actions button:hover { color: var(--accent-gold); }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.6rem;
+            font-weight: 600;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* --- HERO SECTION --- */
         .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 0 5%;
+            position: relative;
         }
 
-        .hero h2 {
-            font-size: 3rem;
-            color: var(--primary-gold);
-            margin-bottom: 15px;
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
         }
+
+        .hero h1 span { color: var(--accent-gold); }
 
         .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto;
-            color: var(--text-muted);
-            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-btn {
+            padding: 1rem 2.5rem;
+            background-color: var(--accent-gold);
+            color: #000;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .hero-btn:hover {
+            background-color: var(--accent-gold-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
         }
 
         /* --- PRODUCT SECTIONS --- */
-        .category-section {
-            padding: 60px 50px;
+        .section-container {
+            padding: 6rem 5%;
         }
 
-        .category-title {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .section-header h2 {
             font-size: 2.5rem;
-            color: var(--text-light);
-            margin-bottom: 40px;
-            border-bottom: 2px solid var(--primary-gold);
-            display: inline-block;
-            padding-bottom: 10px;
+            color: var(--accent-gold);
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
         }
 
         .product-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.4s, box-shadow 0.4s;
-            border: 1px solid #333;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
-            border-color: var(--primary-gold);
+            border-color: rgba(197, 160, 89, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
 
-        .product-image {
+        .product-image-wrapper {
             width: 100%;
-            height: 250px;
-            background-color: #222; /* Placeholder for actual images */
-            border-radius: 8px;
-            margin-bottom: 20px;
+            height: 320px;
+            background-color: #1a1a1a; /* Placeholder for image */
+            overflow: hidden;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
-            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-image-wrapper img, 
+        .product-card:hover .product-image-wrapper::after {
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .product-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         .product-price {
-            color: var(--primary-gold);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        /* --- BUTTONS --- */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Card Buttons */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-outline {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             gap: 8px;
         }
 
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
+        .btn-outline:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background: rgba(197, 160, 89, 0.05);
         }
 
-        .btn-whatsapp:hover {
-            background-color: #1ebe57;
-            box-shadow: 0 0 15px #25D366;
-        }
-
-        .btn-cart {
-            background-color: transparent;
-            color: var(--primary-gold);
-            border: 1px solid var(--primary-gold);
-        }
-
-        .btn-cart:hover {
-            background-color: var(--primary-gold);
+        .btn-whatsapp-full {
+            grid-column: span 2;
+            padding: 0.8rem;
+            background: #25D366;
             color: #000;
-        }
-        
-        .btn-wishlist {
-            background-color: transparent;
-            color: #ff4757;
-            border: 1px solid #ff4757;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
         }
 
-        .btn-wishlist:hover {
-            background-color: #ff4757;
-            color: #fff;
+        .btn-whatsapp-full:hover {
+            background: #20b858;
+            color: #000;
         }
 
         /* --- FOOTER --- */
         footer {
+            background: var(--bg-surface);
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid var(--border-color);
             text-align: center;
-            padding: 30px;
-            background-color: #050505;
-            color: var(--text-muted);
-            border-top: 1px solid #222;
         }
 
+        .footer-logo {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            font-size: 0.9rem;
+            z-index: 2000;
+            opacity: 0;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* --- SCROLL ANIMATIONS (Intersection Observer) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Add a hamburger menu later if needed */
+            .hero h1 { font-size: 3rem; }
+            .section-header h2 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Welcome Screen -->
-    <div id="welcome-screen">
-        <h1>Since 1998</h1>
-        <p>Crafting Elegance (and tolerating Madhurjya) for Decades</p>
+    <!-- Splash Screen Loader -->
+    <div id="splash-screen">
+        <div class="splash-logo">SINCE 1998</div>
     </div>
 
     <!-- Navigation -->
-    <header>
-        <div class="brand">Since 1998</div>
+    <header id="header">
+        <a href="#" class="brand-logo">SINCE 1998</a>
         <nav>
-            <ul>
-                <li><a href="#brass">Brass</a></li>
-                <li><a href="#bellmetal">Bell Metal</a></li>
-                <li><a href="#decorative">Decorative</a></li>
+            <ul class="nav-links">
+                <li><a href="#brass">Brass Collection</a></li>
+                <li><a href="#bellmetal">Bell Metal (Kanh)</a></li>
+                <li><a href="#decorative">Decor</a></li>
             </ul>
         </nav>
-        <div class="nav-icons">
-            <i class="fas fa-search" onclick="prankAlert('Search')"></i>
-            <i class="fas fa-heart" onclick="prankAlert('Wishlist')"></i>
-            <i class="fas fa-shopping-cart" onclick="prankAlert('Cart')"></i>
+        <div class="nav-actions">
+            <button aria-label="Search"><i class="fas fa-search"></i></button>
+            <button aria-label="Wishlist" onclick="window.location.href='#brass'">
+                <i class="far fa-heart"></i>
+                <span class="badge" id="wishlist-count">0</span>
+            </button>
+            <button aria-label="Cart" onclick="window.location.href='#brass'">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="badge" id="cart-count">0</span>
+            </button>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <h2>Premium Quality Metalware</h2>
-        <p>Explore our exquisite collection of traditional and modern items. Crafted with perfection, completely free from any of Madhurjya's nonsense.</p>
+    <section class="hero reveal">
+        <h1>Elegance Forged <br><span>In Metal</span></h1>
+        <p>Discover our exclusive collection of premium Brass and traditional Bell Metal heritage pieces. Crafted with uncompromising precision.</p>
+        <a href="#brass" class="hero-btn">Explore Collection</a>
     </section>
 
-    <!-- Brass Category -->
-    <section id="brass" class="category-section">
-        <h2 class="category-title">Brass Collection</h2>
+    <!-- Brass Section -->
+    <section id="brass" class="section-container">
+        <div class="section-header reveal">
+            <h2>The Brass Collection</h2>
+        </div>
+        
         <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-image">Image Placeholder</div>
-                <h3 class="product-title">Royal Brass Diya</h3>
-                <p class="product-price">₹1,200</p>
-                <div class="btn-group">
-                    <a href="https://wa.me/919395842653?text=Hi,%20I'm%20interested%20in%20buying%20the%20Royal%20Brass%20Diya" target="_blank" class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                    </a>
-                    <button class="btn btn-cart" onclick="addToCart()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-                    <button class="btn btn-wishlist" onclick="addToWishlist()"><i class="fas fa-heart"></i> Wishlist</button>
+            <!-- Product Item -->
+            <div class="product-card reveal">
+                <div class="product-image-wrapper">
+                    <!-- Replace this div with an actual img tag when you have photos -->
+                    Product Image (800x800)
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Royal Brass Diya</h3>
+                    <div class="product-price">₹1,200</div>
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
+                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
+                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Royal%20Brass%20Diya%20(₹1,200)." target="_blank" class="btn-whatsapp-full">
+                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-image">Image Placeholder</div>
-                <h3 class="product-title">Vintage Brass Pot</h3>
-                <p class="product-price">₹3,500</p>
-                <div class="btn-group">
-                    <a href="https://wa.me/919395842653?text=Hi,%20I'm%20interested%20in%20buying%20the%20Vintage%20Brass%20Pot" target="_blank" class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                    </a>
-                    <button class="btn btn-cart" onclick="addToCart()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-                    <button class="btn btn-wishlist" onclick="addToWishlist()"><i class="fas fa-heart"></i> Wishlist</button>
+
+            <!-- Product Item -->
+            <div class="product-card reveal">
+                <div class="product-image-wrapper">
+                    Product Image (800x800)
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Vintage Etched Pot</h3>
+                    <div class="product-price">₹3,500</div>
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
+                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
+                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Vintage%20Etched%20Pot%20(₹3,500)." target="_blank" class="btn-whatsapp-full">
+                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Product Item -->
+             <div class="product-card reveal">
+                <div class="product-image-wrapper">
+                    Product Image (800x800)
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Premium Brass Urli</h3>
+                    <div class="product-price">₹4,200</div>
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
+                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
+                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Premium%20Brass%20Urli%20(₹4,200)." target="_blank" class="btn-whatsapp-full">
+                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Bellmetal Category -->
-    <section id="bellmetal" class="category-section">
-        <h2 class="category-title">Bell Metal (Kanh)</h2>
+    <!-- Bell Metal Section -->
+    <section id="bellmetal" class="section-container">
+        <div class="section-header reveal">
+            <h2>Heritage Bell Metal</h2>
+        </div>
+        
         <div class="product-grid">
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image">Image Placeholder</div>
-                <h3 class="product-title">Traditional Kanh Thali Set</h3>
-                <p class="product-price">₹5,000</p>
-                <div class="btn-group">
-                    <a href="https://wa.me/919395842653?text=Hi,%20I'm%20interested%20in%20buying%20the%20Traditional%20Kanh%20Thali%20Set" target="_blank" class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                    </a>
-                    <button class="btn btn-cart" onclick="addToCart()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-                    <button class="btn btn-wishlist" onclick="addToWishlist()"><i class="fas fa-heart"></i> Wishlist</button>
+            <!-- Product Item -->
+            <div class="product-card reveal">
+                <div class="product-image-wrapper">
+                    Product Image (800x800)
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Authentic Kanh Thali Set</h3>
+                    <div class="product-price">₹6,500</div>
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
+                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
+                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Authentic%20Kanh%20Thali%20Set%20(₹6,500)." target="_blank" class="btn-whatsapp-full">
+                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Decorative Items Category -->
-    <section id="decorative" class="category-section">
-        <h2 class="category-title">Decorative Masterpieces</h2>
-        <div class="product-grid">
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="product-image">Image Placeholder</div>
-                <h3 class="product-title">Golden Peacock Figurine</h3>
-                <p class="product-price">₹2,800</p>
-                <div class="btn-group">
-                    <a href="https://wa.me/919395842653?text=Hi,%20I'm%20interested%20in%20buying%20the%20Golden%20Peacock%20Figurine" target="_blank" class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                    </a>
-                    <button class="btn btn-cart" onclick="addToCart()"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-                    <button class="btn btn-wishlist" onclick="addToWishlist()"><i class="fas fa-heart"></i> Wishlist</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Since 1998. All rights reserved. No brain cells were harmed in the making of this website.</p>
+        <div class="footer-logo">SINCE 1998</div>
+        <p class="footer-text">Premium Brass, Bell Metal & Decorative Artifacts.</p>
+        <p style="color: #444; font-size: 0.8rem;">&copy; 2026 Since 1998. All Rights Reserved.</p>
     </footer>
 
-    <!-- JAVASCRIPT FOR ANIMATIONS AND PRANKS -->
+    <!-- Toast UI for Cart/Wishlist -->
+    <div id="toast"><i class="fas fa-check-circle" style="color: var(--accent-gold);"></i> <span id="toast-msg">Item Added</span></div>
+
+    <!-- JAVASCRIPT -->
     <script>
-        // Welcome Screen Fade Out
+        // 1. Splash Screen Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const welcomeScreen = document.getElementById('welcome-screen');
-                welcomeScreen.style.opacity = '0';
-                setTimeout(() => {
-                    welcomeScreen.style.display = 'none';
-                }, 1000);
-            }, 2500); // 2.5 seconds delay before fading
+                document.getElementById('splash-screen').classList.add('splash-hidden');
+            }, 2000); // Waits for the CSS animation to finish
         });
 
-        // Prank Functions for your friend!
+        // 2. Sticky Header Shrink Effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // 3. Scroll Reveal Animation (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.15, // Triggers when 15% of the element is visible
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // 4. Cart & Wishlist Logic with Toast Notification
+        let cartCount = 0;
+        let wishlistCount = 0;
+        let toastTimeout;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            
+            toast.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
         function addToCart() {
-            alert("ERROR: Cannot add to cart. Your cart is currently full of Madhurjya's ass. Please clear out the garbage first.");
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            showToast('Item added to your shopping bag');
         }
 
         function addToWishlist() {
-            alert("Added to Wishlist! (Just kidding, your wishlist only contains 1x Used Brain Cell).");
-        }
-
-        function prankAlert(type) {
-            if(type === 'Cart') {
-                alert("🛒 CART SUMMARY:\n- 1x Madhurjya's Ass\n- 0x Good Ideas\n\nTotal: ₹0.00 (Worthless)");
-            } else if (type === 'Wishlist') {
-                alert("❤️ WISHLIST:\n- Better friends\n- A working website button");
-            } else {
-                alert("Searching for Madhurjya's missing dignity... 404 Not Found.");
-            }
+            wishlistCount++;
+            document.getElementById('wishlist-count').innerText = wishlistCount;
+            showToast('Item saved to your wishlist');
         }
     </script>
 </body>
