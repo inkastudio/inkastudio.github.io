@@ -3,612 +3,522 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Since 1998 | Luxury Metalcraft</title>
+    <title>Inka Interactive | The Spatial Core</title>
     
-    <!-- Google Fonts -->
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+    
+    <!-- PREMIUM TYPOGRAPHY -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- THREE.JS & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        /* --- DESIGN TOKENS & RESET --- */
+        /* =========================================
+           CORE PREMIUM VARIABLES
+           ========================================= */
         :root {
-            --bg-base: #0a0a0a;
-            --bg-surface: #141414;
-            --bg-surface-hover: #1f1f1f;
-            --accent-gold: #c5a059;
-            --accent-gold-hover: #dfb971;
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --border-color: #2a2a2a;
-            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --bg-pure: #ffffff; 
+            --text-main: #0a0a0a;
+            --text-grey: #555555;
+            --accent: #e63946; /* Inka Red */
+            --accent-hover: #d62828;
+            
+            --shadow-soft: 0 15px 35px rgba(0,0,0,0.06);
+            --shadow-hard: 0 25px 50px rgba(0,0,0,0.12);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            line-height: 1.6;
+            background-color: var(--bg-pure); color: var(--text-main);
+            font-family: 'Inter', sans-serif; font-size: 1.1rem;
+            overflow-x: hidden; line-height: 1.6;
         }
 
-        h1, h2, h3, h4, .brand-logo {
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-        }
+        ::selection { background: var(--accent); color: white; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f8f9fa; }
+        ::-webkit-scrollbar-thumb { background: #cccccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 900; letter-spacing: -1px; }
         a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        button { border: none; background: none; cursor: pointer; font-family: inherit; }
 
-        /* --- SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            background-color: #000;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        /* =========================================
+           MASSIVE 3D BACKGROUND
+           ========================================= */
+        #webgl-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none; 
+            background: radial-gradient(circle at center, #ffffff 0%, #ebedf0 100%);
         }
 
-        .splash-logo {
-            color: var(--accent-gold);
-            font-size: 3rem;
-            letter-spacing: 4px;
-            opacity: 0;
-            animation: fadeInOut 2s ease-in-out forwards;
+        /* =========================================
+           1. PREMIUM NAVBAR
+           ========================================= */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
         }
+        nav.nav-hidden { transform: translateY(-100%); }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: scale(0.95); }
-            30% { opacity: 1; transform: scale(1); }
-            70% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.05); }
+        .logo-text { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px;}
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
+        .nav-links a { font-size: 0.95rem; font-weight: 700; color: var(--text-main); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
+        .nav-links a:hover { color: var(--accent); }
+        
+        /* Dropdown CSS */
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            position: absolute; top: 100%; left: -20px; background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px); border: 1px solid rgba(0,0,0,0.05); border-radius: 16px;
+            min-width: 200px; opacity: 0; pointer-events: none;
+            transform: translateY(15px); transition: var(--transition);
+            box-shadow: var(--shadow-hard); padding: 10px 0;
         }
+        .dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .dropdown-menu a { display: block; padding: 12px 25px; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+        .dropdown-menu a:hover { background: rgba(230,57,70,0.05); color: var(--accent); padding-left: 30px;}
 
-        .splash-hidden {
-            transform: translateY(-100%);
+        .nav-links a.support-btn { border: 2px solid var(--text-main); padding: 8px 24px; border-radius: 50px; }
+        .nav-links a.support-btn:hover { background: var(--text-main); color: white; }
+
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); transition: var(--transition);}
+
+        /* =========================================
+           SECTIONS & UI
+           ========================================= */
+        main { position: relative; z-index: 10; }
+        .section-wrapper { min-height: 100vh; padding: 120px 5%; display: flex; flex-direction: column; justify-content: center; position: relative;}
+
+        /* --- 2. HERO --- */
+        .hero { align-items: center; text-align: center; }
+        .hero h1 { font-size: clamp(3.5rem, 8vw, 8rem); line-height: 0.9; margin-bottom: 15px; text-transform: uppercase;}
+        .hero h3 { font-size: clamp(1rem, 3vw, 1.8rem); color: var(--accent); font-weight: 700; margin-bottom: 40px; letter-spacing: 4px; text-transform: uppercase;}
+        
+        .about-box {
+            max-width: 700px; background: rgba(255,255,255,0.7); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 24px; padding: 45px; box-shadow: var(--shadow-soft); border: 1px solid rgba(255,255,255,1);
         }
+        .about-box p { font-size: 1.15rem; color: var(--text-main); font-weight: 500;}
 
-        /* --- NAVBAR (GLASSMORPHISM) --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 5%;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1000;
-            transition: padding 0.3s ease;
+        /* --- 3. DEAD IGNITION (Left Aligned for Desktop) --- */
+        .spotlight { align-items: flex-start; } 
+        .spotlight-content {
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px; padding: 60px; max-width: 600px;
+            box-shadow: var(--shadow-hard); border: 1px solid rgba(255,255,255,1);
         }
+        .spotlight img { width: 90px; height: 90px; margin-bottom: 25px; border-radius: 20px; box-shadow: var(--shadow-soft); border: 2px solid var(--bg-pure);}
+        .spotlight h2 { font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 10px;}
+        .spotlight p.subtitle { font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; }
+        .spotlight p.desc { font-size: 1.15rem; margin-bottom: 35px; color: var(--text-grey); }
 
-        header.scrolled { padding: 1rem 5%; }
-
-        .brand-logo {
-            font-size: 1.75rem;
-            color: var(--accent-gold);
-            letter-spacing: 2px;
+        .btn-primary {
+            display: inline-block; background: var(--text-main); color: white;
+            padding: 18px 45px; font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.1rem;
+            border-radius: 50px; transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;
         }
+        .btn-primary:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(230, 57, 70, 0.3); }
 
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
+        /* --- 4. NEWSWIRE (Opaque Cards for Visibility) --- */
+        .newswire-section { align-items: center; justify-content: center;}
+        .section-title { font-size: 4rem; margin-bottom: 60px; text-transform: uppercase; text-align: center;}
+        
+        .news-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1400px; width: 100%;}
+        
+        .news-card {
+            background: #ffffff; border: 1px solid rgba(0,0,0,0.05); 
+            border-radius: 24px; padding: 40px 30px; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-soft); transition: var(--transition); position: relative; z-index: 50;
         }
+        .news-card:hover { transform: translateY(-12px); border-color: var(--accent); box-shadow: var(--shadow-hard); }
+        .news-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.2; }
+        .news-card p { font-size: 1.05rem; color: var(--text-grey); margin-bottom: 30px; flex-grow: 1; word-wrap: break-word;}
+        .read-more { color: var(--accent); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);}
+        .read-more:hover { color: var(--accent-hover); transform: translateX(5px); }
 
-        .nav-links a {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-secondary);
-            transition: var(--transition-smooth);
-        }
+        /* --- 5. NEWSLETTER --- */
+        .newsletter { padding: 100px 5%; background: var(--accent); color: white; text-align: center; border-radius: 50px 50px 0 0; position: relative; z-index: 10;}
+        .newsletter h2 { font-size: 3.5rem; margin-bottom: 15px; color: white; text-transform: uppercase;}
+        .newsletter p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
 
-        .nav-links a:hover { color: var(--accent-gold); }
+        .form-group { display: flex; justify-content: center; gap: 15px; max-width: 650px; margin: 0 auto; }
+        .form-group input { flex: 1; padding: 22px 30px; border: none; border-radius: 50px; font-family: 'Inter'; font-size: 1.1rem; outline: none; box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);}
+        .form-group button { background: var(--text-main); color: white; border: none; padding: 22px 50px; border-radius: 50px; font-family: 'Space Grotesk'; font-weight: 900; cursor: pointer; transition: var(--transition); font-size: 1.1rem; text-transform: uppercase;}
+        .form-group button:hover { background: white; color: var(--text-main); box-shadow: var(--shadow-hard);}
 
-        .nav-actions {
-            display: flex;
-            gap: 1.5rem;
-        }
+        /* --- 6. FOOTER --- */
+        footer { padding: 60px 5% 40px; background: white; text-align: center; position: relative; z-index: 10;}
+        .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.95rem; transition: var(--transition); }
+        .footer-links a:hover { color: var(--accent); }
+        .copyright { font-size: 0.95rem; color: var(--text-grey); margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px;}
 
-        .nav-actions button {
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            transition: var(--transition-smooth);
-            position: relative;
-        }
+        .gs-reveal { will-change: transform, opacity; }
 
-        .nav-actions button:hover { color: var(--accent-gold); }
-
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background: var(--accent-gold);
-            color: #000;
-            font-size: 0.6rem;
-            font-weight: 600;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
-            padding: 0 5%;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        .hero h1 span { color: var(--accent-gold); }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-        }
-
-        .hero-btn {
-            padding: 1rem 2.5rem;
-            background-color: var(--accent-gold);
-            color: #000;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-            border-radius: 4px;
-            transition: var(--transition-smooth);
-        }
-
-        .hero-btn:hover {
-            background-color: var(--accent-gold-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
-        }
-
-        /* --- PRODUCT SECTIONS --- */
-        .section-container {
-            padding: 6rem 5%;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            color: var(--accent-gold);
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .product-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            border-color: rgba(197, 160, 89, 0.5);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-        }
-
-        .product-image-wrapper {
-            width: 100%;
-            height: 320px;
-            background-color: #1a1a1a; /* Placeholder for image */
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-        }
-
-        .product-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .product-card:hover .product-image-wrapper img, 
-        .product-card:hover .product-image-wrapper::after {
-            transform: scale(1.05); /* Slight zoom on hover */
-        }
-
-        .product-info {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .product-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .product-price {
-            font-size: 1.2rem;
-            color: var(--accent-gold);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Card Buttons */
-        .card-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: auto;
-        }
-
-        .btn-outline {
-            padding: 0.8rem;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            transition: var(--transition-smooth);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-            background: rgba(197, 160, 89, 0.05);
-        }
-
-        .btn-whatsapp-full {
-            grid-column: span 2;
-            padding: 0.8rem;
-            background: #25D366;
-            color: #000;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition-smooth);
-        }
-
-        .btn-whatsapp-full:hover {
-            background: #20b858;
-            color: #000;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: var(--bg-surface);
-            padding: 4rem 5% 2rem;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .footer-logo {
-            font-size: 2rem;
-            color: var(--accent-gold);
-            margin-bottom: 1rem;
-        }
-
-        .footer-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        /* --- TOAST NOTIFICATION --- */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--bg-surface-hover);
-            color: var(--text-primary);
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            font-size: 0.9rem;
-            z-index: 2000;
-            opacity: 0;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* --- SCROLL ANIMATIONS (Intersection Observer) --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive Design */
+        /* =========================================
+           PERFECT MOBILE ALIGNMENT
+           ========================================= */
+        @media (max-width: 1200px) { .news-container { grid-template-columns: repeat(2, 1fr); } }
+        
         @media (max-width: 768px) {
-            .nav-links { display: none; } /* Add a hamburger menu later if needed */
-            .hero h1 { font-size: 3rem; }
-            .section-header h2 { font-size: 2rem; }
+            nav { padding: 0 20px; height: 70px; }
+            .logo-text { font-size: 1.5rem; }
+            .hamburger { display: flex; }
+            .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px 0; gap: 0; transform: translateY(-150%); opacity: 0; transition: var(--transition); border-bottom: 1px solid rgba(0,0,0,0.05);}
+            .nav-links.active { transform: translateY(0); opacity: 1; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 15px; }
+            
+            .dropdown-menu { position: static; box-shadow: none; border: none; background: #f9f9f9; display: none; opacity: 1; pointer-events: all; transform: none;}
+            .dropdown.mobile-open .dropdown-menu { display: block; }
+            
+            /* Structural Fixes */
+            .section-wrapper { padding: 100px 20px; }
+            
+            .hero h1 { font-size: clamp(3rem, 12vw, 4rem); }
+            .hero h3 { font-size: 1rem; letter-spacing: 2px; margin-bottom: 30px;}
+            .about-box { padding: 35px 25px; border-radius: 20px;}
+            .about-box p { font-size: 1.05rem; }
+
+            .spotlight { align-items: center; text-align: center;}
+            .spotlight-content { padding: 40px 25px; border-radius: 20px;}
+            .spotlight img { width: 75px; height: 75px; margin-bottom: 20px;}
+            .spotlight h2 { font-size: 2.8rem; }
+            .spotlight p.desc { font-size: 1rem; }
+            
+            .section-title { font-size: 3rem; margin-bottom: 40px; }
+            .news-container { grid-template-columns: 1fr; gap: 20px;}
+            .news-card { padding: 30px 25px; }
+            
+            .newsletter { padding: 80px 20px; }
+            .newsletter h2 { font-size: 2.5rem; }
+            .newsletter p { font-size: 1.05rem; }
+            .form-group { flex-direction: column; }
+            .form-group input, .form-group button { width: 100%; border-radius: 20px; padding: 16px 20px;}
         }
     </style>
 </head>
 <body>
 
-    <!-- Splash Screen Loader -->
-    <div id="splash-screen">
-        <div class="splash-logo">SINCE 1998</div>
-    </div>
+    <!-- THE MASSIVE GLASS SATURN CORE & STARFIELD -->
+    <canvas id="webgl-canvas"></canvas>
 
-    <!-- Navigation -->
-    <header id="header">
-        <a href="#" class="brand-logo">SINCE 1998</a>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#brass">Brass Collection</a></li>
-                <li><a href="#bellmetal">Bell Metal (Kanh)</a></li>
-                <li><a href="#decorative">Decor</a></li>
-            </ul>
-        </nav>
-        <div class="nav-actions">
-            <button aria-label="Search"><i class="fas fa-search"></i></button>
-            <button aria-label="Wishlist" onclick="window.location.href='#brass'">
-                <i class="far fa-heart"></i>
-                <span class="badge" id="wishlist-count">0</span>
-            </button>
-            <button aria-label="Cart" onclick="window.location.href='#brass'">
-                <i class="fas fa-shopping-bag"></i>
-                <span class="badge" id="cart-count">0</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero reveal">
-        <h1>Elegance Forged <br><span>In Metal</span></h1>
-        <p>Discover our exclusive collection of premium Brass and traditional Bell Metal heritage pieces. Crafted with uncompromising precision.</p>
-        <a href="#brass" class="hero-btn">Explore Collection</a>
-    </section>
-
-    <!-- Brass Section -->
-    <section id="brass" class="section-container">
-        <div class="section-header reveal">
-            <h2>The Brass Collection</h2>
-        </div>
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <a href="/"><span class="logo-text">INKA</span></a>
         
-        <div class="product-grid">
-            <!-- Product Item -->
-            <div class="product-card reveal">
-                <div class="product-image-wrapper">
-                    <!-- Replace this div with an actual img tag when you have photos -->
-                    Product Image (800x800)
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Royal Brass Diya</h3>
-                    <div class="product-price">₹1,200</div>
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
-                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
-                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Royal%20Brass%20Diya%20(₹1,200)." target="_blank" class="btn-whatsapp-full">
-                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Item -->
-            <div class="product-card reveal">
-                <div class="product-image-wrapper">
-                    Product Image (800x800)
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Vintage Etched Pot</h3>
-                    <div class="product-price">₹3,500</div>
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
-                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
-                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Vintage%20Etched%20Pot%20(₹3,500)." target="_blank" class="btn-whatsapp-full">
-                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-             <!-- Product Item -->
-             <div class="product-card reveal">
-                <div class="product-image-wrapper">
-                    Product Image (800x800)
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Premium Brass Urli</h3>
-                    <div class="product-price">₹4,200</div>
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
-                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
-                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Premium%20Brass%20Urli%20(₹4,200)." target="_blank" class="btn-whatsapp-full">
-                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div class="hamburger" id="hamburger">
+            <div></div><div></div><div></div>
         </div>
-    </section>
 
-    <!-- Bell Metal Section -->
-    <section id="bellmetal" class="section-container">
-        <div class="section-header reveal">
-            <h2>Heritage Bell Metal</h2>
-        </div>
-        
-        <div class="product-grid">
-            <!-- Product Item -->
-            <div class="product-card reveal">
-                <div class="product-image-wrapper">
-                    Product Image (800x800)
+        <ul class="nav-links" id="navLinks">
+            <li class="dropdown" id="games-dropdown">
+                <a href="javascript:void(0);" id="games-btn">Games ▾</a>
+                <div class="dropdown-menu">
+                    <a href="/games/deadignition">Dead Ignition</a>
+                    <a href="/games">All Games</a>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">Authentic Kanh Thali Set</h3>
-                    <div class="product-price">₹6,500</div>
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="addToWishlist()"><i class="far fa-heart"></i> Save</button>
-                        <button class="btn-outline" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add</button>
-                        <a href="https://wa.me/919395842653?text=Hello,%20I'm%20interested%20in%20purchasing%20the%20Authentic%20Kanh%20Thali%20Set%20(₹6,500)." target="_blank" class="btn-whatsapp-full">
-                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
-                        </a>
-                    </div>
+            </li>
+            <li><a href="/news">Newswire</a></li>
+            <li><a href="/videos">Videos</a></li>
+            <li><a href="/downloads">Downloads</a></li>
+            <li><a href="#footer-section" class="support-btn">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN SCROLL CONTAINER -->
+    <main id="main-scroll">
+        <!-- HERO -->
+        <section class="section-wrapper hero">
+            <h1 class="gs-reveal">INKA INTERACTIVE</h1>
+            <h3 class="gs-reveal">Official Studio Website</h3>
+            <div class="about-box gs-reveal">
+                <p>We are an independent game development studio built on a zero-budget, DIY ethos. We specialize in atmospheric, C++ engineered survival horror experiences without corporate bloat.</p>
+            </div>
+        </section>
+
+        <!-- DEAD IGNITION -->
+        <section class="section-wrapper spotlight">
+            <div class="spotlight-content gs-reveal">
+                <img src="icon.png" alt="Dead Ignition" onerror="this.src='https://via.placeholder.com/90/cccccc/666666?text=Icon';">
+                <h2>DEAD IGNITION</h2>
+                <p class="subtitle">In Development // Coming Soon</p>
+                <p class="desc">Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension.</p>
+                <a href="/games/deadignition" class="btn-primary">View Project</a>
+            </div>
+        </section>
+
+        <!-- NEWSWIRE -->
+        <section class="section-wrapper newswire-section">
+            <h2 class="section-title gs-reveal">Latest News</h2>
+            <div class="news-container">
+                <div class="news-card gs-reveal">
+                    <h3>Graphic Designer Wanted</h3>
+                    <p>We are expanding the core indie team. Seeking high-contrast, clean aesthetics.</p>
+                    <a href="/news" class="read-more">Learn More &rarr;</a>
+                </div>
+                <div class="news-card gs-reveal">
+                    <h3>Level Dressing Progress</h3>
+                    <p>First look at the raw C++ engine implementation for the urban ruins sector.</p>
+                    <a href="/news" class="read-more">Learn More &rarr;</a>
+                </div>
+                <div class="news-card gs-reveal">
+                    <h3>The Ignition Protocol</h3>
+                    <p>When the grid failed, the rules changed. A brief lore drop introducing resource mechanics.</p>
+                    <a href="/news" class="read-more">Learn More &rarr;</a>
+                </div>
+                <div class="news-card gs-reveal">
+                    <h3>View All Updates</h3>
+                    <p>Access the full archive of studio updates, devlogs, and recruitment posts.</p>
+                    <a href="/news" class="btn-primary" style="padding: 12px 25px; font-size: 0.95rem; width: fit-content; margin-top: auto;">Go to Newswire</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-logo">SINCE 1998</div>
-        <p class="footer-text">Premium Brass, Bell Metal & Decorative Artifacts.</p>
-        <p style="color: #444; font-size: 0.8rem;">&copy; 2026 Since 1998. All Rights Reserved.</p>
+        <!-- NEWSLETTER -->
+        <section class="newsletter gs-reveal">
+            <h2>Join the Mailing List</h2>
+            <p>Get updates on development, playtests, and release dates straight to your inbox.</p>
+            <form class="form-group" action="#" method="POST">
+                <input type="email" name="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="footer-section">
+        <div class="footer-links gs-reveal">
+            <a href="/contact">Contact</a>
+            <a href="/careers">Careers</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+        </div>
+        <p class="copyright gs-reveal">&copy; 2026 Inka Interactive &bull; Built in India &bull; All rights reserved</p>
     </footer>
 
-    <!-- Toast UI for Cart/Wishlist -->
-    <div id="toast"><i class="fas fa-check-circle" style="color: var(--accent-gold);"></i> <span id="toast-msg">Item Added</span></div>
-
-    <!-- JAVASCRIPT -->
+    <!-- =========================================
+         JAVASCRIPT ENGINES (Flawless Physics Engine)
+         ========================================= -->
     <script>
-        // 1. Splash Screen Logic
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').classList.add('splash-hidden');
-            }, 2000); // Waits for the CSS animation to finish
-        });
+        gsap.registerPlugin(ScrollTrigger);
 
-        // 2. Sticky Header Shrink Effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // 3. Scroll Reveal Animation (Intersection Observer)
-        const revealElements = document.querySelectorAll('.reveal');
+        // --- MOBILE NAV LOGIC ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const gamesBtn = document.getElementById('games-btn');
+        const gamesDropdown = document.getElementById('games-dropdown');
         
-        const revealOptions = {
-            threshold: 0.15, // Triggers when 15% of the element is visible
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Only animate once
-                }
-            });
-        }, revealOptions);
-
-        revealElements.forEach(el => {
-            revealOnScroll.observe(el);
+        hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+        gamesBtn.addEventListener('click', () => { if (window.innerWidth <= 768) gamesDropdown.classList.toggle('mobile-open'); });
+        
+        let lastScroll = window.scrollY;
+        window.addEventListener('scroll', () => {
+            if (!navLinks.classList.contains('active')) {
+                document.getElementById('navbar').classList.toggle('nav-hidden', lastScroll < window.scrollY && window.scrollY > 80);
+            }
+            lastScroll = window.scrollY;
         });
 
-        // 4. Cart & Wishlist Logic with Toast Notification
-        let cartCount = 0;
-        let wishlistCount = 0;
-        let toastTimeout;
+        /* =========================================
+           THREE.JS - THE GLASS CORE & STARFIELD
+           ========================================= */
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0xffffff, 0.012);
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = message;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // High-End Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        dirLight.position.set(10, 20, 15);
+        scene.add(dirLight);
+        
+        const coreLight = new THREE.PointLight(0xe63946, 6, 40);
+        scene.add(coreLight);
+
+        // Advanced Materials (No Black, Pure Glass/White/Red)
+        const glassPlanetMat = new THREE.MeshPhysicalMaterial({ 
+            color: 0xffffff, metalness: 0.1, roughness: 0.1, transmission: 0.7, clearcoat: 1.0
+        });
+        const innerGlowMat = new THREE.MeshBasicMaterial({ color: 0xaa0000 }); // Deep red core
+        const wireRedMat = new THREE.MeshBasicMaterial({ color: 0xe63946, wireframe: true, transparent: true, opacity: 0.4 });
+        const ringMatRed = new THREE.MeshPhysicalMaterial({ color: 0xe63946, metalness: 0.3, roughness: 0.2, side: THREE.DoubleSide });
+        const cageMat = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true, transparent: true, opacity: 0.2 });
+
+        /* --- PHYSICS SEPARATION --- 
+           MasterGroup: Moved and scaled by GSAP
+           ScrollTiltGroup: Tilted by GSAP
+           SaturnGroup: Rotates continuously on its own
+        */
+        const masterGroup = new THREE.Group();
+        scene.add(masterGroup);
+
+        const scrollTiltGroup = new THREE.Group();
+        masterGroup.add(scrollTiltGroup);
+
+        const saturnGroup = new THREE.Group();
+        scrollTiltGroup.add(saturnGroup);
+
+        // 1. The Planet
+        const innerCore = new THREE.Mesh(new THREE.SphereGeometry(2.5, 32, 32), innerGlowMat);
+        const planetSolid = new THREE.Mesh(new THREE.SphereGeometry(3.5, 32, 32), glassPlanetMat);
+        const planetWire = new THREE.Mesh(new THREE.SphereGeometry(3.6, 16, 16), wireRedMat);
+        saturnGroup.add(innerCore, planetSolid, planetWire);
+
+        // 2. Outer Geometric Cage
+        const cageMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(4.2, 1), cageMat);
+        saturnGroup.add(cageMesh);
+
+        // 3. Accretion Rings
+        const ring1 = new THREE.Mesh(new THREE.RingGeometry(4.8, 5.0, 64), ringMatRed);
+        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(6.0, 0.05, 16, 100), wireRedMat);
+        ring1.rotation.x = Math.PI / 2;
+        ring2.rotation.x = Math.PI / 2;
+        saturnGroup.add(ring1, ring2);
+
+        // --- 4. MULTI-COLORED STARFIELD (White, Grey, Charcoal) ---
+        function createStars(count, size, color, spread) {
+            const geo = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            for(let i = 0; i < count * 3; i++) {
+                pos[i] = (Math.random() - 0.5) * spread;
+            }
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({ size: size, color: color, transparent: true, opacity: 0.8 });
+            return new THREE.Points(geo, mat);
+        }
+
+        const starsWhite = createStars(800, 0.15, 0xffffff, 80);
+        const starsGrey = createStars(800, 0.2, 0xaaaaaa, 80);
+        const starsDark = createStars(800, 0.25, 0x333333, 80); // Dark charcoal, acts as negative space particles
+        
+        const starField = new THREE.Group();
+        starField.add(starsWhite, starsGrey, starsDark);
+        scene.add(starField);
+
+        // Initial Setup
+        scrollTiltGroup.rotation.x = Math.PI / 6;
+        camera.position.z = 18;
+
+        // --- CONTINUOUS ANIMATION LOOP (Never interrupted by GSAP) ---
+        const clock = new THREE.Clock();
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            const t = clock.getElapsedTime();
+
+            // Constant independent rotation
+            planetSolid.rotation.y += 0.002;
+            innerCore.rotation.x -= 0.003;
+            planetWire.rotation.y -= 0.001;
+            cageMesh.rotation.y += 0.003;
             
-            toast.classList.add('show');
+            ring2.rotation.z -= 0.004;
             
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+            // Starfield slowly drifts
+            starField.rotation.y += 0.0005;
+            starField.rotation.x += 0.0002;
 
-        function addToCart() {
-            cartCount++;
-            document.getElementById('cart-count').innerText = cartCount;
-            showToast('Item added to your shopping bag');
-        }
+            // Heartbeat glow
+            coreLight.intensity = 5 + Math.sin(t * 3) * 3;
+            
+            // Subtle idle float
+            masterGroup.position.y += Math.sin(t * 2) * 0.003;
 
-        function addToWishlist() {
-            wishlistCount++;
-            document.getElementById('wishlist-count').innerText = wishlistCount;
-            showToast('Item saved to your wishlist');
+            renderer.render(scene, camera);
         }
+        animate3D();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        /* =========================================
+           FLAWLESS GSAP TIMELINE ENGINE
+           (Using a single continuous timeline so it NEVER glitches on fast scrolls)
+           ========================================= */
+        let mm = gsap.matchMedia();
+
+        mm.add("(min-width: 769px)", () => {
+            // Master Scroll Timeline tied to the entire page
+            let tl = gsap.timeline({
+                scrollTrigger: { trigger: "#main-scroll", start: "top top", end: "bottom bottom", scrub: 1 }
+            });
+
+            // Frame 1: Hero to Dead Ignition (Moves Right, Scales Up)
+            tl.to(masterGroup.position, { x: 7, y: 0, z: 2, duration: 1 }, 0)
+              .to(masterGroup.scale, { x: 1.5, y: 1.5, z: 1.5, duration: 1 }, 0)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 4, duration: 1 }, 0)
+              .to(starField.position, { z: 10, duration: 1 }, 0)
+
+            // Frame 2: Dead Ignition to Newswire (Moves Center, Scales MASSIVE, Halos)
+              .to(masterGroup.position, { x: 0, y: 0, z: -5, duration: 1 }, 1)
+              .to(masterGroup.scale, { x: 2.5, y: 2.5, z: 2.5, duration: 1 }, 1)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 2, duration: 1 }, 1)
+              .to(starField.position, { z: 20, duration: 1 }, 1)
+
+            // Frame 3: Newswire to Newsletter (Plunges down, Resets Scale)
+              .to(masterGroup.position, { x: 0, y: -8, z: 5, duration: 1 }, 2)
+              .to(masterGroup.scale, { x: 1, y: 1, z: 1, duration: 1 }, 2)
+              .to(scrollTiltGroup.rotation, { x: Math.PI / 6, duration: 1 }, 2)
+              .to(starField.position, { z: 30, duration: 1 }, 2);
+        });
+
+        mm.add("(max-width: 768px)", () => {
+            // Mobile Specific Physics
+            let tlMobile = gsap.timeline({
+                scrollTrigger: { trigger: "#main-scroll", start: "top top", end: "bottom bottom", scrub: 1 }
+            });
+
+            tlMobile.to(masterGroup.position, { x: 0, y: 2, z: -5, duration: 1 }, 0)
+                    .to(masterGroup.scale, { x: 1.1, y: 1.1, z: 1.1, duration: 1 }, 0)
+
+                    .to(masterGroup.position, { x: 0, y: 6, z: -10, duration: 1 }, 1)
+                    .to(masterGroup.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 1 }, 1)
+                    .to(scrollTiltGroup.rotation, { x: Math.PI / 2, duration: 1 }, 1)
+
+                    .to(masterGroup.position, { x: 0, y: -3, z: -5, duration: 1 }, 2)
+                    .to(masterGroup.scale, { x: 1, y: 1, z: 1, duration: 1 }, 2)
+                    .to(scrollTiltGroup.rotation, { x: Math.PI / 6, duration: 1 }, 2);
+        });
+
+        /* =========================================
+           GSAP HTML UI REVEALS (Play/Reverse every time)
+           ========================================= */
+        gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 95%", 
+                    end: "bottom 5%",
+                    toggleActions: "play reverse play reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
     </script>
 </body>
 </html>
