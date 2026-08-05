@@ -65,7 +65,7 @@
         
         .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
         .nav-links a { font-size: 0.85rem; font-weight: 600; color: var(--text-grey); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
-        .nav-links a:hover { color: var(--text-main); }
+        .nav-links a:hover { color: var(--accent); } /* Turned hover red */
         
         .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
         .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); }
@@ -110,12 +110,16 @@
         .section-header h2 { font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 8px; color: var(--text-main); }
         .section-header p { color: var(--text-grey); font-size: 1rem; }
 
+        /* Reduced gap between Newswire and Career */
+        #newswire { padding-bottom: 40px; }
+        #career { padding-top: 40px; }
+
         .hybrid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 
         /* Restored Older Rounded Outlines for Cards */
         .card {
             background: var(--surface-1); border: 1px solid var(--border-color);
-            border-radius: 16px; /* Brought back earlier rounded design */
+            border-radius: 16px;
             padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
             transition: var(--transition);
         }
@@ -125,7 +129,7 @@
 
         .btn-ui {
             display: block; background: var(--border-color); color: var(--text-main);
-            padding: 14px 0; font-weight: 600; text-align: center; border-radius: 8px; /* Matched rounded design */
+            padding: 14px 0; font-weight: 600; text-align: center; border-radius: 8px;
             transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; cursor: pointer; border: none; width: 100%;
         }
         .btn-ui:hover { background: var(--text-main); color: var(--bg-pure); }
@@ -141,7 +145,7 @@
         .store-badge-img:hover { opacity: 0.7; }
 
         /* =========================================
-           4. ABOUT US SECTION (Expanded)
+           4. ABOUT US SECTION 
            ========================================= */
         #about {
             background-color: var(--surface-1); position: relative; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
@@ -149,11 +153,9 @@
         }
         .about-content { max-width: 900px; position: relative; z-index: 2;}
         .about-content p { font-size: 1.15rem; color: var(--text-grey); margin-bottom: 25px;}
-        .about-highlights { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        .highlight-tag { background: #000; border: 1px solid #333; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #fff;}
 
         /* =========================================
-           5. UNIVERSAL MODAL SYSTEM (Restored Older Style)
+           5. UNIVERSAL MODAL SYSTEM (Restored Older Style + Red Theme)
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -166,10 +168,10 @@
         
         .modal-box {
             background: var(--surface-1); border: 1px solid var(--border-color);
-            border-radius: 16px; /* Brought back older rounded popup style */
+            border-radius: 16px; 
             padding: 40px; width: 100%; max-width: 600px;
-            max-height: 90vh; overflow-y: auto;
-            text-align: center; /* Brought back earlier centered style */
+            /* Removed height limit & scroll to bring back old design */
+            text-align: center; 
             position: relative;
         }
         
@@ -177,45 +179,44 @@
             position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--text-grey);
             cursor: pointer; line-height: 1; border: none; background: none; transition: color 0.2s;
         }
-        .modal-close:hover { color: #fff; }
+        .modal-close:hover { color: var(--accent); }
         
-        .modal-box h3 { font-size: 2rem; margin-bottom: 20px; color: var(--text-main); line-height: 1.2;}
+        .modal-box h3 { font-size: 2rem; margin-bottom: 20px; color: var(--accent); line-height: 1.2;} /* Restored red theme */
         .modal-box p { font-size: 1.1rem; color: var(--text-grey); margin-bottom: 25px; line-height: 1.7;}
         
-        /* Older style centered email box + new social links */
+        /* Older style centered email box */
         .modal-footer {
             margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-color);
             display: flex; flex-direction: column; align-items: center;
         }
         .modal-email-box { margin-bottom: 25px; background: #111; padding: 20px; border-radius: 8px; border: 1px solid #333; width: 100%; text-align: center; }
         .modal-email-box span { display: block; font-size: 0.85rem; color: #777; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
-        .modal-email { font-size: 1.2rem; font-weight: 700; color: #fff; transition: color 0.2s;}
-        .modal-email:hover { color: var(--text-grey); }
+        .modal-email { font-size: 1.2rem; font-weight: 700; color: var(--accent); transition: color 0.2s;} /* Restored red email */
+        .modal-email:hover { color: #fff; }
         
         .modal-socials { display: flex; justify-content: center; gap: 20px; }
         .modal-socials a { color: var(--text-grey); transition: color 0.2s; }
-        .modal-socials a:hover { color: #fff; }
+        .modal-socials a:hover { color: var(--accent); } /* Turned hover red */
         .modal-socials svg { width: 24px; height: 24px; fill: currentColor; }
 
         /* =========================================
-           6. NEWSLETTER (Restored Color) & FOOTER
+           6. NEWSLETTER & FOOTER
            ========================================= */
-        /* Brought back the accent color for newsletter */
         #newsletter { background: var(--accent); color: white; text-align: center; padding: 80px 5%; border-top: 1px solid var(--border-color); }
-        #newsletter h2 { font-size: 2rem; margin-bottom: 10px; color: #fff; }
+        #newsletter h2 { font-size: 2rem; margin-bottom: 10px; }
         .form-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; }
-        .form-group input { flex: 1; padding: 16px 20px; border: none; background: #fff; color: #000; border-radius: 8px; outline: none; font-family: 'Inter'; }
-        .form-group button { background: #000; color: #fff; border: none; padding: 0 30px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-        .form-group button:hover { background: #333; }
+        .form-group input { flex: 1; padding: 16px 20px; border: 1px solid #333; background: #000; color: #fff; outline: none; font-family: 'Inter'; }
+        .form-group button { background: #fff; color: #000; border: none; padding: 0 30px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .form-group button:hover { background: #ccc; }
 
         #support { padding: 80px 5% 40px; text-align: center; background: var(--bg-pure); }
         .footer-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
         .footer-email { font-size: 1.3rem; color: #fff; font-weight: 700; display: inline-block; margin-bottom: 40px; transition: color 0.2s;}
-        .footer-email:hover { color: var(--text-grey); }
+        .footer-email:hover { color: var(--accent); }
         
         .social-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
         .social-icon { color: var(--text-grey); transition: color 0.2s; }
-        .social-icon:hover { color: #fff; }
+        .social-icon:hover { color: var(--accent); } /* Turned hover red */
         .social-icon svg { width: 24px; height: 24px; fill: currentColor; }
         
         .copyright { color: #555; font-size: 0.85rem; border-top: 1px solid #111; padding-top: 30px;}
@@ -295,7 +296,7 @@
         </video>
         <div class="noise-overlay"></div>
         <div class="hero-content">
-            <img src="backimage.png" alt="Inka Games" onerror="this.style.display='none'">
+            <img src="backimage.png" alt="Inka Interactive" onerror="this.style.display='none'">
             <div class="hero-subtitle-box">
                 <h2>Official Studio Website</h2>
             </div>
@@ -340,13 +341,6 @@
             </div>
             <p>We are an independent game development studio built on a zero-budget, DIY ethos. We believe in raw gameplay, atmospheric immersion, and cutting out the corporate bloat.</p>
             <p>From playful physics shooters to deeply disturbing survival horror, we build worlds we want to get lost in. We handle everything from engine architecture to marketing in-house. Based in India, operating globally.</p>
-            
-            <div class="about-highlights">
-                <div class="highlight-tag">We Are Hiring</div>
-                <div class="highlight-tag">Active on Socials</div>
-                <div class="highlight-tag">Devlogs Available</div>
-                <div class="highlight-tag">Community Driven</div>
-            </div>
         </div>
     </section>
 
@@ -370,7 +364,7 @@
             <div class="card">
                 <h3>Career Opportunities Available</h3>
                 <p>We are expanding the core team. Check our careers section for open positions across programming and design.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Games is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Interactive is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
             </div>
             <div class="card">
                 <h3>Community & Feedback</h3>
@@ -405,7 +399,7 @@
             <div class="card" style="background: #050505;">
                 <h3>Open Application</h3>
                 <p>Don't see your specific role? We are always looking for exceptional, self-motivated talent. Pitch yourself to us.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto; background: #fff; color: #000;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Games, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto; background: #fff; color: #000;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Interactive, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
             </div>
         </div>
     </section>
