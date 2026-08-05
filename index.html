@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Interactive | Official Studio</title>
+    <title>Inka Games | Official Studio</title>
     
     <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
     
@@ -25,7 +25,7 @@
             --text-grey: #a1a1aa;
             --accent: #e63946; 
             --nav-height: 80px;
-            --transition: background-color 0.2s ease, color 0.2s ease; /* Removed transform effects for minimalism */
+            --transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,7 +44,7 @@
         ::selection { background: var(--text-main); color: var(--bg-pure); }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-pure); }
-        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
@@ -92,12 +92,11 @@
 
         .hero-content { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center;}
         
-        /* Made logo significantly bigger */
+        /* Untouched image settings */
         .hero-content img { max-width: 400px; width: 90%; margin-bottom: 25px; }
         
-        /* Encased subtitle in a black box */
         .hero-subtitle-box {
-            background: #000; padding: 10px 20px; border: 1px solid #222; border-radius: 4px;
+            background: #000; padding: 10px 20px; border: 1px solid #222; border-radius: 6px;
         }
         .hero-subtitle-box h2 { 
             font-size: 0.95rem; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-grey); margin: 0;
@@ -113,9 +112,10 @@
 
         .hybrid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 
-        /* Refined, Minimalist Cards */
+        /* Restored Older Rounded Outlines for Cards */
         .card {
             background: var(--surface-1); border: 1px solid var(--border-color);
+            border-radius: 16px; /* Brought back earlier rounded design */
             padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
             transition: var(--transition);
         }
@@ -123,10 +123,9 @@
         .card h3 { font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
         .card p { color: var(--text-grey); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; line-height: 1.6; }
 
-        /* Minimalist Buttons */
         .btn-ui {
             display: block; background: var(--border-color); color: var(--text-main);
-            padding: 14px 0; font-weight: 600; text-align: center;
+            padding: 14px 0; font-weight: 600; text-align: center; border-radius: 8px; /* Matched rounded design */
             transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; cursor: pointer; border: none; width: 100%;
         }
         .btn-ui:hover { background: var(--text-main); color: var(--bg-pure); }
@@ -134,7 +133,7 @@
         /* =========================================
            3. GAMES SECTION 
            ========================================= */
-        .game-icon { width: 100%; height: 200px; background: #111; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
+        .game-icon { width: 100%; height: 200px; background: #111; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
         
         .store-badges { display: flex; gap: 15px; flex-wrap: wrap; margin-top: auto; }
         .store-badge-img { height: 42px; display: inline-block; transition: opacity 0.2s ease; }
@@ -151,10 +150,10 @@
         .about-content { max-width: 900px; position: relative; z-index: 2;}
         .about-content p { font-size: 1.15rem; color: var(--text-grey); margin-bottom: 25px;}
         .about-highlights { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        .highlight-tag { background: #000; border: 1px solid #333; padding: 8px 16px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #fff;}
+        .highlight-tag { background: #000; border: 1px solid #333; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: #fff;}
 
         /* =========================================
-           5. UNIVERSAL MODAL SYSTEM (Scrollable & Clean)
+           5. UNIVERSAL MODAL SYSTEM (Restored Older Style)
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -167,43 +166,47 @@
         
         .modal-box {
             background: var(--surface-1); border: 1px solid var(--border-color);
+            border-radius: 16px; /* Brought back older rounded popup style */
             padding: 40px; width: 100%; max-width: 600px;
             max-height: 90vh; overflow-y: auto;
-            text-align: left; position: relative;
+            text-align: center; /* Brought back earlier centered style */
+            position: relative;
         }
         
         .modal-close {
-            position: absolute; top: 20px; right: 25px; font-size: 2rem; color: var(--text-grey);
+            position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--text-grey);
             cursor: pointer; line-height: 1; border: none; background: none; transition: color 0.2s;
         }
         .modal-close:hover { color: #fff; }
         
-        .modal-box h3 { font-size: 2rem; margin-bottom: 20px; color: var(--text-main); padding-right: 30px; line-height: 1.2;}
+        .modal-box h3 { font-size: 2rem; margin-bottom: 20px; color: var(--text-main); line-height: 1.2;}
         .modal-box p { font-size: 1.1rem; color: var(--text-grey); margin-bottom: 25px; line-height: 1.7;}
         
-        /* Modal Contact & Social Footer */
+        /* Older style centered email box + new social links */
         .modal-footer {
             margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-color);
+            display: flex; flex-direction: column; align-items: center;
         }
-        .modal-email-box { margin-bottom: 20px; }
+        .modal-email-box { margin-bottom: 25px; background: #111; padding: 20px; border-radius: 8px; border: 1px solid #333; width: 100%; text-align: center; }
         .modal-email-box span { display: block; font-size: 0.85rem; color: #777; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
         .modal-email { font-size: 1.2rem; font-weight: 700; color: #fff; transition: color 0.2s;}
         .modal-email:hover { color: var(--text-grey); }
         
-        .modal-socials { display: flex; gap: 15px; }
+        .modal-socials { display: flex; justify-content: center; gap: 20px; }
         .modal-socials a { color: var(--text-grey); transition: color 0.2s; }
         .modal-socials a:hover { color: #fff; }
         .modal-socials svg { width: 24px; height: 24px; fill: currentColor; }
 
         /* =========================================
-           6. NEWSLETTER & FOOTER
+           6. NEWSLETTER (Restored Color) & FOOTER
            ========================================= */
-        #newsletter { background: #111; color: white; text-align: center; padding: 80px 5%; border-top: 1px solid var(--border-color); }
-        #newsletter h2 { font-size: 2rem; margin-bottom: 10px; }
+        /* Brought back the accent color for newsletter */
+        #newsletter { background: var(--accent); color: white; text-align: center; padding: 80px 5%; border-top: 1px solid var(--border-color); }
+        #newsletter h2 { font-size: 2rem; margin-bottom: 10px; color: #fff; }
         .form-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; }
-        .form-group input { flex: 1; padding: 16px 20px; border: 1px solid #333; background: #000; color: #fff; outline: none; font-family: 'Inter'; }
-        .form-group button { background: #fff; color: #000; border: none; padding: 0 30px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-        .form-group button:hover { background: #ccc; }
+        .form-group input { flex: 1; padding: 16px 20px; border: none; background: #fff; color: #000; border-radius: 8px; outline: none; font-family: 'Inter'; }
+        .form-group button { background: #000; color: #fff; border: none; padding: 0 30px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .form-group button:hover { background: #333; }
 
         #support { padding: 80px 5% 40px; text-align: center; background: var(--bg-pure); }
         .footer-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
@@ -231,7 +234,6 @@
             .nav-links.active { transform: translateY(0); opacity: 1; }
             .section-header h2 { font-size: 2rem; }
 
-            /* Perfectly Aligned Mobile Scroll */
             .hybrid-container {
                 display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
                 padding-bottom: 20px; margin: 0; padding-left: 0; padding-right: 20px; 
@@ -239,7 +241,6 @@
             }
             .hybrid-container::-webkit-scrollbar { display: none; }
             
-            /* Card takes up most of screen, snaps to start so alignment matches header */
             .card { flex: 0 0 85vw; scroll-snap-align: start; min-height: 350px; }
             
             .modal-box { padding: 25px; }
@@ -294,7 +295,7 @@
         </video>
         <div class="noise-overlay"></div>
         <div class="hero-content">
-            <img src="backimage.png" alt="Inka Interactive" onerror="this.style.display='none'">
+            <img src="backimage.png" alt="Inka Games" onerror="this.style.display='none'">
             <div class="hero-subtitle-box">
                 <h2>Official Studio Website</h2>
             </div>
@@ -369,7 +370,7 @@
             <div class="card">
                 <h3>Career Opportunities Available</h3>
                 <p>We are expanding the core team. Check our careers section for open positions across programming and design.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Interactive is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Games is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
             </div>
             <div class="card">
                 <h3>Community & Feedback</h3>
@@ -404,7 +405,7 @@
             <div class="card" style="background: #050505;">
                 <h3>Open Application</h3>
                 <p>Don't see your specific role? We are always looking for exceptional, self-motivated talent. Pitch yourself to us.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto; background: #fff; color: #000;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Interactive, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto; background: #fff; color: #000;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Games, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
             </div>
         </div>
     </section>
@@ -422,7 +423,7 @@
     <!-- SUPPORT / FOOTER -->
     <footer id="support">
         <div class="footer-content">
-            <h2>Get in Touch</h2>
+            <h2>Contact Us</h2>
             <p style="color: #666; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
             <a href="mailto:contact@inka.games" class="footer-email">contact@inka.games</a>
             
@@ -432,7 +433,7 @@
                 <a href="#" class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
             </div>
         </div>
-        <p class="copyright">&copy; 2026 Inka Interactive. All rights reserved.</p>
+        <p class="copyright">&copy; 2026 Inka Games. All rights reserved.</p>
     </footer>
 
     <!-- INTERACTIVE SCRIPTS -->
