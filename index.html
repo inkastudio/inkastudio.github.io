@@ -18,19 +18,17 @@
            ========================================= */
         :root {
             --bg-pure: #ffffff; 
-            --surface-1: #f9fafb; /* Soft off-white for cards */
+            --surface-1: #f8f9fa; /* Soft off-white */
             --surface-2: #ffffff;
             --border-color: #e5e7eb;
-            --text-main: #111827; /* Dark slate for high readability */
-            --text-grey: #6b7280;
-            --accent: #E03C4A; /* Matched precisely to your red screenshot */
-            --accent-hover: #c93340;
+            --text-main: #0f172a; /* Slate for high readability */
+            --text-grey: #64748b;
+            --accent: #E03C4A; /* Vibrant Red */
             --nav-height: 80px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
 
         body {
@@ -45,8 +43,8 @@
         ::selection { background: var(--accent); color: #fff; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-pure); }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--text-main); }
         a { text-decoration: none; color: inherit; display: inline-block; }
@@ -55,10 +53,11 @@
            1. NAVIGATION
            ========================================= */
         nav {
-            position: fixed; top: 0; width: 100%; height: var(--nav-height);
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
             display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
             background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 1000; border-bottom: 1px solid var(--border-color);
+            transition: padding-right 0s; /* Prevents lag when JS adjusts for modal */
         }
 
         .logo-text { font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; transition: var(--transition); color: var(--text-main);}
@@ -77,30 +76,37 @@
         .hero {
             position: relative; width: 100vw; height: 100vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden; background: #f3f4f6;
+            overflow: hidden; background: #fff;
+        }
+
+        /* Frosted White Overlay for better video clarity */
+        .hero::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.65); /* Lets the video bleed through nicely */
+            z-index: 1; pointer-events: none;
         }
 
         .hero-video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.15; z-index: 0; pointer-events: none; /* Lightened video opacity for white theme */
+            object-fit: cover; opacity: 1; z-index: 0; pointer-events: none; 
         }
 
         .noise-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
-            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
-            z-index: 1;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.04"/%3E%3C/svg%3E');
+            z-index: 2; /* Put noise above the overlay */
         }
 
-        .hero-content { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center;}
+        .hero-content { position: relative; z-index: 3; text-align: center; display: flex; flex-direction: column; align-items: center;}
         
         .hero-content img { max-width: 400px; width: 90%; margin-bottom: 25px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05)); }
         
         .hero-subtitle-box {
-            background: rgba(255, 255, 255, 0.95); padding: 12px 24px; border: 1px solid var(--border-color); 
-            border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.95); padding: 12px 24px; border: 1px solid var(--accent); 
+            border-radius: 8px; box-shadow: 0 10px 25px rgba(224, 60, 74, 0.1); backdrop-filter: blur(5px);
         }
         .hero-subtitle-box h2 { 
-            font-size: 0.95rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin: 0;
+            font-size: 0.95rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin: 0;
         }
 
         /* =========================================
@@ -111,60 +117,92 @@
         .section-header h2 { font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 8px; color: var(--text-main); }
         .section-header p { color: var(--text-grey); font-size: 1rem; }
 
-        #newswire { padding-bottom: 40px; }
-        #career { padding-top: 40px; }
-
         .hybrid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 
+        /* Sleek Cards */
         .card {
             background: var(--surface-1); border: 1px solid var(--border-color);
+            border-bottom: 3px solid var(--border-color); /* Bottom weight */
             border-radius: 16px; padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
             transition: var(--transition); position: relative; overflow: hidden;
         }
         .card:hover { 
             background: var(--surface-2); 
-            border-color: #d1d5db;
-            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08); 
+            border-color: var(--border-color);
+            border-bottom-color: var(--accent); /* Red bottom accent on hover */
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.08); 
             transform: translateY(-4px);
         }
         .card h3 { font-size: 1.4rem; margin-bottom: 12px; }
         .card p { color: var(--text-grey); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; line-height: 1.6; }
 
-        /* Sleek Red Button */
+        /* UNIQUE BUTTON DIAGONAL SWEEP ANIMATION */
         .btn-ui {
-            display: block; background: var(--accent); color: #fff;
-            padding: 14px 0; font-weight: 600; text-align: center; border-radius: 8px;
-            transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; 
-            cursor: pointer; border: none; width: 100%; box-shadow: 0 4px 12px rgba(224, 60, 74, 0.2);
+            position: relative; overflow: hidden; display: block; 
+            background: var(--accent); color: #fff;
+            padding: 14px 0; font-weight: 700; text-align: center; border-radius: 8px;
+            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+            cursor: pointer; border: none; width: 100%; 
+            box-shadow: 0 4px 12px rgba(224, 60, 74, 0.2); z-index: 1;
+            transition: color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .btn-ui:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(224, 60, 74, 0.3); }
+        .btn-ui::before {
+            content: ''; position: absolute; top: 0; left: -110%;
+            width: 100%; height: 100%;
+            background: var(--text-main); /* Slides in dark */
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: -1;
+            transform: skewX(-20deg); transform-origin: bottom left;
+        }
+        .btn-ui:hover {
+            color: #fff; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3); transform: translateY(-2px);
+        }
+        .btn-ui:hover::before { left: -10%; width: 120%; }
+
+        /* Open Application Card Fix */
+        .card-accent { background: var(--text-main); border-color: var(--text-main); border-bottom-color: var(--text-main); }
+        .card-accent h3, .card-accent p { color: #fff; }
+        .card-accent:hover { 
+            background: #000; border-color: #000; border-bottom-color: var(--accent);
+        }
+        .card-accent .btn-ui { background: #fff; color: var(--text-main); box-shadow: none; }
+        .card-accent .btn-ui::before { background: var(--accent); } /* Diagonal sweep is vibrant red */
+        .card-accent .btn-ui:hover { box-shadow: 0 8px 20px rgba(224, 60, 74, 0.4); color: #fff;}
 
         /* =========================================
            3. GAMES SECTION 
            ========================================= */
-        .game-icon { width: 100%; height: 200px; background: #e5e7eb; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
-        
+        .game-icon { width: 100%; height: 200px; background: #e2e8f0; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
         .store-badges { display: flex; gap: 15px; flex-wrap: wrap; margin-top: auto; }
         .store-badge-img { height: 42px; display: inline-block; transition: var(--transition); }
         .store-badge-img img { height: 100%; width: auto; object-fit: contain; }
         .store-badge-img:hover { transform: scale(1.05); }
 
         /* =========================================
-           4. ABOUT US SECTION 
+           4. REDESIGNED ABOUT US 
            ========================================= */
         #about {
-            background-color: var(--surface-1); position: relative; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
-            background-image: url('data:image/svg+xml;utf8,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.03"%3E%3Cpath d="M30 30c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm-2 0c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm-8 0c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20zm-2 0c0 12.15 9.85 22 22 22s22-9.85 22-22S44.15 8 32 8 10 17.85 10 30zM2 30C2 14.536 14.536 2 30 2s28 12.536 28 28-12.536 28-28 28S2 45.464 2 30zm30 30c-16.569 0-30-13.431-30-30S15.431 0 30 0s30 13.431 30 30-13.431 30-30 30z"/%3E%3Ccircle cx="15" cy="15" r="3"/%3E%3Ccircle cx="45" cy="45" r="3"/%3E%3Cpath d="M10 45h10v2H10zM40 15h10v2H40zM30 10V0h2v10zM30 60V50h2v10zM0 30h10v2H0zM60 30H50v2h10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            background-color: var(--bg-pure); position: relative; 
+            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
+            /* Sleek Red Dot Grid Background */
+            background-image: radial-gradient(rgba(224, 60, 74, 0.2) 2px, transparent 2px); 
+            background-size: 30px 30px;
+            display: flex; justify-content: center;
         }
-        .about-content { max-width: 900px; position: relative; z-index: 2;}
+        .about-content { 
+            max-width: 900px; position: relative; z-index: 2; width: 100%;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 50px; border-radius: 20px;
+            border: 1px solid rgba(224, 60, 74, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
         .about-content p { font-size: 1.15rem; color: var(--text-grey); margin-bottom: 25px;}
 
         /* =========================================
-           5. REFINED, SLEEK MODAL SYSTEM
+           5. REFINED, CUTTER MODAL SYSTEM
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(6px);
+            background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 2000; display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
             padding: 20px;
@@ -172,21 +210,20 @@
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
         .modal-box {
-            background: var(--bg-pure); border: 1px solid var(--border-color);
-            border-radius: 24px; /* Cuter, softer corners */
-            padding: 40px 30px; width: 100%; max-width: 460px; /* Smaller and more professional */
+            background: var(--bg-pure); border: 1px solid var(--border-color); border-bottom: 4px solid var(--accent);
+            border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 440px; /* Small, cute, professional */
             height: auto; max-height: 85vh; 
             display: flex; flex-direction: column; 
             overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; 
             text-align: center; position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); /* Deep sleek shadow */
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+            transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
         .modal-box::-webkit-scrollbar { display: none; }
         
         .modal-close {
-            position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #9ca3af;
+            position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #cbd5e1;
             cursor: pointer; line-height: 1; border: none; background: none; transition: var(--transition);
         }
         .modal-close:hover { color: var(--accent); transform: rotate(90deg); }
@@ -204,11 +241,11 @@
         }
         .modal-email-box span { display: block; font-size: 0.75rem; color: var(--text-grey); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
         .modal-email { font-size: 1.1rem; font-weight: 700; color: var(--accent); transition: color 0.2s;} 
-        .modal-email:hover { color: var(--accent-hover); }
+        .modal-email:hover { color: var(--text-main); }
         
         .modal-socials { display: flex; justify-content: center; gap: 20px; }
         .modal-socials a { color: var(--text-grey); transition: var(--transition); }
-        .modal-socials a:hover { color: var(--accent); transform: translateY(-2px); } 
+        .modal-socials a:hover { color: var(--accent); transform: translateY(-3px); } 
         .modal-socials svg { width: 22px; height: 22px; fill: currentColor; }
 
         /* =========================================
@@ -220,38 +257,32 @@
         
         .form-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; }
         .form-group input { 
-            flex: 1; padding: 16px 20px; border: 1px solid transparent; 
+            flex: 1; padding: 16px 20px; border: 2px solid transparent; 
             background: #ffffff; color: var(--text-main); 
             border-radius: 8px; outline: none; font-family: 'Inter'; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: var(--transition);
         }
-        .form-group input:focus { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
-        .form-group input::placeholder { color: #9ca3af; } 
+        .form-group input:focus { border-color: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+        .form-group input::placeholder { color: #94a3b8; } 
         
         .form-group button { 
             background: var(--text-main); color: #fff; border: none; padding: 0 30px; 
             border-radius: 8px; font-weight: 700; cursor: pointer; transition: var(--transition); 
         }
-        .form-group button:hover { background: #1f2937; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .form-group button:hover { background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
         #support { padding: 80px 5% 40px; text-align: center; background: var(--surface-1); border-top: 1px solid var(--border-color); }
         .footer-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
         
-        .footer-email { font-size: 1.3rem; color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 40px; transition: var(--transition);}
+        .footer-email { font-size: 1.3rem; color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 30px; transition: var(--transition);}
         .footer-email:hover { color: var(--text-main); } 
         
-        .social-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        .social-links { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 40px; }
         .social-icon { color: var(--text-grey); transition: var(--transition); }
-        .social-icon:hover { color: var(--accent); transform: translateY(-2px); } 
-        .social-icon svg { width: 24px; height: 24px; fill: currentColor; }
+        .social-icon:hover { color: var(--accent); transform: translateY(-3px) scale(1.1); } 
+        .social-icon svg { width: 26px; height: 26px; fill: currentColor; }
         
-        .copyright { color: #9ca3af; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px;}
-
-        /* Special Open Application Card Styling */
-        .card-accent { background: var(--text-main); border-color: var(--text-main); }
-        .card-accent h3, .card-accent p { color: #fff; }
-        .card-accent .btn-ui { background: #fff; color: var(--text-main); box-shadow: none; }
-        .card-accent .btn-ui:hover { background: var(--surface-1); }
+        .copyright { color: #94a3b8; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px;}
 
         /* =========================================
            MOBILE RESPONSIVENESS
@@ -277,6 +308,7 @@
             
             .card { flex: 0 0 85vw; scroll-snap-align: start; min-height: 350px; }
             
+            .about-content { padding: 30px 20px; }
             .modal-box { padding: 30px 20px; max-width: 90%; }
             .form-group { flex-direction: column; }
             .form-group input, .form-group button { width: 100%; padding: 15px; }
@@ -285,7 +317,7 @@
 </head>
 <body>
 
-    <!-- REFINED MODAL SYSTEM -->
+    <!-- REFINED CUTE MODAL SYSTEM -->
     <div class="modal-overlay" id="mainModal">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -307,7 +339,7 @@
     </div>
 
     <!-- NAVBAR -->
-    <nav>
+    <nav id="navbar">
         <a href="#home" class="logo-text">INKA</a>
         <div class="hamburger" id="hamburger">
             <div></div><div></div><div></div>
@@ -343,7 +375,7 @@
         </div>
         <div class="hybrid-container">
             <div class="card">
-                <img src="https://via.placeholder.com/400x200/f3f4f6/9ca3af?text=Paint+Strike" alt="Paint Strike 3D" class="game-icon">
+                <img src="https://via.placeholder.com/400x200/e2e8f0/64748b?text=Paint+Strike" alt="Paint Strike 3D" class="game-icon">
                 <h3>Paint Strike 3D</h3>
                 <p>A fast-paced tactical shooter. Control zones using experimental physics-based paint mechanics. Coordinate with your team to dominate the arena. (In Progress)</p>
                 <div class="store-badges">
@@ -352,7 +384,7 @@
                 </div>
             </div>
             <div class="card">
-                <img src="https://via.placeholder.com/400x200/f3f4f6/9ca3af?text=Dead+Ignition" alt="Dead Ignition" class="game-icon">
+                <img src="https://via.placeholder.com/400x200/e2e8f0/64748b?text=Dead+Ignition" alt="Dead Ignition" class="game-icon">
                 <h3>Dead Ignition</h3>
                 <p>Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension on mobile devices. (In Progress)</p>
                 <div class="store-badges">
@@ -448,13 +480,14 @@
     <footer id="support">
         <div class="footer-content">
             <h2>Contact Us</h2>
-            <p style="color: #6b7280; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
+            <p style="color: #64748b; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
             <a href="mailto:contact@inka.games" class="footer-email">contact@inka.games</a>
             
             <div class="social-links">
                 <a href="#" class="social-icon" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
                 <a href="#" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <!-- YOUTUBE BUTTON ADDED -->
+                <a href="#" class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
             </div>
         </div>
         <p class="copyright">&copy; 2026 Inka Games. All rights reserved.</p>
@@ -469,16 +502,29 @@
         hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
         navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); }); });
 
-        // 2. Universal Modal System (Sleek Redesign)
+        // 2. Fixed Modal System with Layout Shift Compensation
         const mainModal = document.getElementById('mainModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
         const body = document.body;
+        const navbar = document.getElementById('navbar');
+
+        // Calculate scrollbar width dynamically
+        function getScrollbarWidth() {
+            return window.innerWidth - document.documentElement.clientWidth;
+        }
 
         document.querySelectorAll('.trigger-modal').forEach(btn => {
             btn.addEventListener('click', () => {
                 modalTitle.textContent = btn.getAttribute('data-title');
                 modalContent.innerHTML = btn.getAttribute('data-content');
+                
+                const scrollbarWidth = getScrollbarWidth();
+                
+                // Add padding to prevent page jumping when scrollbar disappears
+                body.style.paddingRight = `${scrollbarWidth}px`;
+                navbar.style.paddingRight = `calc(5% + ${scrollbarWidth}px)`;
+                
                 mainModal.classList.add('active');
                 body.classList.add('modal-open'); 
             });
@@ -487,6 +533,12 @@
         window.closeModal = function() {
             mainModal.classList.remove('active');
             body.classList.remove('modal-open'); 
+            
+            // Remove padding compensations
+            setTimeout(() => {
+                body.style.paddingRight = '0px';
+                navbar.style.paddingRight = '5%';
+            }, 300); // Wait for transition to finish
         }
 
         mainModal.addEventListener('click', (e) => {
