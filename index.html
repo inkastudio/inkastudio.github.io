@@ -14,18 +14,19 @@
 
     <style>
         /* =========================================
-           CORE DARK THEME VARIABLES
+           CORE LIGHT THEME VARIABLES
            ========================================= */
         :root {
-            --bg-pure: #050505; 
-            --surface-1: #0d0d0d;
-            --surface-2: #1a1a1a;
-            --border-color: #262626;
-            --text-main: #f4f4f5;
-            --text-grey: #a1a1aa;
-            --accent: #e63946; 
+            --bg-pure: #ffffff; 
+            --surface-1: #f9fafb; /* Soft off-white for cards */
+            --surface-2: #ffffff;
+            --border-color: #e5e7eb;
+            --text-main: #111827; /* Dark slate for high readability */
+            --text-grey: #6b7280;
+            --accent: #E03C4A; /* Matched precisely to your red screenshot */
+            --accent-hover: #c93340;
             --nav-height: 80px;
-            --transition: background-color 0.2s ease, color 0.2s ease;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,18 +37,18 @@
             background-color: var(--bg-pure); color: var(--text-main);
             font-family: 'Inter', sans-serif; font-size: 1rem;
             overflow-x: hidden; line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Prevents background scrolling when modal is open */
         body.modal-open { overflow: hidden; }
 
-        ::selection { background: var(--text-main); color: var(--bg-pure); }
+        ::selection { background: var(--accent); color: #fff; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-pure); }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--text-main); }
         a { text-decoration: none; color: inherit; display: inline-block; }
 
         /* =========================================
@@ -56,11 +57,11 @@
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height);
             display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
-            background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 1000; border-bottom: 1px solid var(--border-color);
         }
 
-        .logo-text { font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; transition: var(--transition);}
+        .logo-text { font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; transition: var(--transition); color: var(--text-main);}
         .logo-text:hover { color: var(--accent); }
         
         .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
@@ -68,7 +69,7 @@
         .nav-links a:hover { color: var(--accent); } 
         
         .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
-        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); }
+        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); transition: var(--transition); }
 
         /* =========================================
            2. CINEMATIC HERO 
@@ -76,29 +77,30 @@
         .hero {
             position: relative; width: 100vw; height: 100vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden; background: #000;
+            overflow: hidden; background: #f3f4f6;
         }
 
         .hero-video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.5; z-index: 0; pointer-events: none;
+            object-fit: cover; opacity: 0.15; z-index: 0; pointer-events: none; /* Lightened video opacity for white theme */
         }
 
         .noise-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
-            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.12"/%3E%3C/svg%3E');
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
             z-index: 1;
         }
 
         .hero-content { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center;}
         
-        .hero-content img { max-width: 400px; width: 90%; margin-bottom: 25px; }
+        .hero-content img { max-width: 400px; width: 90%; margin-bottom: 25px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05)); }
         
         .hero-subtitle-box {
-            background: #000; padding: 10px 20px; border: 1px solid #222; border-radius: 6px;
+            background: rgba(255, 255, 255, 0.95); padding: 12px 24px; border: 1px solid var(--border-color); 
+            border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); backdrop-filter: blur(5px);
         }
         .hero-subtitle-box h2 { 
-            font-size: 0.95rem; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-grey); margin: 0;
+            font-size: 0.95rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin: 0;
         }
 
         /* =========================================
@@ -109,7 +111,6 @@
         .section-header h2 { font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 8px; color: var(--text-main); }
         .section-header p { color: var(--text-grey); font-size: 1rem; }
 
-        /* Tighter spacing between Newswire and Career */
         #newswire { padding-bottom: 40px; }
         #career { padding-top: 40px; }
 
@@ -117,47 +118,53 @@
 
         .card {
             background: var(--surface-1); border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
-            transition: var(--transition);
+            border-radius: 16px; padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
+            transition: var(--transition); position: relative; overflow: hidden;
         }
-        .card:hover { border-color: #444; background: var(--surface-2); }
-        .card h3 { font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .card:hover { 
+            background: var(--surface-2); 
+            border-color: #d1d5db;
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08); 
+            transform: translateY(-4px);
+        }
+        .card h3 { font-size: 1.4rem; margin-bottom: 12px; }
         .card p { color: var(--text-grey); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; line-height: 1.6; }
 
+        /* Sleek Red Button */
         .btn-ui {
-            display: block; background: var(--border-color); color: var(--text-main);
+            display: block; background: var(--accent); color: #fff;
             padding: 14px 0; font-weight: 600; text-align: center; border-radius: 8px;
-            transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; cursor: pointer; border: none; width: 100%;
+            transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; 
+            cursor: pointer; border: none; width: 100%; box-shadow: 0 4px 12px rgba(224, 60, 74, 0.2);
         }
-        .btn-ui:hover { background: var(--text-main); color: var(--bg-pure); }
+        .btn-ui:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(224, 60, 74, 0.3); }
 
         /* =========================================
            3. GAMES SECTION 
            ========================================= */
-        .game-icon { width: 100%; height: 200px; background: #111; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
+        .game-icon { width: 100%; height: 200px; background: #e5e7eb; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
         
         .store-badges { display: flex; gap: 15px; flex-wrap: wrap; margin-top: auto; }
-        .store-badge-img { height: 42px; display: inline-block; transition: opacity 0.2s ease; }
+        .store-badge-img { height: 42px; display: inline-block; transition: var(--transition); }
         .store-badge-img img { height: 100%; width: auto; object-fit: contain; }
-        .store-badge-img:hover { opacity: 0.7; }
+        .store-badge-img:hover { transform: scale(1.05); }
 
         /* =========================================
            4. ABOUT US SECTION 
            ========================================= */
         #about {
             background-color: var(--surface-1); position: relative; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
-            background-image: url('data:image/svg+xml;utf8,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.02"%3E%3Cpath d="M30 30c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm-2 0c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm-8 0c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20zm-2 0c0 12.15 9.85 22 22 22s22-9.85 22-22S44.15 8 32 8 10 17.85 10 30zM2 30C2 14.536 14.536 2 30 2s28 12.536 28 28-12.536 28-28 28S2 45.464 2 30zm30 30c-16.569 0-30-13.431-30-30S15.431 0 30 0s30 13.431 30 30-13.431 30-30 30z"/%3E%3Ccircle cx="15" cy="15" r="3"/%3E%3Ccircle cx="45" cy="45" r="3"/%3E%3Cpath d="M10 45h10v2H10zM40 15h10v2H40zM30 10V0h2v10zM30 60V50h2v10zM0 30h10v2H0zM60 30H50v2h10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            background-image: url('data:image/svg+xml;utf8,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.03"%3E%3Cpath d="M30 30c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm-2 0c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm-8 0c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20zm-2 0c0 12.15 9.85 22 22 22s22-9.85 22-22S44.15 8 32 8 10 17.85 10 30zM2 30C2 14.536 14.536 2 30 2s28 12.536 28 28-12.536 28-28 28S2 45.464 2 30zm30 30c-16.569 0-30-13.431-30-30S15.431 0 30 0s30 13.431 30 30-13.431 30-30 30z"/%3E%3Ccircle cx="15" cy="15" r="3"/%3E%3Ccircle cx="45" cy="45" r="3"/%3E%3Cpath d="M10 45h10v2H10zM40 15h10v2H40zM30 10V0h2v10zM30 60V50h2v10zM0 30h10v2H0zM60 30H50v2h10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
         }
         .about-content { max-width: 900px; position: relative; z-index: 2;}
         .about-content p { font-size: 1.15rem; color: var(--text-grey); margin-bottom: 25px;}
 
         /* =========================================
-           5. UNIVERSAL MODAL SYSTEM (Fixed Size, Scrollable without Scrollbar)
+           5. REFINED, SLEEK MODAL SYSTEM
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+            background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(6px);
             z-index: 2000; display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
             padding: 20px;
@@ -165,90 +172,98 @@
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
         .modal-box {
-            background: var(--surface-1); border: 1px solid var(--border-color);
-            border-radius: 16px; 
-            padding: 40px; width: 100%; max-width: 600px;
-            height: 600px; /* ONE PERFECT FIXED SIZE FOR ALL */
-            max-height: 85vh; /* Adapts slightly on smaller screens */
-            display: flex; flex-direction: column; /* Keeps footer pinned to bottom */
-            overflow-y: auto; /* Allows smooth scrolling if text is long */
-            scrollbar-width: none; /* Hides scrollbar in Firefox */
-            -ms-overflow-style: none;  /* Hides scrollbar in IE/Edge */
-            text-align: center; 
-            position: relative;
+            background: var(--bg-pure); border: 1px solid var(--border-color);
+            border-radius: 24px; /* Cuter, softer corners */
+            padding: 40px 30px; width: 100%; max-width: 460px; /* Smaller and more professional */
+            height: auto; max-height: 85vh; 
+            display: flex; flex-direction: column; 
+            overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; 
+            text-align: center; position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); /* Deep sleek shadow */
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        /* Hides scrollbar in Chrome/Safari/Brave */
-        .modal-box::-webkit-scrollbar { 
-            display: none; 
-        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-box::-webkit-scrollbar { display: none; }
         
         .modal-close {
-            position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--text-grey);
-            cursor: pointer; line-height: 1; border: none; background: none; transition: color 0.2s;
+            position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #9ca3af;
+            cursor: pointer; line-height: 1; border: none; background: none; transition: var(--transition);
         }
-        .modal-close:hover { color: var(--accent); }
+        .modal-close:hover { color: var(--accent); transform: rotate(90deg); }
         
-        .modal-box h3 { font-size: 2rem; margin-bottom: 20px; color: var(--accent); line-height: 1.2;} 
-        .modal-box p { font-size: 1.1rem; color: var(--text-grey); margin-bottom: 25px; line-height: 1.7;}
+        .modal-box h3 { font-size: 1.6rem; margin-bottom: 16px; color: var(--text-main); line-height: 1.2;} 
+        .modal-box p { font-size: 1rem; color: var(--text-grey); margin-bottom: 20px; line-height: 1.6;}
         
         .modal-footer {
-            margin-top: auto; /* Pushes footer automatically to the bottom */
-            padding-top: 30px; border-top: 1px solid var(--border-color);
+            margin-top: 15px; padding-top: 25px; border-top: 1px solid var(--border-color);
             display: flex; flex-direction: column; align-items: center;
         }
-        .modal-email-box { margin-bottom: 25px; background: #111; padding: 20px; border-radius: 8px; border: 1px solid #333; width: 100%; text-align: center; }
-        .modal-email-box span { display: block; font-size: 0.85rem; color: #777; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
-        .modal-email { font-size: 1.2rem; font-weight: 700; color: var(--accent); transition: color 0.2s;} 
-        .modal-email:hover { color: #fff; }
+        .modal-email-box { 
+            margin-bottom: 20px; background: var(--surface-1); padding: 15px; 
+            border-radius: 12px; border: 1px solid var(--border-color); width: 100%; text-align: center; 
+        }
+        .modal-email-box span { display: block; font-size: 0.75rem; color: var(--text-grey); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
+        .modal-email { font-size: 1.1rem; font-weight: 700; color: var(--accent); transition: color 0.2s;} 
+        .modal-email:hover { color: var(--accent-hover); }
         
         .modal-socials { display: flex; justify-content: center; gap: 20px; }
-        .modal-socials a { color: var(--text-grey); transition: color 0.2s; }
-        .modal-socials a:hover { color: var(--accent); } 
-        .modal-socials svg { width: 24px; height: 24px; fill: currentColor; }
+        .modal-socials a { color: var(--text-grey); transition: var(--transition); }
+        .modal-socials a:hover { color: var(--accent); transform: translateY(-2px); } 
+        .modal-socials svg { width: 22px; height: 22px; fill: currentColor; }
 
         /* =========================================
            6. NEWSLETTER & FOOTER
            ========================================= */
-        #newsletter { background: var(--accent); color: white; text-align: center; padding: 80px 5%; border-top: 1px solid var(--border-color); }
+        #newsletter { background: var(--accent); color: white; text-align: center; padding: 80px 5%; }
         #newsletter h2 { font-size: 2rem; margin-bottom: 10px; color: #fff;}
+        #newsletter p { color: rgba(255,255,255,0.9); }
+        
         .form-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; }
-        
-        /* Updated Input Box Colors */
         .form-group input { 
-            flex: 1; padding: 16px 20px; border: none; 
-            background: #ffffff; color: #000000; /* White box, black text */
-            border-radius: 8px; outline: none; font-family: 'Inter'; 
+            flex: 1; padding: 16px 20px; border: 1px solid transparent; 
+            background: #ffffff; color: var(--text-main); 
+            border-radius: 8px; outline: none; font-family: 'Inter'; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: var(--transition);
         }
-        .form-group input::placeholder { color: #555; } /* Darker placeholder for contrast */
+        .form-group input:focus { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+        .form-group input::placeholder { color: #9ca3af; } 
         
-        .form-group button { background: #000; color: #fff; border: none; padding: 0 30px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-        .form-group button:hover { background: #333; }
+        .form-group button { 
+            background: var(--text-main); color: #fff; border: none; padding: 0 30px; 
+            border-radius: 8px; font-weight: 700; cursor: pointer; transition: var(--transition); 
+        }
+        .form-group button:hover { background: #1f2937; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-        #support { padding: 80px 5% 40px; text-align: center; background: var(--bg-pure); }
+        #support { padding: 80px 5% 40px; text-align: center; background: var(--surface-1); border-top: 1px solid var(--border-color); }
         .footer-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
         
-        /* Red Footer Email */
-        .footer-email { font-size: 1.3rem; color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 40px; transition: color 0.2s;}
-        .footer-email:hover { color: #ffffff; } /* Hover makes it white */
+        .footer-email { font-size: 1.3rem; color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 40px; transition: var(--transition);}
+        .footer-email:hover { color: var(--text-main); } 
         
         .social-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
-        .social-icon { color: var(--text-grey); transition: color 0.2s; }
-        .social-icon:hover { color: var(--accent); } 
+        .social-icon { color: var(--text-grey); transition: var(--transition); }
+        .social-icon:hover { color: var(--accent); transform: translateY(-2px); } 
         .social-icon svg { width: 24px; height: 24px; fill: currentColor; }
         
-        .copyright { color: #555; font-size: 0.85rem; border-top: 1px solid #111; padding-top: 30px;}
+        .copyright { color: #9ca3af; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px;}
+
+        /* Special Open Application Card Styling */
+        .card-accent { background: var(--text-main); border-color: var(--text-main); }
+        .card-accent h3, .card-accent p { color: #fff; }
+        .card-accent .btn-ui { background: #fff; color: var(--text-main); box-shadow: none; }
+        .card-accent .btn-ui:hover { background: var(--surface-1); }
 
         /* =========================================
-           MOBILE RESPONSIVENESS (IMPROVED HORIZONTAL SCROLL)
+           MOBILE RESPONSIVENESS
            ========================================= */
         @media (max-width: 768px) {
             nav { padding: 0 20px; }
             .hamburger { display: flex; }
             .nav-links {
-                position: fixed; top: var(--nav-height); left: 0; width: 100%; background: var(--surface-1);
+                position: fixed; top: var(--nav-height); left: 0; width: 100%; background: rgba(255,255,255,0.98);
                 flex-direction: column; padding: 30px 0; gap: 20px; transform: translateY(-150%); opacity: 0;
                 transition: transform 0.3s ease, opacity 0.3s ease; border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             }
             .nav-links.active { transform: translateY(0); opacity: 1; }
             .section-header h2 { font-size: 2rem; }
@@ -260,11 +275,9 @@
             }
             .hybrid-container::-webkit-scrollbar { display: none; }
             
-            /* Reduced width to 75vw - this exposes 25% of the NEXT card, making it extremely obvious it's scrollable */
-            .card { flex: 0 0 75vw; scroll-snap-align: start; min-height: 350px; }
+            .card { flex: 0 0 85vw; scroll-snap-align: start; min-height: 350px; }
             
-            .modal-box { padding: 25px; }
-
+            .modal-box { padding: 30px 20px; max-width: 90%; }
             .form-group { flex-direction: column; }
             .form-group input, .form-group button { width: 100%; padding: 15px; }
         }
@@ -272,7 +285,7 @@
 </head>
 <body>
 
-    <!-- UNIVERSAL MODAL SYSTEM -->
+    <!-- REFINED MODAL SYSTEM -->
     <div class="modal-overlay" id="mainModal">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -281,7 +294,7 @@
             
             <div class="modal-footer">
                 <div class="modal-email-box">
-                    <span>Contact Us</span>
+                    <span>Reach Out</span>
                     <a href="mailto:contact@inka.games" class="modal-email">contact@inka.games</a>
                 </div>
                 <div class="modal-socials">
@@ -329,9 +342,8 @@
             <p>Built from scratch. Engineered for tension.</p>
         </div>
         <div class="hybrid-container">
-            <!-- Game 1 -->
             <div class="card">
-                <img src="https://via.placeholder.com/400x200/111111/333333?text=Paint+Strike" alt="Paint Strike 3D" class="game-icon">
+                <img src="https://via.placeholder.com/400x200/f3f4f6/9ca3af?text=Paint+Strike" alt="Paint Strike 3D" class="game-icon">
                 <h3>Paint Strike 3D</h3>
                 <p>A fast-paced tactical shooter. Control zones using experimental physics-based paint mechanics. Coordinate with your team to dominate the arena. (In Progress)</p>
                 <div class="store-badges">
@@ -339,9 +351,8 @@
                     <a href="#" class="store-badge-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store"></a>
                 </div>
             </div>
-            <!-- Game 2 (Now Mobile) -->
             <div class="card">
-                <img src="https://via.placeholder.com/400x200/111111/333333?text=Dead+Ignition" alt="Dead Ignition" class="game-icon">
+                <img src="https://via.placeholder.com/400x200/f3f4f6/9ca3af?text=Dead+Ignition" alt="Dead Ignition" class="game-icon">
                 <h3>Dead Ignition</h3>
                 <p>Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension on mobile devices. (In Progress)</p>
                 <div class="store-badges">
@@ -363,7 +374,7 @@
         </div>
     </section>
 
-    <!-- NEWSWIRE SECTION (4 Boxes) -->
+    <!-- NEWSWIRE SECTION -->
     <section id="newswire">
         <div class="section-header">
             <h2>Newswire</h2>
@@ -381,7 +392,7 @@
                 <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Paint Strike 3D Started" data-content="<p>To contrast our dark horror titles, we are kicking off prototyping for 'Paint Strike 3D'. This is a fast-paced multiplayer shooter focused on territory control through dynamic fluid physics.</p><p>We are currently stress-testing the network code to handle real-time paint splatters across mobile devices without dropping frames. We'll be needing closed-beta testers soon, so make sure to follow us on Twitter/X!</p>">Learn More</button>
             </div>
             <div class="card">
-                <h3>Career Opportunities Available</h3>
+                <h3>Career Opportunities</h3>
                 <p>We are expanding the core team. Check our careers section for open positions across programming and design.</p>
                 <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Games is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
             </div>
@@ -413,12 +424,12 @@
             <div class="card">
                 <h3>Graphic Designer</h3>
                 <p>Looking for a designer to handle UI/UX, marketing materials, and brand identity with a clean, high-contrast style.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Role: Graphic Designer" data-content="<p>We are currently in need of a sharp <strong>Graphic Designer</strong> to join our core team.</p><p>Your role will encompass everything from in-game UI design to crafting promotional assets for the App Store and our social channels. We favor brutalist, minimalist, and high-contrast aesthetics.</p><p>Please send a portfolio showcasing relevant digital design work.</p>">Apply Now</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Role: Graphic Designer" data-content="<p>We are currently in need of a sharp <strong>Graphic Designer</strong> to join our core team.</p><p>Your role will encompass everything from in-game UI design to crafting promotional assets for the App Store and our social channels. We favor clean, minimalist, and high-contrast aesthetics.</p><p>Please send a portfolio showcasing relevant digital design work.</p>">Apply Now</button>
             </div>
-            <div class="card" style="background: #050505;">
+            <div class="card card-accent">
                 <h3>Open Application</h3>
                 <p>Don't see your specific role? We are always looking for exceptional, self-motivated talent. Pitch yourself to us.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto; background: #fff; color: #000;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Games, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
+                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Games, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
             </div>
         </div>
     </section>
@@ -437,13 +448,13 @@
     <footer id="support">
         <div class="footer-content">
             <h2>Contact Us</h2>
-            <p style="color: #666; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
+            <p style="color: #6b7280; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
             <a href="mailto:contact@inka.games" class="footer-email">contact@inka.games</a>
             
             <div class="social-links">
                 <a href="#" class="social-icon" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
                 <a href="#" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                <a href="#" class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
             </div>
         </div>
         <p class="copyright">&copy; 2026 Inka Games. All rights reserved.</p>
@@ -458,7 +469,7 @@
         hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
         navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); }); });
 
-        // 2. Universal Modal System
+        // 2. Universal Modal System (Sleek Redesign)
         const mainModal = document.getElementById('mainModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
