@@ -1,555 +1,1996 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inka Games | Official Studio</title>
+    <title>Inka Studio — Independent Game Development & Interactive Architecture</title>
+    <meta name="description" content="Inka Studio is an independent game studio engineering Paint Strike 3D and Dead Ignition with surgical precision, custom C# physics, and uncompromising performance.">
     
-    <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- PREMIUM TYPOGRAPHY -->
+    <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', ' system-ui', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        inka: {
+                            blue: '#2563EB',
+                            blueDark: '#1D4ED8',
+                            crimson: '#E11D48',
+                            amber: '#D97706',
+                            emerald: '#059669',
+                            slate: '#0F172A',
+                            darkBg: '#090D16',
+                            darkCard: '#111827',
+                        }
+                    },
+                    boxShadow: {
+                        'notarize': '0 20px 50px -12px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04)',
+                        'notarize-hover': '0 25px 60px -12px rgba(37, 99, 235, 0.14), 0 0 1px 1px rgba(37, 99, 235, 0.2)',
+                        'float': '0 12px 32px -4px rgba(15, 23, 42, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* =========================================
-           CORE LIGHT THEME VARIABLES
-           ========================================= */
+        /* Custom Notarize-Inspired Editorial Polish */
         :root {
-            --bg-pure: #ffffff; 
-            --surface-1: #f8f9fa; /* Soft off-white */
-            --surface-2: #ffffff;
-            --border-color: #e5e7eb;
-            --text-main: #0f172a; /* Slate for high readability */
-            --text-grey: #64748b;
-            --accent: #E03C4A; /* Vibrant Red */
-            --nav-height: 80px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --bg-primary: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --border-subtle: #E2E8F0;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html.dark {
+            --bg-primary: #090D16;
+            --bg-surface: #111827;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-subtle: #1E293B;
+        }
 
         body {
-            background-color: var(--bg-pure); color: var(--text-main);
-            font-family: 'Inter', sans-serif; font-size: 1rem;
-            overflow-x: hidden; line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
-        body.modal-open { overflow: hidden; }
-
-        ::selection { background: var(--accent); color: #fff; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-pure); }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--text-main); }
-        a { text-decoration: none; color: inherit; display: inline-block; }
-
-        /* =========================================
-           1. NAVIGATION
-           ========================================= */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            z-index: 1000; border-bottom: 1px solid var(--border-color);
-            transition: padding-right 0s; /* Prevents lag when JS adjusts for modal */
+        /* Subtle Architectural Dot Grid */
+        .bg-architectural-grid {
+            background-size: 32px 32px;
+            background-image: radial-gradient(circle, rgba(148, 163, 184, 0.28) 1px, transparent 1px);
+        }
+        html.dark .bg-architectural-grid {
+            background-image: radial-gradient(circle, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
         }
 
-        .logo-text { font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; transition: var(--transition); color: var(--text-main);}
-        .logo-text:hover { color: var(--accent); }
-        
-        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
-        .nav-links a { font-size: 0.85rem; font-weight: 600; color: var(--text-grey); transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;}
-        .nav-links a:hover { color: var(--accent); } 
-        
-        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
-        .hamburger div { width: 30px; height: 2px; background-color: var(--text-main); transition: var(--transition); }
-
-        /* =========================================
-           2. CINEMATIC HERO 
-           ========================================= */
-        .hero {
-            position: relative; width: 100vw; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden; background: #fff;
+        /* Soft Ambient Mesh Gradients (Notarize Hero Backdrop) */
+        .notarize-mesh {
+            background: 
+                radial-gradient(at 85% 15%, rgba(37, 99, 235, 0.10) 0px, transparent 50%),
+                radial-gradient(at 15% 80%, rgba(225, 29, 72, 0.08) 0px, transparent 50%),
+                radial-gradient(at 60% 60%, rgba(14, 165, 233, 0.07) 0px, transparent 50%);
+        }
+        html.dark .notarize-mesh {
+            background: 
+                radial-gradient(at 85% 15%, rgba(37, 99, 235, 0.18) 0px, transparent 55%),
+                radial-gradient(at 15% 80%, rgba(225, 29, 72, 0.15) 0px, transparent 55%);
         }
 
-        /* Frosted White Overlay for better video clarity */
-        .hero::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.65); /* Lets the video bleed through nicely */
-            z-index: 1; pointer-events: none;
+        /* Floating Animation for Hero UI Widgets */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float-slow {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: floatSlow 6s ease-in-out 1.5s infinite;
         }
 
-        .hero-video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 1; z-index: 0; pointer-events: none; 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-
-        .noise-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
-            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.04"/%3E%3C/svg%3E');
-            z-index: 2; /* Put noise above the overlay */
+        ::-webkit-scrollbar-track {
+            background: transparent;
         }
-
-        .hero-content { position: relative; z-index: 3; text-align: center; display: flex; flex-direction: column; align-items: center;}
-        
-        .hero-content img { max-width: 400px; width: 90%; margin-bottom: 25px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05)); }
-        
-        .hero-subtitle-box {
-            background: rgba(255, 255, 255, 0.95); padding: 12px 24px; border: 1px solid var(--accent); 
-            border-radius: 8px; box-shadow: 0 10px 25px rgba(224, 60, 74, 0.1); backdrop-filter: blur(5px);
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 9999px;
         }
-        .hero-subtitle-box h2 { 
-            font-size: 0.95rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin: 0;
-        }
-
-        /* =========================================
-           GLOBAL SECTION STYLES
-           ========================================= */
-        section { padding: 100px 5%; scroll-margin-top: var(--nav-height); }
-        .section-header { text-align: left; margin-bottom: 40px; }
-        .section-header h2 { font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 8px; color: var(--text-main); }
-        .section-header p { color: var(--text-grey); font-size: 1rem; }
-
-        .hybrid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-
-        /* Sleek Cards */
-        .card {
-            background: var(--surface-1); border: 1px solid var(--border-color);
-            border-bottom: 3px solid var(--border-color); /* Bottom weight */
-            border-radius: 16px; padding: 30px; display: flex; flex-direction: column; min-height: 380px; 
-            transition: var(--transition); position: relative; overflow: hidden;
-        }
-        .card:hover { 
-            background: var(--surface-2); 
-            border-color: var(--border-color);
-            border-bottom-color: var(--accent); /* Red bottom accent on hover */
-            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.08); 
-            transform: translateY(-4px);
-        }
-        .card h3 { font-size: 1.4rem; margin-bottom: 12px; }
-        .card p { color: var(--text-grey); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; line-height: 1.6; }
-
-        /* UNIQUE BUTTON DIAGONAL SWEEP ANIMATION */
-        .btn-ui {
-            position: relative; overflow: hidden; display: block; 
-            background: var(--accent); color: #fff;
-            padding: 14px 0; font-weight: 700; text-align: center; border-radius: 8px;
-            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
-            cursor: pointer; border: none; width: 100%; 
-            box-shadow: 0 4px 12px rgba(224, 60, 74, 0.2); z-index: 1;
-            transition: color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .btn-ui::before {
-            content: ''; position: absolute; top: 0; left: -110%;
-            width: 100%; height: 100%;
-            background: var(--text-main); /* Slides in dark */
-            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: -1;
-            transform: skewX(-20deg); transform-origin: bottom left;
-        }
-        .btn-ui:hover {
-            color: #fff; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3); transform: translateY(-2px);
-        }
-        .btn-ui:hover::before { left: -10%; width: 120%; }
-
-        /* Open Application Card Fix */
-        .card-accent { background: var(--text-main); border-color: var(--text-main); border-bottom-color: var(--text-main); }
-        .card-accent h3, .card-accent p { color: #fff; }
-        .card-accent:hover { 
-            background: #000; border-color: #000; border-bottom-color: var(--accent);
-        }
-        .card-accent .btn-ui { background: #fff; color: var(--text-main); box-shadow: none; }
-        .card-accent .btn-ui::before { background: var(--accent); } /* Diagonal sweep is vibrant red */
-        .card-accent .btn-ui:hover { box-shadow: 0 8px 20px rgba(224, 60, 74, 0.4); color: #fff;}
-
-        /* =========================================
-           3. GAMES SECTION 
-           ========================================= */
-        .game-icon { width: 100%; height: 200px; background: #e2e8f0; border-radius: 12px; margin-bottom: 25px; object-fit: cover; border: 1px solid var(--border-color); }
-        .store-badges { display: flex; gap: 15px; flex-wrap: wrap; margin-top: auto; }
-        .store-badge-img { height: 42px; display: inline-block; transition: var(--transition); }
-        .store-badge-img img { height: 100%; width: auto; object-fit: contain; }
-        .store-badge-img:hover { transform: scale(1.05); }
-
-        /* =========================================
-           4. REDESIGNED ABOUT US 
-           ========================================= */
-        #about {
-            background-color: var(--bg-pure); position: relative; 
-            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
-            /* Sleek Red Dot Grid Background */
-            background-image: radial-gradient(rgba(224, 60, 74, 0.2) 2px, transparent 2px); 
-            background-size: 30px 30px;
-            display: flex; justify-content: center;
-        }
-        .about-content { 
-            max-width: 900px; position: relative; z-index: 2; width: 100%;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 50px; border-radius: 20px;
-            border: 1px solid rgba(224, 60, 74, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.04);
-        }
-        .about-content p { font-size: 1.15rem; color: var(--text-grey); margin-bottom: 25px;}
-
-        /* =========================================
-           5. REFINED, CUTTER MODAL SYSTEM
-           ========================================= */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 2000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-            padding: 20px;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .modal-box {
-            background: var(--bg-pure); border: 1px solid var(--border-color); border-bottom: 4px solid var(--accent);
-            border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 440px; /* Small, cute, professional */
-            height: auto; max-height: 85vh; 
-            display: flex; flex-direction: column; 
-            overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; 
-            text-align: center; position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
-            transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
-        .modal-box::-webkit-scrollbar { display: none; }
-        
-        .modal-close {
-            position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: #cbd5e1;
-            cursor: pointer; line-height: 1; border: none; background: none; transition: var(--transition);
-        }
-        .modal-close:hover { color: var(--accent); transform: rotate(90deg); }
-        
-        .modal-box h3 { font-size: 1.6rem; margin-bottom: 16px; color: var(--text-main); line-height: 1.2;} 
-        .modal-box p { font-size: 1rem; color: var(--text-grey); margin-bottom: 20px; line-height: 1.6;}
-        
-        .modal-footer {
-            margin-top: 15px; padding-top: 25px; border-top: 1px solid var(--border-color);
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .modal-email-box { 
-            margin-bottom: 20px; background: var(--surface-1); padding: 15px; 
-            border-radius: 12px; border: 1px solid var(--border-color); width: 100%; text-align: center; 
-        }
-        .modal-email-box span { display: block; font-size: 0.75rem; color: var(--text-grey); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
-        .modal-email { font-size: 1.1rem; font-weight: 700; color: var(--accent); transition: color 0.2s;} 
-        .modal-email:hover { color: var(--text-main); }
-        
-        .modal-socials { display: flex; justify-content: center; gap: 20px; }
-        .modal-socials a { color: var(--text-grey); transition: var(--transition); }
-        .modal-socials a:hover { color: var(--accent); transform: translateY(-3px); } 
-        .modal-socials svg { width: 22px; height: 22px; fill: currentColor; }
-
-        /* =========================================
-           6. NEWSLETTER & FOOTER
-           ========================================= */
-        #newsletter { background: var(--accent); color: white; text-align: center; padding: 80px 5%; }
-        #newsletter h2 { font-size: 2rem; margin-bottom: 10px; color: #fff;}
-        #newsletter p { color: rgba(255,255,255,0.9); }
-        
-        .form-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 30px auto 0; }
-        .form-group input { 
-            flex: 1; padding: 16px 20px; border: 2px solid transparent; 
-            background: #ffffff; color: var(--text-main); 
-            border-radius: 8px; outline: none; font-family: 'Inter'; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: var(--transition);
-        }
-        .form-group input:focus { border-color: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
-        .form-group input::placeholder { color: #94a3b8; } 
-        
-        .form-group button { 
-            background: var(--text-main); color: #fff; border: none; padding: 0 30px; 
-            border-radius: 8px; font-weight: 700; cursor: pointer; transition: var(--transition); 
-        }
-        .form-group button:hover { background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-
-        #support { padding: 80px 5% 40px; text-align: center; background: var(--surface-1); border-top: 1px solid var(--border-color); }
-        .footer-content h2 { font-size: 1.8rem; margin-bottom: 10px; }
-        
-        .footer-email { font-size: 1.3rem; color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 30px; transition: var(--transition);}
-        .footer-email:hover { color: var(--text-main); } 
-        
-        .social-links { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 40px; }
-        .social-icon { color: var(--text-grey); transition: var(--transition); }
-        .social-icon:hover { color: var(--accent); transform: translateY(-3px) scale(1.1); } 
-        .social-icon svg { width: 26px; height: 26px; fill: currentColor; }
-        
-        .copyright { color: #94a3b8; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px;}
-
-        /* =========================================
-           MOBILE RESPONSIVENESS
-           ========================================= */
-        @media (max-width: 768px) {
-            nav { padding: 0 20px; }
-            .hamburger { display: flex; }
-            .nav-links {
-                position: fixed; top: var(--nav-height); left: 0; width: 100%; background: rgba(255,255,255,0.98);
-                flex-direction: column; padding: 30px 0; gap: 20px; transform: translateY(-150%); opacity: 0;
-                transition: transform 0.3s ease, opacity 0.3s ease; border-bottom: 1px solid var(--border-color);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            }
-            .nav-links.active { transform: translateY(0); opacity: 1; }
-            .section-header h2 { font-size: 2rem; }
-
-            .hybrid-container {
-                display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-                padding-bottom: 20px; margin: 0; padding-left: 0; padding-right: 20px; 
-                gap: 15px; scrollbar-width: none;
-            }
-            .hybrid-container::-webkit-scrollbar { display: none; }
-            
-            .card { flex: 0 0 85vw; scroll-snap-align: start; min-height: 350px; }
-            
-            .about-content { padding: 30px 20px; }
-            .modal-box { padding: 30px 20px; max-width: 90%; }
-            .form-group { flex-direction: column; }
-            .form-group input, .form-group button { width: 100%; padding: 15px; }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.6);
         }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- REFINED CUTE MODAL SYSTEM -->
-    <div class="modal-overlay" id="mainModal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h3 id="modalTitle">Title</h3>
-            <div id="modalContent"></div>
+    <!-- Top Trust & Build Telemetry Banner (Notarize-style Announcement Strip) -->
+    <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2.5 px-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    BUILD v0.8.4-LIVE
+                </span>
+                <span class="text-slate-300 font-medium hidden sm:inline">Inka Studio Engineering Report:</span>
+                <span class="text-slate-400">Custom fluid splat shaders & acoustic survival AI now in active testing.</span>
+            </div>
+            <div class="flex items-center gap-4 ml-auto">
+                <button onclick="copyStudioEmail()" class="hover:text-white transition-colors flex items-center gap-1 font-mono text-[11px] text-slate-300">
+                    <i class="ph ph-envelope-simple text-blue-400"></i>
+                    <span>contact@inka.games</span>
+                    <i class="ph ph-copy text-[10px] opacity-75"></i>
+                </button>
+                <a href="#newswire" class="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+                    <span>Read Devlog</span>
+                    <i class="ph ph-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Glassmorphic Navbar (Notarize.com Clean Header) -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/85 dark:bg-slate-900/85 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             
-            <div class="modal-footer">
-                <div class="modal-email-box">
-                    <span>Reach Out</span>
-                    <a href="mailto:contact@inka.games" class="modal-email">contact@inka.games</a>
+            <!-- Brand Identity -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-slate-900 dark:bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-600 dark:group-hover:bg-blue-500 transition-colors relative overflow-hidden">
+                    <!-- Custom Geometric Inka Emblem SVG -->
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M12 3L4 9v11h6v-6h4v6h6V9l-8-6z" stroke-linejoin="round"/>
+                        <circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/>
+                    </svg>
                 </div>
-                <div class="modal-socials">
-                    <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                    <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                    <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">INKA</span>
+                        <span class="font-display font-semibold text-xl tracking-tight text-blue-600 dark:text-blue-400">STUDIO</span>
+                    </div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400 -mt-1">Indie Game Architecture</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800/70 p-1.5 rounded-full border border-slate-200/70 dark:border-slate-700/70">
+                <a href="#games" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">Games</a>
+                <a href="#architecture" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">How We Craft</a>
+                <a href="#about" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">About Studio</a>
+                <a href="#newswire" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">Newswire</a>
+                <a href="#careers" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">Careers</a>
+                <a href="#support" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/80 transition-all">Support</a>
+            </nav>
+
+            <!-- Right Actions: Theme Switcher & Notarize-Style CTAs -->
+            <div class="flex items-center gap-2.5">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle Light/Dark Mode" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-blue-500/50 text-xs font-semibold shadow-sm transition-all">
+                    <i id="themeIcon" class="ph ph-moon-stars text-base text-blue-600 dark:text-amber-400"></i>
+                    <span id="themeLabel" class="hidden sm:inline">Studio Dark</span>
+                </button>
+
+                <!-- Contact Modal Trigger -->
+                <a href="#support" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <span>Contact</span>
+                </a>
+
+                <!-- Primary CTA -->
+                <a href="#games" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md hover:shadow-blue-600/20 transition-all">
+                    <span>Explore Games</span>
+                    <i class="ph-bold ph-arrow-up-right"></i>
+                </a>
+
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMobileMenu()" aria-label="Open Menu" class="lg:hidden p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                    <i id="mobileMenuIcon" class="ph ph-list text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Collapsible Navigation Drawer -->
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 space-y-2">
+            <a href="#games" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">Games (Paint Strike 3D & Dead Ignition)</a>
+            <a href="#architecture" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">How We Craft Games</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">About Inka Studio</a>
+            <a href="#newswire" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">Newswire & Devlogs</a>
+            <a href="#careers" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">Careers & Collaboration</a>
+            <a href="#support" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800">Support & FAQ</a>
+        </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- 1. SPLIT HERO SECTION (NOTARIZE.COM EDITORIAL LAYOUT + LIVE PREVIEW) -->
+    <!-- ===================================================================== -->
+    <section class="relative pt-10 pb-20 lg:pt-16 lg:pb-28 notarize-mesh bg-architectural-grid border-b border-slate-200/80 dark:border-slate-800/80 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+                
+                <!-- Left Column: High-Trust Editorial Messaging -->
+                <div class="lg:col-span-6 space-y-7">
+                    <!-- Trust Pill Badge -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700 shadow-sm">
+                        <span class="flex h-2 w-2 rounded-full bg-blue-600"></span>
+                        <span class="text-xs font-semibold tracking-wide text-slate-700 dark:text-slate-200">
+                            Zero Corporate Bloat • Custom C# & Physics Architecture
+                        </span>
+                    </div>
+
+                    <!-- Bold Geometric Headline -->
+                    <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-[54px] text-slate-900 dark:text-white tracking-tight leading-[1.08]">
+                        Immersive worlds, engineered with <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-rose-600 dark:from-blue-400 dark:via-indigo-400 dark:to-rose-400">surgical precision.</span>
+                    </h1>
+
+                    <!-- Crisp Editorial Subheadline -->
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-xl">
+                        Inka Studio is an independent game development house crafting high-impact action and survival experiences. From real-time fluid territory combat in <strong class="font-semibold text-slate-900 dark:text-white">Paint Strike 3D</strong> to acoustic horror in <strong class="font-semibold text-slate-900 dark:text-white">Dead Ignition</strong>, we build games that respect player skill and hardware limits.
+                    </p>
+
+                    <!-- Dual CTAs (Notarize Button Hierarchy) -->
+                    <div class="flex flex-wrap items-center gap-4 pt-1">
+                        <a href="#games" class="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl font-display font-bold text-base bg-slate-900 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-500 shadow-lg shadow-slate-900/10 dark:shadow-blue-600/20 transition-all hover:-translate-y-0.5">
+                            <span>Explore Flagship Games</span>
+                            <i class="ph-bold ph-game-controller text-lg"></i>
+                        </a>
+                        <a href="#architecture" class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-display font-bold text-base bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 shadow-sm transition-all">
+                            <span>How We Craft</span>
+                            <i class="ph-bold ph-code text-blue-600 dark:text-blue-400"></i>
+                        </a>
+                    </div>
+
+                    <!-- Notarize-Inspired Trust & Telemetry Bar -->
+                    <div class="pt-6 border-t border-slate-200/90 dark:border-slate-800 grid grid-cols-3 gap-4 max-w-lg">
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="ph-fill ph-seal-check text-blue-600 dark:text-blue-400 text-lg"></i>
+                                <span class="font-display font-extrabold text-xl text-slate-900 dark:text-white">2 IPs</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">In Active Production</p>
+                        </div>
+                        <div class="border-l border-slate-200 dark:border-slate-800 pl-4">
+                            <div class="flex items-center gap-1.5">
+                                <i class="ph-fill ph-lightning text-amber-500 text-lg"></i>
+                                <span class="font-display font-extrabold text-xl text-slate-900 dark:text-white">60 FPS</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">16.2ms Frame Target</p>
+                        </div>
+                        <div class="border-l border-slate-200 dark:border-slate-800 pl-4">
+                            <div class="flex items-center gap-1.5">
+                                <i class="ph-fill ph-cpu text-rose-600 dark:text-rose-400 text-lg"></i>
+                                <span class="font-display font-extrabold text-xl text-slate-900 dark:text-white">100%</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">In-House C# Systems</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Multi-Layered Floating UI Card (Notarize Live Session Style) -->
+                <div class="lg:col-span-6 relative">
+                    
+                    <!-- Floating Top-Left Verification Pill -->
+                    <div class="hidden sm:flex animate-float-slow absolute -top-5 -left-5 z-20 items-center gap-3 bg-white dark:bg-slate-800 px-4 py-3 rounded-2xl shadow-float border border-slate-200/90 dark:border-slate-700">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <i class="ph-fill ph-check-circle text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Engine Telemetry</div>
+                            <div id="floatingStatText" class="text-xs font-bold text-slate-900 dark:text-white">Fluid Grid: 60Hz Locked</div>
+                        </div>
+                    </div>
+
+                    <!-- Main Interactive Showcase Window -->
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-notarize border border-slate-200/90 dark:border-slate-800 overflow-hidden relative z-10">
+                        
+                        <!-- Window Top Bar with Game Switcher Tabs -->
+                        <div class="bg-slate-50 dark:bg-slate-800/70 px-4 py-3 border-b border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                                <span class="ml-2 text-xs font-mono text-slate-400 hidden sm:inline">inka-runtime://live-sandbox</span>
+                            </div>
+                            
+                            <!-- Interactive Switcher Pills -->
+                            <div class="flex items-center bg-slate-200/70 dark:bg-slate-900 p-1 rounded-xl border border-slate-300/60 dark:border-slate-700">
+                                <button id="heroTabPaint" onclick="switchHeroPreview('paint')" class="px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-sm transition-all flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-blue-600 dark:bg-white"></span>
+                                    Paint Strike 3D
+                                </button>
+                                <button id="heroTabDead" onclick="switchHeroPreview('dead')" class="px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                    Dead Ignition
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Live Canvas Area (Click/Move to Interact!) -->
+                        <div class="relative bg-slate-950 h-72 sm:h-80 w-full overflow-hidden select-none cursor-crosshair" id="heroCanvasContainer">
+                            <canvas id="heroSimCanvas" class="w-full h-full block"></canvas>
+
+                            <!-- Live HUD Overlay Top-Left -->
+                            <div class="absolute top-3 left-3 pointer-events-none flex flex-wrap items-center gap-2">
+                                <span id="heroSimBadge" class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-blue-600/90 text-white backdrop-blur-md shadow-sm">
+                                    LIVE INTERACTIVE SPLAT SIM
+                                </span>
+                                <span id="heroSimInstruction" class="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-slate-900/80 text-slate-200 border border-slate-700/80 backdrop-blur-md">
+                                    Click or drag canvas to fire paint!
+                                </span>
+                            </div>
+
+                            <!-- Live Territory / Tension Score Overlay Bottom -->
+                            <div class="absolute bottom-3 inset-x-3 pointer-events-none bg-slate-900/85 backdrop-blur-md border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-4">
+                                <div class="flex-1">
+                                    <div class="flex justify-between text-[11px] font-mono text-slate-300 mb-1">
+                                        <span id="simMetricLeft">BLUE SQUAD: 52%</span>
+                                        <span id="simMetricCenter" class="text-emerald-400">16.1ms (60 FPS)</span>
+                                        <span id="simMetricRight">CRIMSON: 48%</span>
+                                    </div>
+                                    <div class="w-full h-2 rounded-full bg-rose-600/80 overflow-hidden flex">
+                                        <div id="simProgressBar" class="h-full bg-blue-500 transition-all duration-300" style="width: 52%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer: Live Specs & Interactive Modal Trigger -->
+                        <div class="p-5 bg-white dark:bg-slate-900 flex flex-wrap items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 id="heroCardTitle" class="font-display font-bold text-lg text-slate-900 dark:text-white">Paint Strike 3D — Fluid Arena</h2>
+                                    <span id="heroCardStatus" class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Pre-Alpha Sandbox</span>
+                                </div>
+                                <p id="heroCardDesc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                    Real-time UV surface splat mapping, hydro-slide velocity physics, and 4v4 turf control.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="triggerSimAction()" id="heroSimActionBtn" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1.5">
+                                    <i class="ph-bold ph-Drop text-blue-600"></i>
+                                    <span>Paint Bomb</span>
+                                </button>
+                                <button onclick="openGameModal(currentHeroMode)" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-colors flex items-center gap-1.5">
+                                    <span>Inspect Specs</span>
+                                    <i class="ph-bold ph-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Bottom-Right Architecture Badge -->
+                    <div class="hidden sm:flex animate-float-delayed absolute -bottom-5 -right-4 z-20 items-center gap-3 bg-white dark:bg-slate-800 px-4 py-3 rounded-2xl shadow-float border border-slate-200/90 dark:border-slate-700">
+                        <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                            <i class="ph-fill ph-code-block text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Memory Footprint</div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">&lt; 420 MB VRAM Target</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 2. FLAGSHIP GAMES SHOWCASE (#games) - NOTARIZE BENTO PRODUCT CARDS    -->
+    <!-- ===================================================================== -->
+    <section id="games" class="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
+                    <i class="ph-fill ph-sparkle"></i>
+                    <span>FLAGSHIP PRODUCTION SLATE</span>
+                </div>
+                <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+                    Two distinct genres. One uncompromising standard.
+                </h2>
+            </div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-md">
+                Every title at Inka Studio is built from the ground up around a signature mechanical hook—verified for responsiveness before a single cosmetic asset is added.
+            </p>
+        </div>
+
+        <!-- Two-Column Architectural Bento Showcase -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- GAME CARD 1: PAINT STRIKE 3D -->
+            <div class="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-notarize hover:shadow-notarize-hover transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                <div>
+                    <!-- Top Visual Banner with SVG Tactical Illustration -->
+                    <div class="relative h-64 bg-gradient-to-br from-blue-600 via-indigo-700 to-slate-900 p-6 flex flex-col justify-between overflow-hidden">
+                        <!-- Decorative Paint Splatter SVG Background -->
+                        <svg class="absolute inset-0 w-full h-full opacity-25 pointer-events-none" viewBox="0 0 400 240" fill="none">
+                            <circle cx="80" cy="60" r="55" fill="#60A5FA"/>
+                            <circle cx="135" cy="40" r="22" fill="#60A5FA"/>
+                            <circle cx="320" cy="170" r="70" fill="#F43F5E"/>
+                            <circle cx="250" cy="195" r="28" fill="#F43F5E"/>
+                            <path d="M0 180 Q 200 120 400 200" stroke="#38BDF8" stroke-width="3" stroke-dasharray="6 6"/>
+                        </svg>
+
+                        <div class="relative z-10 flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-white/95 text-blue-700 shadow-sm">
+                                TACTICAL ARENA SHOOTER
+                            </span>
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-900/70 text-emerald-300 border border-white/15 backdrop-blur-md">
+                                PC & Mobile • 60 FPS
+                            </span>
+                        </div>
+
+                        <!-- Center Dynamic Emblem & Title -->
+                        <div class="relative z-10 my-auto">
+                            <div class="inline-flex items-center gap-2 text-blue-200 text-xs font-mono uppercase tracking-widest mb-1">
+                                <i class="ph-fill ph-paint-brush-broad"></i> Project Codename: HydroCore
+                            </div>
+                            <h3 class="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                                Paint Strike 3D
+                            </h3>
+                        </div>
+
+                        <!-- Live Mini Telemetry Strip inside Banner -->
+                        <div class="relative z-10 grid grid-cols-3 gap-2 bg-slate-950/65 backdrop-blur-md rounded-2xl p-3 border border-white/10 text-white">
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-300">SPLAT SHADER</div>
+                                <div class="text-xs font-bold text-sky-300">UV Space 2048²</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-300">MATCH FORMAT</div>
+                                <div class="text-xs font-bold text-white">4v4 Turf Blitz</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-300">NET TICKRATE</div>
+                                <div class="text-xs font-bold text-emerald-400">60Hz Deterministic</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body Copy & Feature Checklist -->
+                    <div class="p-7 sm:p-8 space-y-6">
+                        <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
+                            Every shot reshapes the battlefield. <strong class="text-slate-900 dark:text-white">Paint Strike 3D</strong> fuses crisp third-person arena gunplay with real-time surface fluid control. Coat walls and floors to create high-speed hydro-slide lanes, trap enemy flanks in viscous ink, and claim majority turf before the clock expires.
+                        </p>
+
+                        <!-- Notarize-style Structured Feature List -->
+                        <div class="space-y-3 pt-1">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Dynamic Surface Physics:</strong> Allied paint boosts movement velocity by 35% and enables vertical wall-scaling; enemy paint applies instant drag and audio reveal.
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Zero-Lag Coverage Computation:</strong> Compute-shader territory calculation scores every square centimeter of the arena in under 0.4ms.
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Modular Loadouts:</strong> Pressurized rollers, burst carbines, and pneumatic ink grenades tailored for competitive team synergy.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Footer Actions -->
+                <div class="px-7 sm:px-8 py-5 bg-slate-50/80 dark:bg-slate-800/50 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="openGameModal('paint')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all">
+                        <i class="ph-bold ph-sliders-horizontal"></i>
+                        <span>Inspect Architecture & Media</span>
+                    </button>
+                    <button onclick="switchHeroPreview('paint'); window.scrollTo({top: 0, behavior: 'smooth'});" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <span>Test in Hero Sandbox</span>
+                        <i class="ph-bold ph-arrow-up-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- GAME CARD 2: DEAD IGNITION -->
+            <div class="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-notarize hover:shadow-notarize-hover transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                <div>
+                    <!-- Top Visual Banner with SVG Survival Horror Illustration -->
+                    <div class="relative h-64 bg-gradient-to-br from-slate-950 via-rose-950 to-slate-900 p-6 flex flex-col justify-between overflow-hidden">
+                        <!-- Decorative Radar & Flashlight Cone SVG -->
+                        <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" viewBox="0 0 400 240" fill="none">
+                            <polygon points="40,220 260,20 380,140" fill="url(#flashlightGrad)"/>
+                            <circle cx="290" cy="95" r="45" stroke="#F43F5E" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            <circle cx="290" cy="95" r="6" fill="#F43F5E"/>
+                            <defs>
+                                <linearGradient id="flashlightGrad" x1="40" y1="220" x2="320" y2="80" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.55"/>
+                                    <stop offset="100%" stop-color="#FDE68A" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <div class="relative z-10 flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-600 text-white shadow-sm">
+                                ATMOSPHERIC SURVIVAL HORROR
+                            </span>
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-900/80 text-amber-300 border border-white/15 backdrop-blur-md">
+                                PC & Console Target
+                            </span>
+                        </div>
+
+                        <!-- Center Dynamic Emblem & Title -->
+                        <div class="relative z-10 my-auto">
+                            <div class="inline-flex items-center gap-2 text-rose-300 text-xs font-mono uppercase tracking-widest mb-1">
+                                <i class="ph-fill ph-waveform"></i> Project Codename: BlackoutProtocol
+                            </div>
+                            <h3 class="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                                Dead Ignition
+                            </h3>
+                        </div>
+
+                        <!-- Live Mini Telemetry Strip inside Banner -->
+                        <div class="relative z-10 grid grid-cols-3 gap-2 bg-slate-950/75 backdrop-blur-md rounded-2xl p-3 border border-white/10 text-white">
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-400">LIGHTING ENGINE</div>
+                                <div class="text-xs font-bold text-amber-300">Volumetric Ray-Cone</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-400">THREAT AI</div>
+                                <div class="text-xs font-bold text-rose-400">Acoustic Decibel Grid</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono text-slate-400">HUD PHILOSOPHY</div>
+                                <div class="text-xs font-bold text-white">100% Diegetic</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body Copy & Feature Checklist -->
+                    <div class="p-7 sm:p-8 space-y-6">
+                        <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
+                            Light is scarce, and every sound has consequences. <strong class="text-slate-900 dark:text-white">Dead Ignition</strong> drops players into an isolated industrial quarantine zone where power grids are failing and blind, hyper-acoustic predators hunt by footstep resonance, generator hum, and weapon discharge.
+                        </p>
+
+                        <!-- Notarize-style Structured Feature List -->
+                        <div class="space-y-3 pt-1">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Acoustic Raycasting AI:</strong> Sounds bounce off concrete corridors and metal vents, dynamically drawing or distracting threats in real time.
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Tactile Power & Ignition Loop:</strong> Crank portable dynamos, reroute circuit breakers to seal blast doors, and balance battery drain against total darkness.
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="ph-bold ph-check text-xs"></i>
+                                </div>
+                                <div class="text-sm text-slate-700 dark:text-slate-300">
+                                    <strong class="font-semibold text-slate-900 dark:text-white">Zero Cheap Jump-Scares:</strong> Tension is earned through systemic unpredictability, spatial audio cues, and deliberate resource scarcity.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Footer Actions -->
+                <div class="px-7 sm:px-8 py-5 bg-slate-50/80 dark:bg-slate-800/50 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="openGameModal('dead')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-900 dark:bg-rose-600 hover:bg-rose-600 dark:hover:bg-rose-500 text-white shadow-sm transition-all">
+                        <i class="ph-bold ph-flashlight"></i>
+                        <span>Inspect Architecture & Media</span>
+                    </button>
+                    <button onclick="switchHeroPreview('dead'); window.scrollTo({top: 0, behavior: 'smooth'});" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                        <span>Test in Hero Sandbox</span>
+                        <i class="ph-bold ph-arrow-up-right"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 3. "HOW WE CRAFT GAMES" — NOTARIZE 4-STEP INTERACTIVE PROCESS         -->
+    <!-- ===================================================================== -->
+    <section id="architecture" class="py-20 lg:py-28 bg-white dark:bg-slate-900/60 border-y border-slate-200/80 dark:border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Header -->
+            <div class="max-w-3xl mb-14">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-mono font-semibold mb-3">
+                    <span>OUR ENGINEERING METHODOLOGY</span>
+                </div>
+                <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+                    How we craft games without the bloat.
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg mt-3">
+                    Inspired by high-reliability software engineering, our 4-stage production pipeline ensures every mechanic feels immediate, deterministic, and deeply atmospheric. Click any step below to inspect our live architecture.
+                </p>
+            </div>
+
+            <!-- Interactive 12-Col Grid: 4 Numbered Steps Left, Live Interactive Inspector Right -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                
+                <!-- Left Column: 4 Clickable Process Steps (Notarize "How It Works" Style) -->
+                <div class="lg:col-span-6 space-y-4" id="processStepsList">
+                    
+                    <!-- Step 01 -->
+                    <button onclick="selectProcessStep(0)" id="stepBtn-0" class="w-full text-left p-6 rounded-2xl border-2 border-blue-600 bg-blue-50/40 dark:bg-blue-950/25 transition-all flex items-start gap-4 group">
+                        <span id="stepBadge-0" class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-blue-600 text-white shrink-0">01</span>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Mechanics First (Greybox Verification)</h3>
+                                <i class="ph-bold ph-arrow-right text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                                We never hide sluggish controls behind fancy textures. Movement curves, paint velocity, and acoustic threat detection are tuned in stark geometric greyboxes until 60Hz input feel is unmistakable.
+                            </p>
+                        </div>
+                    </button>
+
+                    <!-- Step 02 -->
+                    <button onclick="selectProcessStep(1)" id="stepBtn-1" class="w-full text-left p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 transition-all flex items-start gap-4 group">
+                        <span id="stepBadge-1" class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">02</span>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">In-House C# & Shader Optimization</h3>
+                                <i class="ph-bold ph-arrow-right text-slate-400 group-hover:text-blue-600"></i>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                                Zero garbage-collection spikes during combat. We write custom C# struct-based state machines and lightweight HLSL compute shaders so mid-tier laptops and mobile devices run cool and fast.
+                            </p>
+                        </div>
+                    </button>
+
+                    <!-- Step 03 -->
+                    <button onclick="selectProcessStep(2)" id="stepBtn-2" class="w-full text-left p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 transition-all flex items-start gap-4 group">
+                        <span id="stepBadge-2" class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">03</span>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Atmospheric Worldbuilding & Diegetic UI</h3>
+                                <i class="ph-bold ph-arrow-right text-slate-400 group-hover:text-blue-600"></i>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                                Instead of cluttering the screen with minimaps and floating bars, we embed information into the world—weapon pressure gauges, flickering facility lights, and spatial 3D audio propagation.
+                            </p>
+                        </div>
+                    </button>
+
+                    <!-- Step 04 -->
+                    <button onclick="selectProcessStep(3)" id="stepBtn-3" class="w-full text-left p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 transition-all flex items-start gap-4 group">
+                        <span id="stepBadge-3" class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">04</span>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Transparent Community Iteration</h3>
+                                <i class="ph-bold ph-arrow-right text-slate-400 group-hover:text-blue-600"></i>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                                Players test our builds early. Through public Newswire telemetry reports and closed playtest cohorts, community feedback directly shapes weapon balance and survival pacing.
+                            </p>
+                        </div>
+                    </button>
+
+                </div>
+
+                <!-- Right Column: Dynamic Interactive Architecture Inspector Card -->
+                <div class="lg:col-span-6 lg:sticky lg:top-28">
+                    <div class="bg-slate-900 text-white rounded-3xl border border-slate-800 shadow-notarize overflow-hidden">
+                        <!-- Top Inspector Header -->
+                        <div class="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+                                <span id="inspectorTag" class="font-mono text-xs text-blue-400 font-semibold uppercase tracking-wider">STAGE 01 // GREYBOX TELEMETRY</span>
+                            </div>
+                            <span id="inspectorFile" class="font-mono text-xs text-slate-400 bg-slate-900 px-2.5 py-1 rounded-md border border-slate-800">FluidController.cs</span>
+                        </div>
+
+                        <!-- Dynamic Inspector Content Container -->
+                        <div class="p-6 sm:p-8 space-y-6">
+                            <div>
+                                <h4 id="inspectorTitle" class="font-display font-bold text-2xl text-white">Sub-Millisecond Input & Velocity Verification</h4>
+                                <p id="inspectorSubtitle" class="text-sm text-slate-400 mt-1">
+                                    Before any 3D character mesh is imported, our movement controller is stress-tested across 10,000 simulated collision frames.
+                                </p>
+                            </div>
+
+                            <!-- Code / Architecture Snippet Box -->
+                            <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800/90 font-mono text-xs leading-relaxed overflow-x-auto text-slate-300">
+                                <pre id="inspectorCode" class="whitespace-pre"><code><span class="text-blue-400">[BurstCompile(FloatPrecision.Standard)]</span>
+<span class="text-rose-400">public struct</span> <span class="text-amber-300">SplatSurfaceJob</span> : IJobParallelFor {
+    <span class="text-slate-500">// Deterministic zero-allocation surface sampling</span>
+    <span class="text-rose-400">public void</span> <span class="text-emerald-400">Execute</span>(<span class="text-rose-400">int</span> index) {
+        <span class="text-rose-400">float</span> inkDensity = SurfaceGrid[index];
+        VelocityMultiplier[index] = math.lerp(<span class="text-amber-300">0.65f</span>, <span class="text-amber-300">1.35f</span>, inkDensity);
+    }
+}</code></pre>
+                            </div>
+
+                            <!-- Live Benchmark Bars -->
+                            <div class="space-y-3 pt-2" id="inspectorMetrics">
+                                <div>
+                                    <div class="flex justify-between text-xs font-mono mb-1">
+                                        <span class="text-slate-300" id="metric1Label">Input-to-Photon Latency</span>
+                                        <span class="text-emerald-400 font-bold" id="metric1Val">11.4 ms (Target &lt; 16.6ms)</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <div id="metric1Bar" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-mono mb-1">
+                                        <span class="text-slate-300" id="metric2Label">GC Heap Allocations Per Frame</span>
+                                        <span class="text-blue-400 font-bold" id="metric2Val">0.0 KB (Zero-Alloc Loop)</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <div id="metric2Bar" class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width: 96%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Callout inside Inspector -->
+                            <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                                <span id="inspectorFooterNote">Verified on Desktop & Snapdragon 8 Gen 2 Testbeds</span>
+                                <a href="#newswire" class="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+                                    <span>Read Engineering Notes</span>
+                                    <i class="ph-bold ph-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. ABOUT INKA STUDIO (#about) — NOTARIZE HIGH-TRUST STUDIO DNA        -->
+    <!-- ===================================================================== -->
+    <section id="about" class="py-20 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-notarize p-8 sm:p-12 lg:p-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold">
+                        <i class="ph-fill ph-compass"></i>
+                        <span>ABOUT INKA STUDIO • INDEPENDENT & PLAYER-DRIVEN</span>
+                    </div>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight leading-tight">
+                        Small team. Fiercely independent. Obsessed with tactile gameplay.
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
+                        Founded with a mission to counter bloated, unoptimized modern releases, <strong class="text-slate-900 dark:text-white">Inka Studio</strong> operates as a focused engineering and creative collective. We believe that whether you are sliding across a paint-drenched arena in <em>Paint Strike 3D</em> or listening for footsteps in the dark corridors of <em>Dead Ignition</em>, a game should respond with instant mechanical honesty.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70">
+                            <div class="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="ph-fill ph-shield-check text-blue-600"></i>
+                                <span>No Pay-to-Win Mechanics</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                Competitive integrity in Paint Strike 3D is sacred. Outcomes are decided strictly by aim, positioning, and turf strategy.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70">
+                            <div class="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="ph-fill ph-devices text-emerald-600"></i>
+                                <span>Cross-Tier Hardware Respect</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                We profile every shader and physics loop so players don't need a flagship GPU to experience smooth 60 FPS gameplay.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Studio Quick Fact Sheet Card -->
+                <div class="lg:col-span-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-700/80 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+                        <div>
+                            <div class="text-xs font-mono uppercase text-slate-400">STUDIO DOSSIER</div>
+                            <div class="font-display font-bold text-lg text-slate-900 dark:text-white">Inka Studio Overview</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                            Verified Indie
+                        </span>
+                    </div>
+
+                    <dl class="space-y-3.5 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="text-slate-500 dark:text-slate-400">Headquarters & Operations</dt>
+                            <dd class="font-semibold text-slate-900 dark:text-white">India • Remote-First Global</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-slate-500 dark:text-slate-400">Core Tech Stack</dt>
+                            <dd class="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">Unity C# • HLSL • Custom Netcode</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-slate-500 dark:text-slate-400">Active Titles</dt>
+                            <dd class="font-semibold text-slate-900 dark:text-white">Paint Strike 3D, Dead Ignition</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-slate-500 dark:text-slate-400">Direct Press / Studio Desk</dt>
+                            <dd class="font-mono text-xs font-semibold text-slate-900 dark:text-white">contact@inka.games</dd>
+                        </div>
+                    </dl>
+
+                    <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">Follow development:</span>
+                        <div class="flex items-center gap-2">
+                            <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X Twitter" class="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-blue-600 hover:border-blue-500 transition-colors">
+                                <i class="ph-bold ph-x-logo"></i>
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-rose-600 hover:border-rose-500 transition-colors">
+                                <i class="ph-bold ph-instagram-logo"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-red-600 hover:border-red-500 transition-colors">
+                                <i class="ph-bold ph-youtube-logo"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. NEWSWIRE & DEVLOG HUB (#newswire) — FILTERABLE EDITORIAL GRID      -->
+    <!-- ===================================================================== -->
+    <section id="newswire" class="py-20 lg:py-28 bg-slate-100/70 dark:bg-slate-900/40 border-t border-slate-200/80 dark:border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Header + Filter Pills -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 text-xs font-mono font-semibold mb-3">
+                        <i class="ph-bold ph-newspaper"></i>
+                        <span>INKA NEWSWIRE & ENGINEERING LOGS</span>
+                    </div>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+                        Dispatches from the workbench.
+                    </h2>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap items-center gap-2" id="newswireFilters">
+                    <button onclick="filterNewswire('all')" data-filter="all" class="news-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-blue-600 text-white shadow-sm transition-all">
+                        All Dispatches
+                    </button>
+                    <button onclick="filterNewswire('Paint Strike 3D')" data-filter="Paint Strike 3D" class="news-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all">
+                        Paint Strike 3D
+                    </button>
+                    <button onclick="filterNewswire('Dead Ignition')" data-filter="Dead Ignition" class="news-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all">
+                        Dead Ignition
+                    </button>
+                    <button onclick="filterNewswire('Engineering')" data-filter="Engineering" class="news-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all">
+                        Engineering
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Newswire Grid -->
+            <div id="newswireGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Populated by JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 6. CAREERS & INDIE COLLABORATION (#careers)                           -->
+    <!-- ===================================================================== -->
+    <section id="careers" class="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- Left Column Pitch -->
+            <div class="lg:col-span-5 space-y-5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>OPEN COLLABORATION & TALENT ROLES</span>
+                </div>
+                <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+                    Build games where your code and art actually matter.
+                </h2>
+                <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
+                    We collaborate with sharp programmers, shader wizards, 3D environment artists, and dedicated playtesters. No five-stage corporate interviews—just show us what you've built or how you think.
+                </p>
+                <div class="p-5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                    <div class="text-xs font-mono uppercase text-slate-500 dark:text-slate-400">DIRECT TALENT INBOX</div>
+                    <div class="font-mono font-bold text-sm text-blue-600 dark:text-blue-400">contact@inka.games</div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Click any role on the right to generate a structured application template ready to send.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column Role Cards -->
+            <div class="lg:col-span-7 space-y-4">
+                
+                <!-- Role 1 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Gameplay & Physics Programmer (C#)</h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400">Remote / Contract</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Work on Paint Strike 3D character movement controllers, projectile ballistics, and deterministic state sync.
+                        </p>
+                    </div>
+                    <button onclick="openCareerModal('Gameplay & Physics Programmer (C#)')" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 text-white transition-colors">
+                        Apply / Pitch →
+                    </button>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Technical Shader & VFX Artist (HLSL)</h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400">Remote / Project</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Craft dynamic UV paint splat shaders, volumetric fog cones, and low-overhead particle effects.
+                        </p>
+                    </div>
+                    <button onclick="openCareerModal('Technical Shader & VFX Artist (HLSL)')" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 text-white transition-colors">
+                        Apply / Pitch →
+                    </button>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">3D Environment & Lighting Artist</h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400">Remote / Collaboration</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Build atmospheric industrial sectors for Dead Ignition and clean modular competitive arenas for Paint Strike 3D.
+                        </p>
+                    </div>
+                    <button onclick="openCareerModal('3D Environment & Lighting Artist')" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 text-white transition-colors">
+                        Apply / Pitch →
+                    </button>
+                </div>
+
+                <!-- Role 4 -->
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Closed Alpha Playtester & QA Scout</h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">Community Cohort</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Join weekend stress-tests, break arena collision bounds, submit frame-time logs, and earn credits in release builds.
+                        </p>
+                    </div>
+                    <button onclick="openCareerModal('Closed Alpha Playtester & QA Scout')" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
+                        Join Playtest →
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 7. SUPPORT, FAQ ACCORDION & DIRECT CONTACT (#support)                 -->
+    <!-- ===================================================================== -->
+    <section id="support" class="py-20 lg:py-28 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Column: Interactive FAQ Accordion (Notarize Style) -->
+                <div class="lg:col-span-6 space-y-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-semibold mb-3">
+                            <span>KNOWLEDGE BASE & FAQ</span>
+                        </div>
+                        <h2 class="font-display font-extrabold text-3xl text-slate-900 dark:text-white tracking-tight">
+                            Frequently asked questions.
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                            Everything you need to know about our build roadmap, platform targets, and playtesting access.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3" id="faqAccordion">
+                        <!-- FAQ Item 1 -->
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 overflow-hidden">
+                            <button onclick="toggleFaq(0)" class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                <span>Which platforms are Paint Strike 3D and Dead Ignition targeting?</span>
+                                <i id="faqIcon-0" class="ph-bold ph-minus text-blue-600 shrink-0"></i>
+                            </button>
+                            <div id="faqContent-0" class="px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <strong>Paint Strike 3D</strong> is architected for simultaneous PC and high-refresh Mobile (Android/iOS) support with scalable shader LODs. <strong>Dead Ignition</strong> is targeted primarily for PC first to leverage volumetric lighting and spatial acoustics, with console evaluation following initial launch.
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 overflow-hidden">
+                            <button onclick="toggleFaq(1)" class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                <span>How can I sign up for early playtests or closed beta builds?</span>
+                                <i id="faqIcon-1" class="ph-bold ph-plus text-slate-400 shrink-0"></i>
+                            </button>
+                            <div id="faqContent-1" class="hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                You can apply directly via the "Closed Alpha Playtester" button in the Careers section above or use the Direct Studio Dispatch form on this page. Select "Playtest Access" as your subject and include your primary device specs.
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 overflow-hidden">
+                            <button onclick="toggleFaq(2)" class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                <span>What engine and networking architecture does Inka Studio use?</span>
+                                <i id="faqIcon-2" class="ph-bold ph-plus text-slate-400 shrink-0"></i>
+                            </button>
+                            <div id="faqContent-2" class="hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                We build on a heavily customized Unity C# pipeline utilizing Burst-compiled jobs, custom HLSL UV-space splat shaders, and deterministic client-side prediction to ensure crisp hit registration and fluid coverage sync.
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 4 -->
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 overflow-hidden">
+                            <button onclick="toggleFaq(3)" class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                <span>Can content creators and press request review keys or interviews?</span>
+                                <i id="faqIcon-3" class="ph-bold ph-plus text-slate-400 shrink-0"></i>
+                            </button>
+                            <div id="faqContent-3" class="hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Absolutely! We love working with indie game journalists, technical breakdown channels, and streamers. Reach out directly to <span class="font-mono text-blue-600 dark:text-blue-400">contact@inka.games</span> for our press kit, high-res logos, and developer interviews.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Direct Studio Contact & Bug Dispatch Card -->
+                <div class="lg:col-span-6">
+                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-3xl p-7 sm:p-10 border border-slate-200/90 dark:border-slate-700/80 shadow-notarize">
+                        <div class="flex items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h3 class="font-display font-extrabold text-2xl text-slate-900 dark:text-white">Direct Studio Dispatch</h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                                    Send a message, playtest request, or bug report straight to our team.
+                                </p>
+                            </div>
+                            <button onclick="copyStudioEmail()" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 hover:border-blue-500 transition-colors flex items-center gap-1.5 shrink-0">
+                                <i class="ph-bold ph-copy"></i>
+                                <span>contact@inka.games</span>
+                            </button>
+                        </div>
+
+                        <form id="studioContactForm" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Your Name / Handle</label>
+                                    <input type="text" id="contactName" required placeholder="Alex Mercer" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Email Address</label>
+                                    <input type="email" id="contactEmail" required placeholder="alex@example.com" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Dispatch Category</label>
+                                <select id="contactTopic" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-600">
+                                    <option value="Playtest Access Request">Playtest Access Request (Paint Strike 3D / Dead Ignition)</option>
+                                    <option value="Bug Report / Technical Feedback">Bug Report / Technical Telemetry Feedback</option>
+                                    <option value="Press / Creator Inquiry">Press Kit & Creator Inquiry</option>
+                                    <option value="Engineering / Art Collaboration">Engineering / Art Collaboration</option>
+                                    <option value="General Studio Inquiry">General Studio Inquiry</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Message / Hardware Specs</label>
+                                <textarea id="contactMessage" rows="4" required placeholder="Tell us what's on your mind, or share your GPU/Mobile specs if requesting playtest access..." class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"></textarea>
+                            </div>
+
+                            <div class="pt-2 flex flex-wrap items-center justify-between gap-4">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                    <i class="ph-fill ph-lock-key text-emerald-500"></i>
+                                    Direct to <strong class="font-mono text-slate-700 dark:text-slate-200">contact@inka.games</strong>
+                                </span>
+                                <button type="submit" class="px-6 py-3.5 rounded-xl font-display font-bold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 transition-all flex items-center gap-2">
+                                    <span>Prepare & Send Dispatch</span>
+                                    <i class="ph-bold ph-paper-plane-tilt"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- FOOTER (NOTARIZE STRUCTURED MULTI-COLUMN EDITORIAL FOOTER)            -->
+    <!-- ===================================================================== -->
+    <footer class="bg-slate-950 text-slate-400 border-t border-slate-800/80 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800/80">
+                
+                <!-- Col 1-2: Brand & Mission -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <path d="M12 3L4 9v11h6v-6h4v6h6V9l-8-6z" stroke-linejoin="round"/>
+                                <circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/>
+                            </svg>
+                        </div>
+                        <span class="font-display font-extrabold text-xl text-white tracking-tight">INKA STUDIO</span>
+                    </div>
+                    <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
+                        Independent game development studio engineering <strong>Paint Strike 3D</strong> and <strong>Dead Ignition</strong> with custom C# architecture, tactile physics, and zero corporate bloat.
+                    </p>
+                    <div class="pt-1 flex items-center gap-3">
+                        <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                            <i class="ph-bold ph-x-logo"></i> X (Twitter)
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                            <i class="ph-bold ph-instagram-logo"></i> Instagram
+                        </a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                            <i class="ph-bold ph-youtube-logo"></i> YouTube
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Col 3: Flagship Games -->
+                <div class="space-y-2.5 text-sm">
+                    <div class="font-mono text-xs uppercase tracking-wider text-white font-semibold mb-3">Flagship Games</div>
+                    <button onclick="openGameModal('paint')" class="block hover:text-white transition-colors">Paint Strike 3D</button>
+                    <button onclick="openGameModal('dead')" class="block hover:text-white transition-colors">Dead Ignition</button>
+                    <a href="#architecture" class="block hover:text-white transition-colors">HydroCore Fluid Shader</a>
+                    <a href="#architecture" class="block hover:text-white transition-colors">Acoustic Threat Engine</a>
+                </div>
+
+                <!-- Col 4: Studio -->
+                <div class="space-y-2.5 text-sm">
+                    <div class="font-mono text-xs uppercase tracking-wider text-white font-semibold mb-3">Studio & Dev</div>
+                    <a href="#about" class="block hover:text-white transition-colors">About Inka Studio</a>
+                    <a href="#architecture" class="block hover:text-white transition-colors">How We Craft Games</a>
+                    <a href="#newswire" class="block hover:text-white transition-colors">Newswire & Devlogs</a>
+                    <a href="#careers" class="block hover:text-white transition-colors">Careers & Collaboration</a>
+                </div>
+
+                <!-- Col 5: Direct Contact -->
+                <div class="space-y-2.5 text-sm">
+                    <div class="font-mono text-xs uppercase tracking-wider text-white font-semibold mb-3">Direct Channels</div>
+                    <button onclick="copyStudioEmail()" class="font-mono text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1.5">
+                        <i class="ph-bold ph-copy"></i> contact@inka.games
+                    </button>
+                    <a href="#support" class="block hover:text-white transition-colors">Playtest Signups</a>
+                    <a href="#support" class="block hover:text-white transition-colors">Bug Report Dispatch</a>
+                    <span class="block text-xs text-slate-500 pt-2">inkastudio.pages.dev</span>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+                <div>© 2026 Inka Studio. All rights reserved. Engineered for players.</div>
+                <div class="flex items-center gap-4">
+                    <span class="inline-flex items-center gap-1.5 text-emerald-400 font-mono">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        All Studio Systems Nominal
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- INTERACTIVE MODAL 1: GAME ARCHITECTURE & SPECS INSPECTOR              -->
+    <!-- ===================================================================== -->
+    <div id="gameSpecsModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl animate-fadeIn">
+            <div id="modalHeaderBanner" class="px-6 py-5 bg-slate-900 text-white flex items-center justify-between">
+                <div>
+                    <span id="modalGameTag" class="font-mono text-[11px] uppercase tracking-wider text-blue-400">TECHNICAL SPECIFICATION DOSSIER</span>
+                    <h3 id="modalGameTitle" class="font-display font-extrabold text-2xl mt-0.5">Paint Strike 3D</h3>
+                </div>
+                <button onclick="closeGameModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8 space-y-6 max-h-[80vh] overflow-y-auto">
+                <p id="modalGameSummary" class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="modalSpecsGrid">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-800/70 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-2">
+                    <div class="text-xs font-mono uppercase text-blue-600 dark:text-blue-400 font-bold">Core Engineering Pillar</div>
+                    <p id="modalEngineeringNote" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    <button onclick="closeGameModal(); document.getElementById('support').scrollIntoView({behavior:'smooth'});" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+                        Request Playtest Access →
+                    </button>
+                    <button onclick="closeGameModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        Close Inspector
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NAVBAR -->
-    <nav id="navbar">
-        <a href="#home" class="logo-text">INKA</a>
-        <div class="hamburger" id="hamburger">
-            <div></div><div></div><div></div>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#games">Games</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#newswire">Newswire</a></li>
-            <li><a href="#career">Career</a></li>
-            <li><a href="#support">Support</a></li>
-        </ul>
-    </nav>
-
-    <!-- CINEMATIC VIDEO HERO -->
-    <header id="home" class="hero">
-        <video id="heroBgVideo" class="hero-video" autoplay loop muted playsinline webkit-playsinline>
-            <source src="backvideo.mp4" type="video/mp4">
-        </video>
-        <div class="noise-overlay"></div>
-        <div class="hero-content">
-            <img src="backimage.png" alt="Inka Games" onerror="this.style.display='none'">
-            <div class="hero-subtitle-box">
-                <h2>Official Studio Website</h2>
+    <!-- ===================================================================== -->
+    <!-- INTERACTIVE MODAL 2: NEWSWIRE ARTICLE READER                          -->
+    <!-- ===================================================================== -->
+    <div id="articleModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl">
+            <div class="px-6 py-4 bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <span id="articleModalCategory" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-600 text-white">DEVLOG</span>
+                <button onclick="closeArticleModal()" class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8 space-y-4 max-h-[80vh] overflow-y-auto">
+                <div id="articleModalDate" class="text-xs font-mono text-slate-400"></div>
+                <h3 id="articleModalTitle" class="font-display font-extrabold text-2xl text-slate-900 dark:text-white"></h3>
+                <div id="articleModalBody" class="space-y-4 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed"></div>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- GAMES SECTION -->
-    <section id="games">
-        <div class="section-header">
-            <h2>Our Games</h2>
-            <p>Built from scratch. Engineered for tension.</p>
-        </div>
-        <div class="hybrid-container">
-            <div class="card">
-                <img src="https://via.placeholder.com/400x200/e2e8f0/64748b?text=Paint+Strike" alt="Paint Strike 3D" class="game-icon">
-                <h3>Paint Strike 3D</h3>
-                <p>A fast-paced tactical shooter. Control zones using experimental physics-based paint mechanics. Coordinate with your team to dominate the arena. (In Progress)</p>
-                <div class="store-badges">
-                    <a href="#" class="store-badge-img"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play"></a>
-                    <a href="#" class="store-badge-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store"></a>
+    <!-- ===================================================================== -->
+    <!-- INTERACTIVE MODAL 3: CAREER / COLLABORATION PITCH GENERATOR           -->
+    <!-- ===================================================================== -->
+    <div id="careerModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
+            <div class="px-6 py-5 bg-slate-900 text-white flex items-center justify-between">
+                <div>
+                    <div class="text-[11px] font-mono text-emerald-400 uppercase">INKA STUDIO TALENT DISPATCH</div>
+                    <h3 id="careerModalRole" class="font-display font-bold text-lg mt-0.5">Role Application</h3>
                 </div>
+                <button onclick="closeCareerModal()" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
+                    <i class="ph-bold ph-x"></i>
+                </button>
             </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/400x200/e2e8f0/64748b?text=Dead+Ignition" alt="Dead Ignition" class="game-icon">
-                <h3>Dead Ignition</h3>
-                <p>Our flagship survival horror architecture. The grid failed, but the core is still spinning. Built entirely from scratch for maximum tension on mobile devices. (In Progress)</p>
-                <div class="store-badges">
-                    <a href="#" class="store-badge-img"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play"></a>
-                    <a href="#" class="store-badge-img"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store"></a>
+            <form onsubmit="submitCareerPitch(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-300 mb-1">Your Name</label>
+                    <input type="text" id="careerName" required placeholder="Your Name" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
                 </div>
-            </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-300 mb-1">Portfolio / GitHub / ArtStation URL</label>
+                    <input type="url" id="careerLink" required placeholder="https://github.com/yourhandle" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-300 mb-1">Short Pitch / Relevant Experience</label>
+                    <textarea id="careerNotes" rows="3" required placeholder="Tell us about a system, shader, or project you're proud of..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white"></textarea>
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeCareerModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-500">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white">Copy & Open Email Client →</button>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
 
-    <!-- ABOUT US SECTION -->
-    <section id="about">
-        <div class="about-content">
-            <div class="section-header">
-                <h2>About Us</h2>
-            </div>
-            <p>We are an independent game development studio built on a zero-budget, DIY ethos. We believe in raw gameplay, atmospheric immersion, and cutting out the corporate bloat.</p>
-            <p>From playful physics shooters to deeply disturbing survival horror, we build worlds we want to get lost in. We handle everything from engine architecture to marketing in-house. Based in India, operating globally.</p>
-        </div>
-    </section>
+    <!-- Custom Toast Notification Box (No alert() used!) -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden items-center gap-3 px-5 py-3.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-2xl border border-slate-700 dark:border-slate-200 transition-all">
+        <i class="ph-fill ph-check-circle text-emerald-400 dark:text-emerald-600 text-xl"></i>
+        <span id="toastMessage" class="text-xs sm:text-sm font-semibold">Copied to clipboard!</span>
+    </div>
 
-    <!-- NEWSWIRE SECTION -->
-    <section id="newswire">
-        <div class="section-header">
-            <h2>Newswire</h2>
-            <p>Studio updates and development logs.</p>
-        </div>
-        <div class="hybrid-container">
-            <div class="card">
-                <h3>Dead Ignition Announced</h3>
-                <p>Development has officially begun on our flagship mobile horror experience. The grid is down, and the core is spinning.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Dead Ignition Announced" data-content="<p>We are thrilled to announce that development on 'Dead Ignition' has officially started. This title is designed from the ground up to push the boundaries of mobile survival horror.</p><p>Players will be tasked with managing degrading resources—batteries that leak, weapons that jam, and lights that flicker—while exploring the ruins of a collapsed grid. We will be sharing alpha footage on our social media soon.</p>">Learn More</button>
-            </div>
-            <div class="card">
-                <h3>Paint Strike 3D Started</h3>
-                <p>Our physics-based tactical shooter is moving into the prototyping phase. Fast-paced, colorful, and highly competitive.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Paint Strike 3D Started" data-content="<p>To contrast our dark horror titles, we are kicking off prototyping for 'Paint Strike 3D'. This is a fast-paced multiplayer shooter focused on territory control through dynamic fluid physics.</p><p>We are currently stress-testing the network code to handle real-time paint splatters across mobile devices without dropping frames. We'll be needing closed-beta testers soon, so make sure to follow us on Twitter/X!</p>">Learn More</button>
-            </div>
-            <div class="card">
-                <h3>Career Opportunities</h3>
-                <p>We are expanding the core team. Check our careers section for open positions across programming and design.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="We Are Expanding" data-content="<p>Inka Games is growing. As we scale up production on both of our primary titles, we need exceptional talent to join our ranks.</p><p>We operate on a zero-corporate-bloat philosophy. If you join us, you will have a direct impact on the games we make. Please review the specific roles in our Career section below, or reach out directly if you have a unique skill set to pitch.</p>">Learn More</button>
-            </div>
-            <div class="card">
-                <h3>Community & Feedback</h3>
-                <p>We are highly active on social media. Follow us, show your support, and give us direct feedback on our progress.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Community Feedback" data-content="<p>Game development doesn't happen in a vacuum. We want to build games that you actually want to play, which means we need your input from day one.</p><p>Follow us on Twitter/X, Instagram, and YouTube. We regularly post behind-the-scenes content, engine tests, and polls. Drop us an email or a DM with your thoughts—we read everything.</p>">Learn More</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- CAREER SECTION -->
-    <section id="career">
-        <div class="section-header">
-            <h2>Career</h2>
-            <p>Build the future with us.</p>
-        </div>
-        <div class="hybrid-container">
-            <div class="card">
-                <h3>Unity Programmer</h3>
-                <p>Looking for an experienced Unity developer to handle core gameplay loops and custom mobile optimizations.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Role: Unity Programmer" data-content="<p>We are currently in need of a highly skilled <strong>Unity Programmer</strong> to join our core team and help shape our upcoming projects.</p><p>Responsibilities include writing clean, efficient C# code, optimizing physics for mobile devices, and working directly with the art team to implement assets.</p><p>Please include links to shipped projects or code repositories in your application.</p>">Apply Now</button>
-            </div>
-            <div class="card">
-                <h3>3D Artist</h3>
-                <p>Seeking a 3D modeler capable of creating optimized assets for mobile, spanning both stylized and realistic aesthetics.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Role: 3D Artist" data-content="<p>We are currently in need of a versatile <strong>3D Artist</strong> to join our core team.</p><p>You will be responsible for modeling, UV mapping, and texturing assets for both 'Paint Strike 3D' (stylized) and 'Dead Ignition' (gritty horror). Strong understanding of mobile polygon budgets is required.</p><p>Please attach a link to your ArtStation or portfolio.</p>">Apply Now</button>
-            </div>
-            <div class="card">
-                <h3>Graphic Designer</h3>
-                <p>Looking for a designer to handle UI/UX, marketing materials, and brand identity with a clean, high-contrast style.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Role: Graphic Designer" data-content="<p>We are currently in need of a sharp <strong>Graphic Designer</strong> to join our core team.</p><p>Your role will encompass everything from in-game UI design to crafting promotional assets for the App Store and our social channels. We favor clean, minimalist, and high-contrast aesthetics.</p><p>Please send a portfolio showcasing relevant digital design work.</p>">Apply Now</button>
-            </div>
-            <div class="card card-accent">
-                <h3>Open Application</h3>
-                <p>Don't see your specific role? We are always looking for exceptional, self-motivated talent. Pitch yourself to us.</p>
-                <button class="btn-ui trigger-modal" style="margin-top: auto;" data-title="Open Application" data-content="<p>If you have skills in audio engineering, community management, narrative design, or anything else that could elevate our studio, we want to hear from you.</p><p>Send us an email detailing what you do, why you want to work with Inka Games, and how you can contribute to our current lineup of games.</p>">Contact Us</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEWSLETTER -->
-    <section id="newsletter">
-        <h2>Stay Updated</h2>
-        <p>Get exclusive development updates and early playtest access.</p>
-        <form class="form-group" onsubmit="event.preventDefault();">
-            <input type="email" placeholder="Enter your email address" required>
-            <button type="submit">Subscribe</button>
-        </form>
-    </section>
-
-    <!-- SUPPORT / FOOTER -->
-    <footer id="support">
-        <div class="footer-content">
-            <h2>Contact Us</h2>
-            <p style="color: #64748b; margin-bottom: 10px;">For business, careers, or general inquiries:</p>
-            <a href="mailto:contact@inka.games" class="footer-email">contact@inka.games</a>
-            
-            <div class="social-links">
-                <a href="#" class="social-icon" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="#" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                <!-- YOUTUBE BUTTON ADDED -->
-                <a href="#" class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            </div>
-        </div>
-        <p class="copyright">&copy; 2026 Inka Games. All rights reserved.</p>
-    </footer>
-
-    <!-- INTERACTIVE SCRIPTS -->
+    <!-- ===================================================================== -->
+    <!-- COMPLETE INTERACTIVE APPLICATION LOGIC                                -->
+    <!-- ===================================================================== -->
     <script>
-        // 1. Mobile Menu Logic
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        
-        hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
-        navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); }); });
-
-        // 2. Fixed Modal System with Layout Shift Compensation
-        const mainModal = document.getElementById('mainModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
-        const body = document.body;
-        const navbar = document.getElementById('navbar');
-
-        // Calculate scrollbar width dynamically
-        function getScrollbarWidth() {
-            return window.innerWidth - document.documentElement.clientWidth;
+        /* ------------------------------------------------------------------
+           1. THEME SWITCHER (NOTARIZE CRISP LIGHT DEFAULT + STUDIO DARK)
+        ------------------------------------------------------------------ */
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const isDark = htmlEl.classList.toggle('dark');
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            if (isDark) {
+                icon.className = 'ph-fill ph-sun text-base text-amber-400';
+                label.textContent = 'Notarize Light';
+                showToast('Switched to Inka Studio Dark Mode');
+            } else {
+                icon.className = 'ph ph-moon-stars text-base text-blue-600';
+                label.textContent = 'Studio Dark';
+                showToast('Switched to Notarize Crisp Light Mode');
+            }
         }
 
-        document.querySelectorAll('.trigger-modal').forEach(btn => {
-            btn.addEventListener('click', () => {
-                modalTitle.textContent = btn.getAttribute('data-title');
-                modalContent.innerHTML = btn.getAttribute('data-content');
-                
-                const scrollbarWidth = getScrollbarWidth();
-                
-                // Add padding to prevent page jumping when scrollbar disappears
-                body.style.paddingRight = `${scrollbarWidth}px`;
-                navbar.style.paddingRight = `calc(5% + ${scrollbarWidth}px)`;
-                
-                mainModal.classList.add('active');
-                body.classList.add('modal-open'); 
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* ------------------------------------------------------------------
+           2. TOAST NOTIFICATION & CLIPBOARD HELPER
+        ------------------------------------------------------------------ */
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const text = document.getElementById('toastMessage');
+            text.textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3400);
+        }
+
+        function copyTextToClipboard(text, customMessage) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(customMessage || `Copied ${text} to clipboard!`);
+            } catch (err) {
+                showToast('Ready: ' + text);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function copyStudioEmail() {
+            copyTextToClipboard('contact@inka.games', 'Copied contact@inka.games to clipboard!');
+        }
+
+        /* ------------------------------------------------------------------
+           3. HERO INTERACTIVE LIVE CANVAS SANDBOX (PAINT STRIKE & DEAD IGNITION)
+        ------------------------------------------------------------------ */
+        let currentHeroMode = 'paint'; // 'paint' | 'dead'
+        const canvas = document.getElementById('heroSimCanvas');
+        const ctx = canvas.getContext('2d');
+        let splats = [];
+        let anomalies = [];
+        let pointer = { x: 220, y: 140, active: false };
+
+        function resizeHeroCanvas() {
+            const container = document.getElementById('heroCanvasContainer');
+            if (!container) return;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            if (splats.length === 0) initHeroSimulation();
+        }
+
+        function initHeroSimulation() {
+            splats = [];
+            // Seed initial turf splats for Paint Strike 3D
+            for (let i = 0; i < 18; i++) {
+                splats.push({
+                    x: Math.random() * (canvas.width || 500),
+                    y: Math.random() * (canvas.height || 300),
+                    r: 18 + Math.random() * 26,
+                    team: i % 2 === 0 ? 'blue' : 'red',
+                    alpha: 0.9
+                });
+            }
+            // Seed hidden acoustic hazards for Dead Ignition
+            anomalies = [
+                { x: 120, y: 90, radius: 14, phase: 0, label: 'ACOUSTIC STALKER [84dB]' },
+                { x: 340, y: 180, radius: 16, phase: 2, label: 'GENERATOR FAULT [62dB]' },
+                { x: 240, y: 110, radius: 12, phase: 4, label: 'BIO-SIGNAL DETECTED' }
+            ];
+            updatePaintMetrics();
+        }
+
+        function addPaintSplat(x, y, team, radiusOverride) {
+            const r = radiusOverride || (18 + Math.random() * 20);
+            splats.push({ x, y, r, team });
+            // Add tiny satellite droplets
+            for (let i = 0; i < 4; i++) {
+                const ang = Math.random() * Math.PI * 2;
+                const dist = r + 4 + Math.random() * 14;
+                splats.push({
+                    x: x + Math.cos(ang) * dist,
+                    y: y + Math.sin(ang) * dist,
+                    r: 3 + Math.random() * 5,
+                    team
+                });
+            }
+            if (splats.length > 160) splats.splice(0, 10);
+            updatePaintMetrics();
+        }
+
+        function updatePaintMetrics() {
+            if (currentHeroMode !== 'paint') return;
+            let blueArea = 0;
+            let redArea = 0;
+            splats.forEach(s => {
+                if (s.team === 'blue') blueArea += s.r * s.r;
+                else redArea += s.r * s.r;
             });
-        });
+            const total = Math.max(1, blueArea + redArea);
+            const bluePct = Math.min(92, Math.max(8, Math.round((blueArea / total) * 100)));
+            const redPct = 100 - bluePct;
 
-        window.closeModal = function() {
-            mainModal.classList.remove('active');
-            body.classList.remove('modal-open'); 
-            
-            // Remove padding compensations
-            setTimeout(() => {
-                body.style.paddingRight = '0px';
-                navbar.style.paddingRight = '5%';
-            }, 300); // Wait for transition to finish
+            document.getElementById('simMetricLeft').textContent = `BLUE SQUAD: ${bluePct}%`;
+            document.getElementById('simMetricRight').textContent = `CRIMSON: ${redPct}%`;
+            const bar = document.getElementById('simProgressBar');
+            bar.style.width = `${bluePct}%`;
+            bar.className = 'h-full bg-blue-500 transition-all duration-200';
         }
 
-        mainModal.addEventListener('click', (e) => {
-            if (e.target === mainModal) closeModal();
+        // Pointer interactions on Hero Canvas
+        canvas.addEventListener('mousedown', (e) => {
+            pointer.active = true;
+            const rect = canvas.getBoundingClientRect();
+            pointer.x = e.clientX - rect.left;
+            pointer.y = e.clientY - rect.top;
+            if (currentHeroMode === 'paint') {
+                addPaintSplat(pointer.x, pointer.y, 'blue');
+            }
         });
-        
-        // 3. Video bruteforce fix
-        window.addEventListener('DOMContentLoaded', () => {
-            const vid = document.getElementById('heroBgVideo');
-            if (vid) { vid.play().catch(e => console.log("Waiting for user interaction to play video.")); }
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            pointer.x = e.clientX - rect.left;
+            pointer.y = e.clientY - rect.top;
+            if (pointer.active && currentHeroMode === 'paint') {
+                addPaintSplat(pointer.x, pointer.y, 'blue', 14);
+            }
         });
+        window.addEventListener('mouseup', () => { pointer.active = false; });
+
+        canvas.addEventListener('touchstart', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            pointer.x = touch.clientX - rect.left;
+            pointer.y = touch.clientY - rect.top;
+            if (currentHeroMode === 'paint') {
+                addPaintSplat(pointer.x, pointer.y, 'blue');
+            }
+        }, { passive: true });
+
+        function triggerSimAction() {
+            if (currentHeroMode === 'paint') {
+                for (let i = 0; i < 6; i++) {
+                    addPaintSplat(
+                        60 + Math.random() * (canvas.width - 120),
+                        50 + Math.random() * (canvas.height - 100),
+                        'blue',
+                        28
+                    );
+                }
+                showToast('Deployed Hydro Paint Bomb! (+Turf Control)');
+            } else {
+                // Acoustic pulse ping in Dead Ignition
+                pointer.x = anomalies[Math.floor(Math.random() * anomalies.length)].x;
+                pointer.y = anomalies[Math.floor(Math.random() * anomalies.length)].y;
+                showToast('Acoustic Sonar Ping emitted — Threat revealed!');
+            }
+        }
+
+        function switchHeroPreview(mode) {
+            currentHeroMode = mode;
+            const tabPaint = document.getElementById('heroTabPaint');
+            const tabDead = document.getElementById('heroTabDead');
+            const badge = document.getElementById('heroSimBadge');
+            const instruction = document.getElementById('heroSimInstruction');
+            const title = document.getElementById('heroCardTitle');
+            const status = document.getElementById('heroCardStatus');
+            const desc = document.getElementById('heroCardDesc');
+            const actionBtn = document.getElementById('heroSimActionBtn');
+            const floatingStat = document.getElementById('floatingStatText');
+
+            if (mode === 'paint') {
+                tabPaint.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-sm transition-all flex items-center gap-1.5';
+                tabDead.className = 'px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5';
+                badge.textContent = 'LIVE INTERACTIVE SPLAT SIM';
+                badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-blue-600/90 text-white backdrop-blur-md shadow-sm';
+                instruction.textContent = 'Click or drag canvas to fire paint!';
+                title.textContent = 'Paint Strike 3D — Fluid Arena';
+                status.textContent = 'Pre-Alpha Sandbox';
+                desc.textContent = 'Real-time UV surface splat mapping, hydro-slide velocity physics, and 4v4 turf control.';
+                actionBtn.innerHTML = '<i class="ph-bold ph-drop text-blue-600"></i><span>Paint Bomb</span>';
+                floatingStat.textContent = 'Fluid Grid: 60Hz Locked';
+                updatePaintMetrics();
+            } else {
+                tabDead.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-rose-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+                tabPaint.className = 'px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5';
+                badge.textContent = 'VOLUMETRIC & ACOUSTIC RADAR SIM';
+                badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-rose-600/90 text-white backdrop-blur-md shadow-sm';
+                instruction.textContent = 'Move cursor to aim flashlight & detect threats';
+                title.textContent = 'Dead Ignition — Quarantine Sector';
+                status.textContent = 'Survival Prototype';
+                desc.textContent = 'Ray-marched flashlight occlusion, decibel propagation AI, and diegetic power management.';
+                actionBtn.innerHTML = '<i class="ph-bold ph-waveform text-rose-500"></i><span>Sonar Ping</span>';
+                floatingStat.textContent = 'Acoustic AI: Active Listen';
+                document.getElementById('simMetricLeft').textContent = 'AMBIENT NOISE: 44 dB';
+                document.getElementById('simMetricRight').textContent = 'BATTERY: 86%';
+                const bar = document.getElementById('simProgressBar');
+                bar.style.width = '86%';
+                bar.className = 'h-full bg-amber-400 transition-all duration-300';
+            }
+        }
+
+        let tickCounter = 0;
+        function animateHeroCanvas() {
+            tickCounter++;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            if (currentHeroMode === 'paint') {
+                // Occasional autonomous Crimson bot paint splat so arena feels alive
+                if (tickCounter % 95 === 0) {
+                    addPaintSplat(
+                        40 + Math.random() * (w - 80),
+                        40 + Math.random() * (h - 80),
+                        'red',
+                        18
+                    );
+                }
+
+                // Draw dark arena grid
+                ctx.fillStyle = '#0B1120';
+                ctx.fillRect(0, 0, w, h);
+
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < w; x += 28) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+                }
+                for (let y = 0; y < h; y += 28) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+                }
+
+                // Render paint splats
+                splats.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = s.team === 'blue' ? 'rgba(37, 99, 235, 0.88)' : 'rgba(225, 29, 72, 0.85)';
+                    ctx.fill();
+                });
+
+                // Render cursor crosshair
+                ctx.strokeStyle = '#60A5FA';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(pointer.x, pointer.y, 12, 0, Math.PI * 2);
+                ctx.stroke();
+
+            } else {
+                // DEAD IGNITION VOLUMETRIC FLASHLIGHT & ACOUSTIC RADAR MODE
+                ctx.fillStyle = '#05070E';
+                ctx.fillRect(0, 0, w, h);
+
+                // Subtle industrial floor grid
+                ctx.strokeStyle = 'rgba(244, 63, 94, 0.08)';
+                for (let x = 0; x < w; x += 36) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+                }
+
+                // Volumetric Flashlight Radial Glow at pointer
+                const grad = ctx.createRadialGradient(pointer.x, pointer.y, 8, pointer.x, pointer.y, 135);
+                grad.addColorStop(0, 'rgba(253, 230, 138, 0.32)');
+                grad.addColorStop(0.5, 'rgba(251, 191, 36, 0.10)');
+                grad.addColorStop(1, 'rgba(5, 7, 14, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(pointer.x, pointer.y, 135, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Check proximity to acoustic anomalies
+                let maxDb = 38;
+                anomalies.forEach((a, idx) => {
+                    const dx = pointer.x - a.x;
+                    const dy = pointer.y - a.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const pulse = (tickCounter * 0.6 + idx * 20) % 45;
+
+                    // Draw acoustic soundwave rings
+                    ctx.strokeStyle = dist < 125 ? 'rgba(244, 63, 94, 0.65)' : 'rgba(244, 63, 94, 0.16)';
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.arc(a.x, a.y, pulse, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    if (dist < 120) {
+                        maxDb = Math.max(maxDb, Math.round(92 - dist * 0.35));
+                        ctx.fillStyle = '#F43F5E';
+                        ctx.beginPath();
+                        ctx.arc(a.x, a.y, 5, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.font = '10px "JetBrains Mono", monospace';
+                        ctx.fillStyle = '#FDA4AF';
+                        ctx.fillText(a.label, a.x + 10, a.y + 3);
+                    }
+                });
+
+                if (tickCounter % 15 === 0) {
+                    document.getElementById('simMetricLeft').textContent = `ACOUSTIC SENSOR: ${maxDb} dB`;
+                }
+            }
+
+            requestAnimationFrame(animateHeroCanvas);
+        }
+
+        /* ------------------------------------------------------------------
+           4. "HOW WE CRAFT GAMES" 4-STEP INTERACTIVE PROCESS SWITCHER
+        ------------------------------------------------------------------ */
+        const processData = [
+            {
+                tag: 'STAGE 01 // GREYBOX TELEMETRY',
+                file: 'FluidController.cs',
+                title: 'Sub-Millisecond Input & Velocity Verification',
+                subtitle: 'Before any 3D character mesh is imported, our movement controller is stress-tested across 10,000 simulated collision frames.',
+                code: `<span class="text-blue-400">[BurstCompile(FloatPrecision.Standard)]</span>
+<span class="text-rose-400">public struct</span> <span class="text-amber-300">SplatSurfaceJob</span> : IJobParallelFor {
+    <span class="text-slate-500">// Deterministic zero-allocation surface sampling</span>
+    <span class="text-rose-400">public void</span> <span class="text-emerald-400">Execute</span>(<span class="text-rose-400">int</span> index) {
+        <span class="text-rose-400">float</span> inkDensity = SurfaceGrid[index];
+        VelocityMultiplier[index] = math.lerp(<span class="text-amber-300">0.65f</span>, <span class="text-amber-300">1.35f</span>, inkDensity);
+    }
+}`,
+                m1Label: 'Input-to-Photon Latency',
+                m1Val: '11.4 ms (Target < 16.6ms)',
+                m1Width: '88%',
+                m2Label: 'GC Heap Allocations Per Frame',
+                m2Val: '0.0 KB (Zero-Alloc Loop)',
+                m2Width: '96%'
+            },
+            {
+                tag: 'STAGE 02 // C# & SHADER PIPELINE',
+                file: 'UVSplatCompute.hlsl',
+                title: 'Lightweight Compute Shaders & Zero GC Stutter',
+                subtitle: 'We bypass heavy middleware in favor of direct UV-space compute masks and pooled struct arrays.',
+                code: `<span class="text-blue-400">[numthreads(8, 8, 1)]</span>
+<span class="text-rose-400">void</span> <span class="text-emerald-400">CSPaintCoverage</span> (uint3 id : SV_DispatchThreadID) {
+    <span class="text-slate-500">// Bitpacked turf ownership evaluation in 0.35ms</span>
+    float4 mask = SplatTexture[id.xy];
+    uint teamBit = (mask.b > mask.r) ? <span class="text-amber-300">1u</span> : <span class="text-amber-300">2u</span>;
+    InterlockedAdd(TeamScoreBuffer[teamBit], <span class="text-amber-300">1</span>);
+}`,
+                m1Label: 'Shader Pass Execution Time',
+                m1Val: '0.38 ms on Mobile GPU',
+                m1Width: '94%',
+                m2Label: 'VRAM Texture Compression Efficiency',
+                m2Val: 'ASTC 6x6 (< 420 MB Total)',
+                m2Width: '91%'
+            },
+            {
+                tag: 'STAGE 03 // DIEGETIC ATMOSPHERE',
+                file: 'AcousticRaycaster.cs',
+                title: 'Acoustic Threat Propagation & Diegetic Immersion',
+                subtitle: 'In Dead Ignition, every sound ray bounces off corridor geometry to inform predator AI without artificial HUD markers.',
+                code: `<span class="text-rose-400">public float</span> <span class="text-emerald-400">CalculateOccludedDecibels</span>(Vector3 origin, Vector3 listener) {
+    <span class="text-rose-400">int</span> hits = Physics.RaycastNonAlloc(origin, dir, _wallBuffer, dist, WallMask);
+    <span class="text-rose-400">float</span> attenuation = Mathf.Pow(<span class="text-amber-300">0.72f</span>, hits);
+    <span class="text-rose-400">return</span> BaseEmissionDb * attenuation / Mathf.Max(<span class="text-amber-300">1f</span>, dist);
+}`,
+                m1Label: '3D Acoustic Ray Bounces / Tick',
+                m1Val: '128 Rays (0.21 ms CPU)',
+                m1Width: '92%',
+                m2Label: 'HUD Screen Clutter Index',
+                m2Val: '0% (100% Diegetic World Signals)',
+                m2Width: '100%'
+            },
+            {
+                tag: 'STAGE 04 // TELEMETRY & PLAYTESTING',
+                file: 'PlaytestTelemetry.json',
+                title: 'Community-Driven Balance & Open Roadmaps',
+                subtitle: 'Automated heatmaps from weekend playtests show us exactly where choke-points or survival loops need tuning.',
+                code: `{
+  <span class="text-blue-400">"buildVersion"</span>: <span class="text-amber-300">"v0.8.4-RC2"</span>,
+  <span class="text-blue-400">"avgMatchBalance"</span>: <span class="text-amber-300">"50.8% Blue / 49.2% Crimson"</span>,
+  <span class="text-blue-400">"99thPercentileFrameTime"</span>: <span class="text-emerald-400">"15.9ms"</span>,
+  <span class="text-blue-400">"communityPatchNotes"</span>: <span class="text-amber-300">"Hydro-slide friction reduced by 12%"</span>
+}`,
+                m1Label: 'Playtest Frame Pacing Stability',
+                m1Val: '99.4% Locked 60 FPS',
+                m1Width: '97%',
+                m2Label: 'Community Feedback Turnaround',
+                m2Val: '< 72 Hours per Patch Cycle',
+                m2Width: '90%'
+            }
+        ];
+
+        function selectProcessStep(index) {
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`stepBtn-${i}`);
+                const badge = document.getElementById(`stepBadge-${i}`);
+                if (i === index) {
+                    btn.className = 'w-full text-left p-6 rounded-2xl border-2 border-blue-600 bg-blue-50/40 dark:bg-blue-950/25 transition-all flex items-start gap-4 group';
+                    badge.className = 'font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-blue-600 text-white shrink-0';
+                } else {
+                    btn.className = 'w-full text-left p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 transition-all flex items-start gap-4 group';
+                    badge.className = 'font-mono font-bold text-sm px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0';
+                }
+            }
+            const d = processData[index];
+            document.getElementById('inspectorTag').textContent = d.tag;
+            document.getElementById('inspectorFile').textContent = d.file;
+            document.getElementById('inspectorTitle').textContent = d.title;
+            document.getElementById('inspectorSubtitle').textContent = d.subtitle;
+            document.getElementById('inspectorCode').innerHTML = `<code>${d.code}</code>`;
+            document.getElementById('metric1Label').textContent = d.m1Label;
+            document.getElementById('metric1Val').textContent = d.m1Val;
+            document.getElementById('metric1Bar').style.width = d.m1Width;
+            document.getElementById('metric2Label').textContent = d.m2Label;
+            document.getElementById('metric2Val').textContent = d.m2Val;
+            document.getElementById('metric2Bar').style.width = d.m2Width;
+        }
+
+        /* ------------------------------------------------------------------
+           5. NEWSWIRE & DEVLOG DATA + FILTERING + MODAL READER
+        ------------------------------------------------------------------ */
+        const newswireArticles = [
+            {
+                id: 0,
+                category: 'Paint Strike 3D',
+                date: 'DEVLOG #14 • 5 MIN READ',
+                title: 'Engineering Real-Time UV Surface Splat Shaders at 60 FPS',
+                excerpt: 'How we achieved crisp, zero-lag paint territory calculation across complex 3D arena geometry without blowing up mobile memory bandwidth.',
+                content: [
+                    'In a territory-control shooter like Paint Strike 3D, the surface of the arena is not just scenery—it is the primary game state. Every projectile impact must immediately alter movement friction, visual masks, and team coverage percentages.',
+                    'Instead of spawning thousands of overlapping decal meshes (which quickly destroys draw-call budgets), our pipeline projects projectile impacts directly into a secondary lightmap-aligned UV render target.',
+                    'Using a lightweight HLSL compute reduction pass, we tally Blue vs. Crimson coverage in under 0.38ms per frame, ensuring rock-solid 60 FPS performance even during chaotic final-minute turf wars.'
+                ]
+            },
+            {
+                id: 1,
+                category: 'Dead Ignition',
+                date: 'DEVLOG #09 • 4 MIN READ',
+                title: 'Designing Blind Predators: How Acoustic Raycasting Replaces Sight',
+                excerpt: 'Inside Dead Ignition’s decibel propagation grid—where dropping a wrench in a concrete hallway creates real physical sound echoes.',
+                content: [
+                    'Traditional stealth games rely on vision cones that players quickly memorize and exploit. For Dead Ignition, we wanted tension to feel organic and physical.',
+                    'Every action—sprinting on metal grates, cranking a backup generator, or reloading under stress—emits an acoustic wave characterized by decibel intensity and frequency.',
+                    'Our AI listeners sample occluded sound paths across doorways and ventilation shafts, allowing players to intentionally throw flares or trigger distant machinery to lure threats away from locked exits.'
+                ]
+            },
+            {
+                id: 2,
+                category: 'Engineering',
+                date: 'ARCHITECTURE • 6 MIN READ',
+                title: 'Zero Garbage Collection Spikes: Our C# Struct-First Mandate',
+                excerpt: 'Why we banned runtime heap allocations inside our core gameplay loops and how it keeps frame pacing glass-smooth.',
+                content: [
+                    'Nothing ruins a competitive firefight or a tense horror encounter faster than a 45-millisecond garbage collection freeze.',
+                    'At Inka Studio, all hot-path systems—projectile pooling, fluid grid sampling, and audio occlusion—are written using pre-allocated native arrays and C# value types.',
+                    'The result is a flat, predictable frame-time graph that respects mid-tier PCs and mobile thermal envelopes alike.'
+                ]
+            },
+            {
+                id: 3,
+                category: 'Paint Strike 3D',
+                date: 'STUDIO UPDATE • 3 MIN READ',
+                title: 'Closed Alpha Playtest Cohort #2: Map Blockouts & Hydro-Slide Tuning',
+                excerpt: 'What we learned from player heatmaps on our first two symmetrical arena layouts and how you can join the next test session.',
+                content: [
+                    'Over the past month, our early playtest cohort logged ratusan matches inside Arena_HydroDock and Arena_Turbine.',
+                    'Based on telemetry heatmaps, we widened the central catwalk flanks by 18% and increased vertical wall-climb velocity in allied ink so aggressive flankers can punish entrenched snipers.',
+                    'Want to test the next build? Head down to our Support or Careers section and submit a Playtest Access dispatch!'
+                ]
+            }
+        ];
+
+        function renderNewswire(filterCategory = 'all') {
+            const grid = document.getElementById('newswireGrid');
+            const filtered = filterCategory === 'all'
+                ? newswireArticles
+                : newswireArticles.filter(a => a.category === filterCategory);
+
+            grid.innerHTML = filtered.map(article => `
+                <article onclick="openArticleModal(${article.id})" class="cursor-pointer group bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-notarize-hover hover:-translate-y-1 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold ${
+                                article.category === 'Paint Strike 3D' ? 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400' :
+                                article.category === 'Dead Ignition' ? 'bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400' :
+                                'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400'
+                            }">${article.category}</span>
+                            <span class="text-[11px] font-mono text-slate-400">${article.date.split('•')[1]}</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                            ${article.title}
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2.5 leading-relaxed">
+                            ${article.excerpt}
+                        </p>
+                    </div>
+                    <div class="pt-5 mt-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-blue-600 dark:text-blue-400">
+                        <span>Read Full Dispatch</span>
+                        <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function filterNewswire(cat) {
+            document.querySelectorAll('.news-filter-btn').forEach(btn => {
+                if (btn.dataset.filter === cat) {
+                    btn.className = 'news-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-blue-600 text-white shadow-sm transition-all';
+                } else {
+                    btn.className = 'news-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all';
+                }
+            });
+            renderNewswire(cat);
+        }
+
+        function openArticleModal(id) {
+            const art = newswireArticles.find(a => a.id === id);
+            if (!art) return;
+            document.getElementById('articleModalCategory').textContent = art.category;
+            document.getElementById('articleModalDate').textContent = art.date;
+            document.getElementById('articleModalTitle').textContent = art.title;
+            document.getElementById('articleModalBody').innerHTML = art.content.map(p => `<p>${p}</p>`).join('');
+            const modal = document.getElementById('articleModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('articleModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* ------------------------------------------------------------------
+           6. GAME SPECS MODAL INSPECTOR
+        ------------------------------------------------------------------ */
+        const gameSpecsData = {
+            paint: {
+                tag: 'PROJECT CODENAME: HYDROCORE // TACTICAL SHOOTER',
+                title: 'Paint Strike 3D — Technical Specification',
+                summary: 'Paint Strike 3D combines competitive 4v4 arena movement with real-time UV-space fluid coverage. Every surface in the arena dynamically alters player speed, vertical traversal, and tactical sightlines.',
+                specs: [
+                    { label: 'Genre', val: '4v4 Turf Arena Shooter' },
+                    { label: 'Target Frame Rate', val: '60 FPS Locked (PC & Mobile)' },
+                    { label: 'Fluid Resolution', val: '2048² UV Compute Grid' },
+                    { label: 'Netcode Architecture', val: '60Hz Client Prediction' },
+                    { label: 'VRAM Budget', val: '< 380 MB Optimized' },
+                    { label: 'Build Status', val: 'Active Pre-Alpha Testing' }
+                ],
+                note: 'Our custom HydroCore shader evaluates surface ownership on the GPU without CPU readback stalls, allowing instantaneous turf scoring and seamless hydro-slide physics transitions.'
+            },
+            dead: {
+                tag: 'PROJECT CODENAME: BLACKOUT PROTOCOL // SURVIVAL HORROR',
+                title: 'Dead Ignition — Technical Specification',
+                summary: 'Dead Ignition is an atmospheric survival horror experience set inside a dark industrial quarantine sector. Players must manage scarce electrical power and acoustic emissions to survive predators that hunt strictly by sound.',
+                specs: [
+                    { label: 'Genre', val: 'Acoustic Survival Horror' },
+                    { label: 'Lighting Pipeline', val: 'Volumetric Ray-Cone Occlusion' },
+                    { label: 'Threat AI System', val: 'Multi-Bounce Decibel Grid' },
+                    { label: 'User Interface', val: '100% Diegetic World Tools' },
+                    { label: 'Audio Engine', val: 'HRTF 3D Spatial Resonance' },
+                    { label: 'Build Status', val: 'Vertical Slice Production' }
+                ],
+                note: 'Every footstep, generator hum, and flare ignition propagates through a real-time acoustic raycaster that calculates material absorption across concrete walls and steel bulkheads.'
+            }
+        };
+
+        function openGameModal(key) {
+            const d = gameSpecsData[key] || gameSpecsData.paint;
+            document.getElementById('modalGameTag').textContent = d.tag;
+            document.getElementById('modalGameTitle').textContent = d.title;
+            document.getElementById('modalGameSummary').textContent = d.summary;
+            document.getElementById('modalEngineeringNote').textContent = d.note;
+            document.getElementById('modalSpecsGrid').innerHTML = d.specs.map(s => `
+                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <div class="text-[10px] font-mono uppercase text-slate-400">${s.label}</div>
+                    <div class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-0.5">${s.val}</div>
+                </div>
+            `).join('');
+
+            const modal = document.getElementById('gameSpecsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeGameModal() {
+            const modal = document.getElementById('gameSpecsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* ------------------------------------------------------------------
+           7. CAREERS MODAL & FAQ ACCORDION & CONTACT DISPATCH
+        ------------------------------------------------------------------ */
+        let selectedRoleTitle = '';
+        function openCareerModal(role) {
+            selectedRoleTitle = role;
+            document.getElementById('careerModalRole').textContent = role;
+            const modal = document.getElementById('careerModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCareerModal() {
+            const modal = document.getElementById('careerModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function submitCareerPitch(e) {
+            e.preventDefault();
+            const name = document.getElementById('careerName').value;
+            const link = document.getElementById('careerLink').value;
+            const notes = document.getElementById('careerNotes').value;
+            const subject = encodeURIComponent(`[Inka Studio Collaboration] ${selectedRoleTitle} — ${name}`);
+            const body = encodeURIComponent(`Hi Inka Studio Team,\n\nRole: ${selectedRoleTitle}\nName: ${name}\nPortfolio/GitHub: ${link}\n\nPitch & Experience:\n${notes}\n\nSent via inkastudio.pages.dev`);
+            copyTextToClipboard(`Role: ${selectedRoleTitle}\nPortfolio: ${link}\n${notes}`, 'Application copied! Opening email client to contact@inka.games...');
+            window.location.href = `mailto:contact@inka.games?subject=${subject}&body=${body}`;
+            closeCareerModal();
+        }
+
+        function toggleFaq(index) {
+            const content = document.getElementById(`faqContent-${index}`);
+            const icon = document.getElementById(`faqIcon-${index}`);
+            const isHidden = content.classList.contains('hidden');
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.className = 'ph-bold ph-minus text-blue-600 shrink-0';
+            } else {
+                content.classList.add('hidden');
+                icon.className = 'ph-bold ph-plus text-slate-400 shrink-0';
+            }
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const topic = document.getElementById('contactTopic').value;
+            const message = document.getElementById('contactMessage').value;
+
+            const subject = encodeURIComponent(`[Inka Studio Dispatch] ${topic} — from ${name}`);
+            const body = encodeURIComponent(`From: ${name} (${email})\nCategory: ${topic}\n\nMessage:\n${message}\n\n---\nDispatched via inkastudio.pages.dev`);
+            copyTextToClipboard(`From: ${name} (${email})\nTopic: ${topic}\n\n${message}`, 'Dispatch copied & prepared for contact@inka.games!');
+            window.location.href = `mailto:contact@inka.games?subject=${subject}&body=${body}`;
+            e.target.reset();
+        }
+
+        /* ------------------------------------------------------------------
+           8. INITIALIZATION ON WINDOW LOAD
+        ------------------------------------------------------------------ */
+        window.onload = function () {
+            resizeHeroCanvas();
+            initHeroSimulation();
+            animateHeroCanvas();
+            renderNewswire('all');
+            window.addEventListener('resize', resizeHeroCanvas);
+        };
     </script>
 </body>
 </html>
